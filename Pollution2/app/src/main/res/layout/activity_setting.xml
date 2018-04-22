@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="295dp"
+            android:src="@mipmap/setting_bg_ic"
+            android:scaleType="fitXY"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/setting_title_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="设置"
+                android:layout_marginTop="15dp"
+                android:textColor="@color/color_white"
+                android:textSize="26sp"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/logo_tv"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:text="LOGO"
+                android:gravity="center"
+                android:layout_below="@+id/setting_title_tv"
+                android:textSize="14sp"
+                android:textColor="@color/color_gray"
+                android:background="@drawable/shape_circle_white"/>
+
+            <TextView
+                android:id="@+id/order_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_white"
+                android:text="山西省空气质量发布"
+                android:layout_below="@+id/logo_tv"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:textSize="14sp"
+                />
+            <TextView
+                android:id="@+id/center_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_white"
+                android:text="山西省环境监测中心站"
+                android:layout_below="@+id/order_tv"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:textSize="10sp"
+                />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/explain_release_tv"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@mipmap/set_bg_ic"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:text="发布说明"
+            android:textSize="13sp"
+            android:paddingLeft="12dp"
+            android:textColor="@color/color_gray"
+            android:gravity="center|left"/>
+
+        <TextView
+            android:id="@+id/explain_quality_tv"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@mipmap/set_bg_ic"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:text="空气质量指标说明"
+            android:textSize="13sp"
+            android:paddingLeft="12dp"
+            android:textColor="@color/color_gray"
+            android:gravity="center|left"/>
+        <TextView
+            android:id="@+id/about_us_tv"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@mipmap/set_bg_ic"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:text="关于我们"
+            android:textSize="13sp"
+            android:paddingLeft="12dp"
+            android:textColor="@color/color_gray"
+            android:gravity="center|left"/>
+
+    </LinearLayout>
+
+</LinearLayout>

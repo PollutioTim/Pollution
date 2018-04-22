@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/comment_title"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="1.发布依据
+根据《环境空气质量标准》（GB 3095―2012）和《环境空气质量指数（AQI）技术规定（试行）》（HJ 633―2012）的有关规定，发布全省城市及站点空气质量状况。
+2.发布机构
+山西省环境监测中心站
+3.发布内容和指标
+内容包括评价时段、监测点位置、各污染物的浓度及空气质量分指数，空气质量指数、首要污染物及空气质量级别，综合指数。
+（1）站点发布指标：细颗粒物（PM2.5）、可吸入颗粒物（PM10）、二氧化硫（SO2）、二氧化氮（NO2）、一氧化碳（CO）和臭氧（O3）的小时浓度值和空气质量指数（AQI）。
+（2）城市发布指标和内容：城市日空气质量指数（AQI）、城市小时空气质量指数（AQI）以及相应的空气质量级别、首要污染物等。
+4.数据来源
+全省空气质量状况来源于省平台空气质量自动监测站点的空气质量自动监测结果。
+5.其他说明
+（1）发布结果主要显示山西省空气质量总体状况，由于所采用的城市监测站点数量和各城市的不尽相同，因此与各城市发布的城市空气质量状况会有所差异。
+（2）发布结果原则上每小时更新一次，由于数据传输需要一定的时间，发布的数据约有半小时延滞。例如，15时的监测数据会在15:30左右发布。当遇到监测仪器校零、校标等日常维护或仪器故障、通信及电力中断等特殊情况时，某些站点会出现一段时间内无数据的情况。
+6.特别说明
+根据《环境空气质量指数（AQI）技术规定（试行）》（HJ 633―2012）的要求，实时发布数据由发布系统进行初步审核，所发布的小时数据仅为当天参考值，用于向公众提供健康指引，不直接用于空气质量达标状况的评价。空气质量达标状况评价应依据《环境空气质量标准》（GB 3095―2012）中的规定进行。"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                />
+        </LinearLayout>
+    </ScrollView>
+
+
+
+</LinearLayout>
