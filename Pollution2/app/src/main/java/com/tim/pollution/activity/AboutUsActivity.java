@@ -22,7 +22,6 @@ import butterknife.Bind;
  */
 
 public class AboutUsActivity extends BaseActivity {
-
     @Bind(R.id.appbar)
     AppBarLayout appBarLayout;
     @Bind(R.id.collapsing_toolbar)
