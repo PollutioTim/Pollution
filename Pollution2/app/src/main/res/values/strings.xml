@@ -3,4 +3,6 @@
     <string name="release_title">发布说明</string>
     <string name="quity_release_title">空气质量</string>
     <string name="about_us">关于我们</string>
+    
+    <string name="air_quality">空气质量</string>
 </resources>

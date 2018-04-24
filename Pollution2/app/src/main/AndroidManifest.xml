@@ -3,17 +3,15 @@
     package="com.tim.pollution">
 
     <application
-        android:allowBackup="true"
         android:name=".MyApplication"
+        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
-
-        </activity>
-        <!--设置-->
-        <activity android:name=".activity.SetActivity" >
+        <activity android:name=".MainActivity"></activity>
+        <!-- 设置 -->
+        <activity android:name=".activity.SetActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,6 +21,7 @@
         <activity android:name=".activity.RelesExplainActvity" />
         <activity android:name=".activity.QualityReleaseActivity" />
         <activity android:name=".activity.AboutUsActivity" />
+        <activity android:name=".activity.WeatherActivity"></activity>
     </application>
 
 </manifest>
