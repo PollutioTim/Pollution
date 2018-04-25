@@ -7,4 +7,5 @@ package com.tim.pollution.general;
 public class MDataType {
     public static String MAP_DATA = "mapdata";
     public static String MAP = "map";
+    public static String RANK = "rank";
 }

@@ -238,7 +238,6 @@ public class MapFragment extends Fragment implements ICallBack ,OnGetDistricSear
         @Override
         protected void onPostExecute(CityBean result) {
             Log.e("lili","result="+result.getRegionName());
-
             districtSearchOption.cityName(result.getRegionName());//检索城市名称
             mDistrictSearch.searchDistrict(districtSearchOption);//请求行政区数据
             super.onPostExecute(result);
