@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="@dimen/padding"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/weather_title_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="小店区 亲闲北街"
+            android:textColor="@color/color_white"
+            android:drawableLeft="@mipmap/location"
+            android:drawablePadding="7dp"
+            android:layout_marginRight="3dp"
+            />
+
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/air_quality"
+            android:textColor="@color/color_white"
+            android:paddingRight="60dp"
+            android:textSize="@dimen/text_size_large" />
+
+        <TextView
+            android:id="@+id/weather_title_location_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_normal"
+            android:text="太原+"
+            android:textColor="@color/color_white"/>
+
+
+    </LinearLayout>
