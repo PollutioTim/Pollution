@@ -10,4 +10,11 @@
     <color name="colorBackground">#319bd2</color>
     <color name="gree_gb">#00d9cf</color>
     <color name="gree_blue">#51b9c2</color>
+    <color name="good">#95ca00</color>
+    <color name="next_good">#ffde0e</color>
+    <color name="light_pollution">#f35e00</color>
+    <color name="moderate_pollution">#f4200b</color>
+    <color name="severe_pollution">#73457f</color>
+    <color name="serious_pollution">#7102b6</color>
+    <color name="tx_gray">#989898</color>
 </resources>
