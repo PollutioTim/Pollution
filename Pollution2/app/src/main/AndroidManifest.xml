@@ -24,6 +24,7 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".MyApplication"
@@ -33,31 +34,25 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon, android:theme">
-
         <meta-data
-            android:name = "com.baidu.lbsapi.API_KEY"
-            android:value="N4sLLL2BQYk2Ga04dRlOOahUG7UHOdG2"/>
-
-        <activity android:name=".MainActivity">
-        android:theme="@style/AppTheme">
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="YtPGwLHem5IUXmpkODrgcA89mRp5HVtL" />
+        <!-- android:value="YtPGwLHem5IUXmpkODrgcA89mRp5HVtL"田春艳 -->
+        <!-- android:value="N4sLLL2BQYk2Ga04dRlOOahUG7UHOdG2" 李立 -->
         <activity android:name=".MainActivity"></activity>
+
         <!-- 设置 -->
-        <activity android:name=".activity.SetActivity">
+        <activity android:name=".activity.RelesExplainActvity" />
+        <activity android:name=".activity.QualityReleaseActivity" />
+        <activity android:name=".activity.AboutUsActivity"></activity>
+        <activity android:name=".activity.WeatherActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!--设置-->
-        <activity android:name=".activity.RelesExplainActvity" />
-        <activity android:name=".activity.QualityReleaseActivity" />
-        <activity android:name=".activity.AboutUsActivity" />
-        <activity android:name=".activity.WeatherActivity"></activity>
-        <activity android:name=".activity.AboutUsActivity" >
-
-        </activity>
-
+        <activity android:name=".activity.WeatherDetailActivity"></activity>
     </application>
 
 </manifest>
