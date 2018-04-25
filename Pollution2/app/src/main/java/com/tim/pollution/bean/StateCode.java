@@ -15,6 +15,7 @@ public class StateCode implements Serializable {
     @SerializedName("status")
     private int code;
 
+
     public int getCode() {
         return code;
     }

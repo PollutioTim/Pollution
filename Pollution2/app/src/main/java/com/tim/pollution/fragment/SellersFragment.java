@@ -12,6 +12,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tim.pollution.R;
+import com.tim.pollution.callback.ICallBack;
+import com.tim.pollution.general.MData;
+import com.tim.pollution.general.MDataType;
+import com.tim.pollution.net.RankDAL;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -23,7 +30,7 @@ import butterknife.OnClick;
  */
 
 
-public class SellersFragment extends Fragment {
+public class SellersFragment extends Fragment implements ICallBack{
     @Bind(R.id.sellers_station_tv)
     TextView tvStation;
     @Bind(R.id.sellers_swicth_tv)
@@ -52,15 +59,8 @@ public class SellersFragment extends Fragment {
     TextView tvLast;
     @Bind(R.id.last_view)
     View vLast;
+    private Map<String ,String>parms;
 
-
-    public static SellersFragment newInstance(String param1) {
-        SellersFragment fragment = new SellersFragment();
-        Bundle args = new Bundle();
-        args.putString("agrs1", param1);
-        fragment.setArguments(args);
-        return fragment;
-    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -79,6 +79,14 @@ public class SellersFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(parms ==null){
+            parms = new HashMap<>();
+        }
+        parms.put("regiontype","city");
+        parms.put("regiontype","AQI");
+        parms.put("ranktype","real");
+        parms.put("pointtype","");
+        RankDAL.getInstance().getRank(parms,this);
     }
 
     @OnClick({R.id.now_ll,R.id.last_ll,R.id.yesterday_ll,R.id.all_ll,R.id.sellers_swicth_tv})
@@ -142,5 +150,18 @@ public class SellersFragment extends Fragment {
         llLast.setSelected(false);
         llYestday.setSelected(false);
         llAll.setSelected(false);
+    }
+
+    @Override
+    public void onProgress(Object data) {
+        MData mData = (MData) data;
+        if(mData.getType().equals(MDataType.RANK)){
+
+        }
+    }
+
+    @Override
+    public void onError(String msg, String eCode) {
+
     }
 }
