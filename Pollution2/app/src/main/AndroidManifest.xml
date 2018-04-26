@@ -39,12 +39,12 @@
             android:value="YtPGwLHem5IUXmpkODrgcA89mRp5HVtL" />
         <!-- android:value="YtPGwLHem5IUXmpkODrgcA89mRp5HVtL"田春艳 -->
         <!-- android:value="N4sLLL2BQYk2Ga04dRlOOahUG7UHOdG2" 李立 -->
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
 
         <!-- 设置 -->
         <activity android:name=".activity.RelesExplainActvity" />
         <activity android:name=".activity.QualityReleaseActivity" />
-        <activity android:name=".activity.AboutUsActivity"></activity>
+        <activity android:name=".activity.AboutUsActivity" />
         <activity android:name=".activity.WeatherActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -52,7 +52,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.WeatherDetailActivity"></activity>
+        <activity android:name=".activity.WeatherDetailActivity" />
+        <activity android:name=".activity.WeatherMainActivity" />
+        <activity android:name=".activity.CityContrastActivity"></activity>
     </application>
 
 </manifest>

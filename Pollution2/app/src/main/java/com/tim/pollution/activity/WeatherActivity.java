@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -50,7 +51,7 @@ import lecho.lib.hellocharts.view.ColumnChartView;
 /**
  * 首页
  */
-public class WeatherActivity extends AppCompatActivity implements ICallBack, View.OnClickListener {
+public class WeatherActivity extends AppCompatActivity implements ICallBack, View.OnClickListener , AdapterView.OnItemClickListener{
 
     @Bind(R.id.weather_title_location)
     TextView weatherTitleLocation;
@@ -122,6 +123,7 @@ public class WeatherActivity extends AppCompatActivity implements ICallBack, Vie
     private void setClick() {
         weatherDetail.setOnClickListener(this);
         weatherHealthTip.setOnClickListener(this);
+        weatherTitleLocationSelect.setOnClickListener(this);
     }
 
     private void location() {
@@ -164,7 +166,7 @@ public class WeatherActivity extends AppCompatActivity implements ICallBack, Vie
             if (regionWeather.getMessage().getRegionList() != null) {
                 weatherLocationTime.setText("地址 " + regionWeather.getMessage().getRegionList().getTime());
                 weatherArcProgress.setProgressTextTop(regionWeather.getMessage().getRegionList().getPollutionLevel());
-                weatherArcProgress.setProgressTextBottom(regionWeather.getMessage().getRegionList().getTopPollution());
+                weatherArcProgress.setProgressTextBottom("首要污染物 "+regionWeather.getMessage().getRegionList().getTopPollution());
                 weatherArcProgress.setProgress(Double.valueOf(getTopPollutionPrograss(regionWeather, regionWeather.getMessage().getRegionList().getTopPollution())));
                 String name = "R.mipmap.w" + regionWeather.getMessage().getRegionList().getWeathercode();
                 weatherInfoImg.setImageResource(getImageResourceId(name));
@@ -203,6 +205,7 @@ public class WeatherActivity extends AppCompatActivity implements ICallBack, Vie
                 weatherPointList.setAdapter(new WeatherPointAdapter(this, regionWeather.getMessage().getPoint_AQI()));
             }
         }
+        weatherPointList.setOnItemClickListener(this);
     }
 
     /**
@@ -230,6 +233,7 @@ public class WeatherActivity extends AppCompatActivity implements ICallBack, Vie
             List<SubcolumnValue> values;
             List<AxisValue> axisXValues = new ArrayList<AxisValue>();
             List<AxisValue> axY = new ArrayList<AxisValue>();
+            int value = 0;
             //对每个集合的柱子进行遍历
             for (int i = 0; i < numColumns; ++i) {
 
@@ -237,11 +241,17 @@ public class WeatherActivity extends AppCompatActivity implements ICallBack, Vie
                 //循环所有柱子（list）
                 for (int j = 0; j < numSubcolumns; ++j) {
                     //创建一个柱子，然后设置值和颜色，并添加到list中
-                    values.add(new SubcolumnValue(Float.valueOf(list.get(i).getAQI()), Color.parseColor(list.get(i).getAQIcolor())));
+                    if(list.get(i).getAQI()!=null){
+                        values.add(new SubcolumnValue(Float.valueOf(list.get(i).getAQI()), Color.parseColor(list.get(i).getAQIcolor())));
+                    }
                     //设置X轴的柱子所对应的属性名称
                     String time = list.get(i).getTime();
-                    if (list.get(i).getTime().contains("1:00") || list.get(i).getTime().contains("8:00") || list.get(i).getTime().contains("18:00") || list.get(i).getTime().contains("2:00")) {
+                    if (value == 5) {
+                        value = 0;
+                        Log.e("test","....."+time);
                         axisXValues.add(new AxisValue(i).setLabel(time.substring(time.indexOf(" "))));
+                    }else{
+                        value++;
                     }
                 }
                 //将每个属性的拥有的柱子，添加到Column中
@@ -261,9 +271,9 @@ public class WeatherActivity extends AppCompatActivity implements ICallBack, Vie
             //设置Columns添加到Data中
             ColumnChartData data = new ColumnChartData(columns);
             //设置X轴显示在底部，并且显示每个属性的Lable，字体颜色为黑色，X轴的名字为“学历”，每个柱子的Lable斜着显示，距离X轴的距离为8
-            data.setAxisXBottom(new Axis(axisXValues).setHasLines(false).setTextColor(Color.WHITE).setHasTiltedLabels(false).setMaxLabelChars(8));
+            data.setAxisXBottom(new Axis(axisXValues).setHasLines(false).setTextColor(Color.WHITE).setHasTiltedLabels(false).setMaxLabelChars(3));
             //属性值含义同X轴
-            data.setAxisYLeft(new Axis().setHasLines(false).setTextColor(Color.WHITE).setMaxLabelChars(5));
+            data.setAxisYLeft(new Axis().setHasLines(false).setTextColor(Color.WHITE).setMaxLabelChars(10));
             //最后将所有值显示在View中
             weatherChart.setColumnChartData(data);
         }
@@ -374,5 +384,12 @@ public class WeatherActivity extends AppCompatActivity implements ICallBack, Vie
         //显示对话框
         dialog.show();
 
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intent=new Intent(WeatherActivity.this,WeatherMainActivity.class);
+        intent.putExtra("pointcode",regionWeather.getMessage().getPoint_AQI().get(position).getPointCode());
+        startActivity(intent);
     }
 }

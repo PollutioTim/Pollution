@@ -10,4 +10,10 @@ public class MDataType {
     public static String RANK = "rank";
 
     public static String REGION_WEATHER="com.tim.pollution.bean.RegionWeather";
+
+    public static String CHANGE_TREND="com.tim.pollution.bean.changetrend.ChangeTrend";
+
+    public static String POINT_INFONET_BEAN="com.tim.pollution.bean.changetrend.PointInfoNetBean";
+
+    public  static String DATA_BANKNET_BEAN ="com.tim.pollution.bean.changetrend.DataBankNetBean";
 }
