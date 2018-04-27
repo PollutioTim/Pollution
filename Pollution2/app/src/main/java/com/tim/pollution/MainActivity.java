@@ -21,25 +21,25 @@ import com.tim.pollution.view.CustomViewPager;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
-    @Bind(R.id.fragment_container)
+    @BindView(R.id.fragment_container)
     CustomViewPager viewPager;
 
-    @Bind(R.id.home_rg)
+    @BindView(R.id.home_rg)
     RadioGroup radioGroup;
-    @Bind(R.id.home_main)
+    @BindView(R.id.home_main)
     RadioButton rbMain;
-    @Bind(R.id.home_map)
+    @BindView(R.id.home_map)
     RadioButton rbMap;
-    @Bind(R.id.home_sellers)
+    @BindView(R.id.home_sellers)
     RadioButton rbSellers;
-    @Bind(R.id.home_pk)
+    @BindView(R.id.home_pk)
     RadioButton rbPk;
-    @Bind(R.id.home_about)
+    @BindView(R.id.home_about)
     RadioButton rbAbout;
 
     private MapFragment mapFragment;

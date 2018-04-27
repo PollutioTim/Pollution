@@ -45,16 +45,22 @@
         <activity android:name=".activity.RelesExplainActvity" />
         <activity android:name=".activity.QualityReleaseActivity" />
         <activity android:name=".activity.AboutUsActivity" />
-        <activity android:name=".activity.WeatherActivity">
+        <activity android:name=".activity.WeatherDetailActivity" />
+        <activity android:name=".activity.WeatherMainActivity" />
+        <activity android:name=".activity.CityContrastActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.WeatherDetailActivity" />
-        <activity android:name=".activity.WeatherMainActivity" />
-        <activity android:name=".activity.CityContrastActivity"></activity>
+        <activity android:name=".activity.HomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

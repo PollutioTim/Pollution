@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import lecho.lib.hellocharts.model.Axis;
 import lecho.lib.hellocharts.model.AxisValue;
@@ -39,31 +39,31 @@ public class WeatherDetailActivity extends AppCompatActivity implements View.OnC
 
     String regionid;
 
-    @Bind(R.id.weather_detail_rg_time)
+    @BindView(R.id.weather_detail_rg_time)
     RadioGroup weatherDetailRgTime;
-    @Bind(R.id.weather_detail_chart)
+    @BindView(R.id.weather_detail_chart)
     ColumnChartView weatherDetailChart;
-    @Bind(R.id.weather_detail_rbpm25_type)
+    @BindView(R.id.weather_detail_rbpm25_type)
     RadioButton weatherDetailRbpm25Type;
-    @Bind(R.id.weather_detail_rbpm10_type)
+    @BindView(R.id.weather_detail_rbpm10_type)
     RadioButton weatherDetailRbpm10Type;
-    @Bind(R.id.weather_detail_rbso2_type)
+    @BindView(R.id.weather_detail_rbso2_type)
     RadioButton weatherDetailRbso2Type;
-    @Bind(R.id.weather_detail_rbno2_type)
+    @BindView(R.id.weather_detail_rbno2_type)
     RadioButton weatherDetailRbno2Type;
-    @Bind(R.id.weather_detail_rbo3_type)
+    @BindView(R.id.weather_detail_rbo3_type)
     RadioButton weatherDetailRbo3Type;
-    @Bind(R.id.weather_detail_rbco_type)
+    @BindView(R.id.weather_detail_rbco_type)
     RadioButton weatherDetailRbcoType;
-    @Bind(R.id.weather_detail_rg_type)
+    @BindView(R.id.weather_detail_rg_type)
     RadioGroup weatherDetailRgType;
-    @Bind(R.id.weather_detail_list)
+    @BindView(R.id.weather_detail_list)
     WrapContentListView weatherDetailList;
-    @Bind(R.id.weather_detail_rb12_time)
+    @BindView(R.id.weather_detail_rb12_time)
     RadioButton weatherDetailRb12Time;
-    @Bind(R.id.weather_detail_rb24_time)
+    @BindView(R.id.weather_detail_rb24_time)
     RadioButton weatherDetailRb24Time;
-    @Bind(R.id.weather_detail_rb30_time)
+    @BindView(R.id.weather_detail_rb30_time)
     RadioButton weatherDetailRb30Time;
     private ChangeTrend changeTrend;
 

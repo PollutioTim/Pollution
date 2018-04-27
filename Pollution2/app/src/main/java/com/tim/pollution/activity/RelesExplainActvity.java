@@ -10,7 +10,7 @@ import com.tim.pollution.R;
 import com.tim.pollution.general.BaseActivity;
 import com.tim.pollution.utils.niorgai.StatusBarCompat;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
@@ -18,9 +18,9 @@ import butterknife.OnClick;
  */
 
 public class RelesExplainActvity extends BaseActivity {
-    @Bind(R.id.comment_back_iv)
+    @BindView(R.id.comment_back_iv)
     ImageView ivBack;
-    @Bind(R.id.comment_title_tv)
+    @BindView(R.id.comment_title_tv)
     TextView tvTitle;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

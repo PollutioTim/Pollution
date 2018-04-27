@@ -9,6 +9,7 @@ import com.tim.pollution.bean.StateCode;
 import com.tim.pollution.bean.changetrend.ChangeTrend;
 import com.tim.pollution.bean.changetrend.DataBankNetBean;
 import com.tim.pollution.bean.changetrend.PointInfoNetBean;
+import com.tim.pollution.bean.changetrend.RegionNetBean;
 import com.tim.pollution.bean.weather.AQI24hBean;
 import com.tim.pollution.callback.ICallBack;
 import com.tim.pollution.general.MData;
@@ -37,11 +38,14 @@ public class WeatherDal {
 
     private static final String dataBankUrl;
 
+    private static final String regionUrl;
+
     static {
         weatherUal = "http://218.26.106.43:10009/AppInterface/HomeData";
         changeTrendUrl="http://218.26.106.43:10009/AppInterface/PollTrend";
         pointDataUrl="http://218.26.106.43:10009/AppInterface/PointData";
         dataBankUrl="http://218.26.106.43:10009/AppInterface/DataRank";
+        regionUrl ="http://218.26.106.43:10009/AppInterface/Region";
 
     }
 
@@ -97,7 +101,8 @@ public class WeatherDal {
     }
 
     /**
-     * http://218.26.106.43:10009/AppInterface/ PollTrend?key=6DlLqAyx3mY=&regionid=140101&type=12h
+     * http://218.26.106.43:10009/AppInterface/ PollTrend?key=6DlLqAyx3mY=&regionid=140000&type=12h
+     * 县区污染物变化趋势
      * @param params
      * @param callBack
      * regionid	是	String	县区代码
@@ -130,6 +135,7 @@ public class WeatherDal {
 
     /**
      * http://218.26.106.43:10009/AppInterface/PointData?key=6DlLqAyx3mY=&pointcode=140101
+     * 站点实时评价
      * @param params
      * @param callBack
      */
@@ -166,7 +172,7 @@ public class WeatherDal {
      * pointtype 站点类型 S为省控站点 G为国控站点 空为全部站点 注：当区域类型为point时，必选此参数
      */
     public void getDataRank(Map<String ,String> params, final ICallBack callBack){
-        PostFormBuilder postFormBuilder = OkHttpUtils.post().url(pointDataUrl).params(params);
+        PostFormBuilder postFormBuilder = OkHttpUtils.post().url(dataBankUrl).params(params);
         postFormBuilder.build().connTimeOut(20*1000)
                 .execute(new StringCallback() {
                     @Override
@@ -182,6 +188,38 @@ public class WeatherDal {
                             MData<DataBankNetBean>mData  = new MData<DataBankNetBean>();
                             mData.setType(MDataType.DATA_BANKNET_BEAN);
                             mData.setData(dataBankNetBean);
+                            callBack.onProgress(mData);
+                        }else{
+                            callBack.onError("服务器异常",code.getCode()+"");
+                        }
+                    }
+                });
+    }
+
+    /**
+     * http://218.26.106.43:10009/AppInterface/Region?key=6DlLqAyx3mY=&regiontype=allregion
+     * 县区列表
+     * @param params
+     * @param callBack
+     */
+//    http://218.26.106.43:10009/AppInterface/Region?regiontype=allregion&key=6DlLqAyx3mY=
+    public void getRegion(Map<String ,String> params, final ICallBack callBack){
+        PostFormBuilder postFormBuilder = OkHttpUtils.post().url(regionUrl).params(params);
+        postFormBuilder.build().connTimeOut(20*1000)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        Log.e("test","response:"+response);
+                        StateCode code = new Gson().fromJson(response.toString(),StateCode.class);
+                        if(1 == code.getCode()){
+                            RegionNetBean regionNetBean=new Gson().fromJson(response.toString(),RegionNetBean.class);
+                            MData<RegionNetBean>mData  = new MData<RegionNetBean>();
+                            mData.setType(MDataType.REGIONNET_BEAN);
+                            mData.setData(regionNetBean);
                             callBack.onProgress(mData);
                         }else{
                             callBack.onError("服务器异常",code.getCode()+"");

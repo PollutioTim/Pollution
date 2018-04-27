@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:layout_gravity="left"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
@@ -126,6 +125,7 @@
                     android:layout_marginLeft="10dp"
                     android:max="500"
                     android:progress="100" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -335,14 +335,15 @@
                 android:gravity="right"
                 android:textColor="@color/color_white"
                 android:textSize="12dp" />
-        </LinearLayout>
 
+        </LinearLayout>
+        <lecho.lib.hellocharts.view.ColumnChartView
+            android:id="@+id/weather_chart"
+            android:layout_width="match_parent"
+            android:layout_marginTop="30dp"
+            android:layout_height="300dp"
+            android:layout_margin="10dp" />
 
     </LinearLayout>
-    <lecho.lib.hellocharts.view.ColumnChartView
-        android:id="@+id/weather_chart"
-        android:layout_width="match_parent"
-        android:layout_marginTop="30dp"
-        android:layout_height="300dp"
-        android:layout_margin="10dp" />
+
 </LinearLayout>

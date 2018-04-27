@@ -15,7 +15,7 @@ import com.tim.pollution.activity.AboutUsActivity;
 import com.tim.pollution.activity.QualityReleaseActivity;
 import com.tim.pollution.activity.RelesExplainActvity;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -24,11 +24,11 @@ import butterknife.OnClick;
  */
 
 public class AboutFragment extends Fragment {
-    @Bind(R.id.explain_quality_tv)
+    @BindView(R.id.explain_quality_tv)
     TextView tvQuality;
-    @Bind(R.id.explain_release_tv)
+    @BindView(R.id.explain_release_tv)
     TextView tvRelease;
-    @Bind(R.id.about_us_tv)
+    @BindView(R.id.about_us_tv)
     TextView tvAboutUs;
 
     public static AboutFragment newInstance(String param1) {

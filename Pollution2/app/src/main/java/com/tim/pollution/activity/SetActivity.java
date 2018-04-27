@@ -17,7 +17,6 @@ import com.tim.pollution.R;
 import com.tim.pollution.general.BaseActivity;
 import com.tim.pollution.utils.niorgai.StatusBarCompat;
 
-import butterknife.Bind;
 import butterknife.OnClick;
 
 /**

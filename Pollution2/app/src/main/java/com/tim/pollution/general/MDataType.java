@@ -16,4 +16,6 @@ public class MDataType {
     public static String POINT_INFONET_BEAN="com.tim.pollution.bean.changetrend.PointInfoNetBean";
 
     public  static String DATA_BANKNET_BEAN ="com.tim.pollution.bean.changetrend.DataBankNetBean";
+
+    public static String REGIONNET_BEAN="com.tim.pollution.bean.changetrend.RegionNetBean";
 }

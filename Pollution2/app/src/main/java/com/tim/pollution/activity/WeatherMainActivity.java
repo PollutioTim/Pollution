@@ -1,9 +1,12 @@
 package com.tim.pollution.activity;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -28,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import lecho.lib.hellocharts.model.Axis;
 import lecho.lib.hellocharts.model.AxisValue;
@@ -39,59 +42,59 @@ import lecho.lib.hellocharts.view.ColumnChartView;
 
 public class WeatherMainActivity extends AppCompatActivity implements ICallBack {
 
-    @Bind(R.id.weather_main_location_time)
+    @BindView(R.id.weather_main_location_time)
     TextView weatherMainLocationTime;
-    @Bind(R.id.weather_main_arcProgress)
+    @BindView(R.id.weather_main_arcProgress)
     ArcProgress weatherMainArcProgress;
-    @Bind(R.id.weather_main_info_img)
+    @BindView(R.id.weather_main_info_img)
     ImageView weatherMainInfoImg;
-    @Bind(R.id.weather_main_temperature)
+    @BindView(R.id.weather_main_temperature)
     TextView weatherMainTemperature;
-    @Bind(R.id.weather_main_wind)
+    @BindView(R.id.weather_main_wind)
     TextView weatherMainWind;
-    @Bind(R.id.weather_main_pm25_va)
+    @BindView(R.id.weather_main_pm25_va)
     TextView weatherMainPm25Va;
-    @Bind(R.id.weather_main_pm25_pro)
+    @BindView(R.id.weather_main_pm25_pro)
     ProgressBar weatherMainPm25Pro;
-    @Bind(R.id.weather_main_no2_va)
+    @BindView(R.id.weather_main_no2_va)
     TextView weatherMainNo2Va;
-    @Bind(R.id.weather_main_no2_pro)
+    @BindView(R.id.weather_main_no2_pro)
     ProgressBar weatherMainNo2Pro;
-    @Bind(R.id.weather_main_pm10_va)
+    @BindView(R.id.weather_main_pm10_va)
     TextView weatherMainPm10Va;
-    @Bind(R.id.weather_main_pm10_pro)
+    @BindView(R.id.weather_main_pm10_pro)
     ProgressBar weatherMainPm10Pro;
-    @Bind(R.id.weather_main_o3_va)
+    @BindView(R.id.weather_main_o3_va)
     TextView weatherMainO3Va;
-    @Bind(R.id.weather_main_o3_pro)
+    @BindView(R.id.weather_main_o3_pro)
     ProgressBar weatherMainO3Pro;
-    @Bind(R.id.weather_main_so2_va)
+    @BindView(R.id.weather_main_so2_va)
     TextView weatherMainSo2Va;
-    @Bind(R.id.weather_main_so2_pro)
+    @BindView(R.id.weather_main_so2_pro)
     ProgressBar weatherMainSo2Pro;
-    @Bind(R.id.weather_main_co_va)
+    @BindView(R.id.weather_main_co_va)
     TextView weatherMainCoVa;
-    @Bind(R.id.weather_main_co_pro)
+    @BindView(R.id.weather_main_co_pro)
     ProgressBar weatherMainCoPro;
-    @Bind(R.id.weather_main_chart)
+    @BindView(R.id.weather_main_chart)
     ColumnChartView weatherMainChart;
-    @Bind(R.id.weather_main_detail_rbpm25_type)
+    @BindView(R.id.weather_main_detail_rbpm25_type)
     RadioButton weatherMainDetailRbpm25Type;
-    @Bind(R.id.weather_main_detail_rbpm10_type)
+    @BindView(R.id.weather_main_detail_rbpm10_type)
     RadioButton weatherMainDetailRbpm10Type;
-    @Bind(R.id.weather_main_detail_rbso2_type)
+    @BindView(R.id.weather_main_detail_rbso2_type)
     RadioButton weatherMainDetailRbso2Type;
-    @Bind(R.id.weather_main_detail_rbno2_type)
+    @BindView(R.id.weather_main_detail_rbno2_type)
     RadioButton weatherMainDetailRbno2Type;
-    @Bind(R.id.weather_main_detail_rbo3_type)
+    @BindView(R.id.weather_main_detail_rbo3_type)
     RadioButton weatherMainDetailRbo3Type;
-    @Bind(R.id.weather_main_detail_rbco_type)
+    @BindView(R.id.weather_main_detail_rbco_type)
     RadioButton weatherMainDetailRbcoType;
-    @Bind(R.id.weather_main_detail_rg_type)
+    @BindView(R.id.weather_main_detail_rg_type)
     RadioGroup weatherMainDetailRgType;
-    @Bind(R.id.weather_main_back)
+    @BindView(R.id.weather_main_back)
     ImageView weatherMainBack;
-    @Bind(R.id.weather_main_title)
+    @BindView(R.id.weather_main_title)
     TextView weatherMainTitle;
     private String pointcode;
     private PointInfoNetBean pointInfoNetBean;
@@ -130,6 +133,7 @@ public class WeatherMainActivity extends AppCompatActivity implements ICallBack 
         WeatherDal.getInstance().getPointData(params, this);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onProgress(Object data) {
         MData mData = (MData) data;
@@ -139,6 +143,7 @@ public class WeatherMainActivity extends AppCompatActivity implements ICallBack 
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void initData() {
         if (pointInfoNetBean.getMessage() == null) {
             return;
@@ -154,16 +159,22 @@ public class WeatherMainActivity extends AppCompatActivity implements ICallBack 
         weatherMainWind.setText(pointInfoNetBean.getMessage().getPointListBean().getWind() + "\n" + "湿度" + pointInfoNetBean.getMessage().getPointListBean().getHumidity() + "%");
         weatherMainPm25Va.setText(pointInfoNetBean.getMessage().getPointListBean().getPM25());
         weatherMainPm25Pro.setProgress(getIntFromString(pointInfoNetBean.getMessage().getPointListBean().getPM25()));
+        weatherMainPm25Pro.setProgressTintList(ColorStateList.valueOf(Color.parseColor(pointInfoNetBean.getMessage().getPointListBean().getPM25color())));
         weatherMainPm10Va.setText(pointInfoNetBean.getMessage().getPointListBean().getPM10());
         weatherMainPm10Pro.setProgress(getIntFromString(pointInfoNetBean.getMessage().getPointListBean().getPM10()));
+        weatherMainPm10Pro.setProgressTintList(ColorStateList.valueOf(Color.parseColor(pointInfoNetBean.getMessage().getPointListBean().getPM10color())));
         weatherMainSo2Va.setText(pointInfoNetBean.getMessage().getPointListBean().getSO2());
         weatherMainSo2Pro.setProgress(getIntFromString(pointInfoNetBean.getMessage().getPointListBean().getSO2()));
+        weatherMainSo2Pro.setProgressTintList(ColorStateList.valueOf(Color.parseColor(pointInfoNetBean.getMessage().getPointListBean().getSO2color())));
         weatherMainNo2Va.setText(pointInfoNetBean.getMessage().getPointListBean().getNO2());
         weatherMainNo2Pro.setProgress(getIntFromString(pointInfoNetBean.getMessage().getPointListBean().getNO2()));
+        weatherMainNo2Pro.setProgressTintList(ColorStateList.valueOf(Color.parseColor(pointInfoNetBean.getMessage().getPointListBean().getNO2color())));
         weatherMainO3Va.setText(pointInfoNetBean.getMessage().getPointListBean().getO3());
         weatherMainO3Pro.setProgress(getIntFromString(pointInfoNetBean.getMessage().getPointListBean().getO3()));
+        weatherMainO3Pro.setProgressTintList(ColorStateList.valueOf(Color.parseColor(pointInfoNetBean.getMessage().getPointListBean().getO3color())));
         weatherMainCoVa.setText(pointInfoNetBean.getMessage().getPointListBean().getO3());
         weatherMainCoPro.setProgress(getIntFromString(pointInfoNetBean.getMessage().getPointListBean().getO3()));
+        weatherMainCoPro.setProgressTintList(ColorStateList.valueOf(Color.parseColor(pointInfoNetBean.getMessage().getPointListBean().getCOcolor())));
         //todo 颜色
         initChars();
 
