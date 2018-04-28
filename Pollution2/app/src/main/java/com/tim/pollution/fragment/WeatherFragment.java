@@ -47,10 +47,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import cn.bingoogolapple.progressbar.BGAProgressBar;
 import lecho.lib.hellocharts.model.Axis;
 import lecho.lib.hellocharts.model.AxisValue;
 import lecho.lib.hellocharts.model.Column;
@@ -155,7 +152,7 @@ public class WeatherFragment extends Fragment implements ICallBack, View.OnClick
                 weatherArcProgress.setProgressTextTop(regionWeather.getMessage().getRegionList().getPollutionLevel());
                 weatherArcProgress.setProgressTextBottom("首要污染物 " + regionWeather.getMessage().getRegionList().getTopPollution());
                 weatherArcProgress.setProgress(Double.valueOf(getTopPollutionPrograss(regionWeather, regionWeather.getMessage().getRegionList().getTopPollution())));
-                String name = "R.mipmap.w" + regionWeather.getMessage().getRegionList().getWeathercode();
+                String name = "w"+ regionWeather.getMessage().getRegionList().getWeathercode();
                 weatherInfoImg.setImageResource(getImageResourceId(name));
                 weatherTemperature.setText(regionWeather.getMessage().getRegionList().getTemperature() + " °C");
                 weatherWind.setText(regionWeather.getMessage().getRegionList().getWind() + "\n" + "湿度" + regionWeather.getMessage().getRegionList().getHumidity() + "%");

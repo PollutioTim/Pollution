@@ -54,9 +54,8 @@ public class HomeActivity extends AppCompatActivity implements ICallBack{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
-        SDKInitializer.initialize(getApplicationContext());
         loadLocation();
-        loadData();
+//        loadData();
 
     }
 

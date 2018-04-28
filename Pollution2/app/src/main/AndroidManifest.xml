@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.tim.pollution">
 
-    <uses-sdk
-        android:minSdkVersion="15"
-        android:targetSdkVersion="25" />
+    <!--<uses-sdk-->
+        <!--android:minSdkVersion="15"-->
+        <!--android:targetSdkVersion="25" />-->
 
     <supports-screens
         android:anyDensity="true"
@@ -48,11 +48,11 @@
         <activity android:name=".activity.WeatherDetailActivity" />
         <activity android:name=".activity.WeatherMainActivity" />
         <activity android:name=".activity.CityContrastActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
         <activity android:name=".activity.HomeActivity">
             <intent-filter>

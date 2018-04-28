@@ -146,6 +146,11 @@ public class WeatherMainActivity extends AppCompatActivity implements ICallBack 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void initData() {
         if (pointInfoNetBean.getMessage() == null) {
+            this.finish();
+            return;
+        }
+        if(pointInfoNetBean.getMessage().getPointListBean()==null){
+            this.finish();
             return;
         }
         weatherMainTitle.setText(pointInfoNetBean.getMessage().getPointListBean().getPointName());

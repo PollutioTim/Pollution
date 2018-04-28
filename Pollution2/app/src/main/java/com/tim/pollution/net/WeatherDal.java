@@ -209,6 +209,7 @@ public class WeatherDal {
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
+
                     }
 
                     @Override
