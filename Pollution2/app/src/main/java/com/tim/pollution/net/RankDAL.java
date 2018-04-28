@@ -2,6 +2,7 @@ package com.tim.pollution.net;
 
 import com.google.gson.Gson;
 import com.tim.pollution.bean.MapBean;
+import com.tim.pollution.bean.RankLastBean;
 import com.tim.pollution.bean.RankMainBean;
 import com.tim.pollution.bean.StateCode;
 import com.tim.pollution.callback.ICallBack;
@@ -69,5 +70,26 @@ public class RankDAL {
                 });
     }
 
+    public void getRankLast(Map<String ,String> params, final ICallBack callBack){
+        PostFormBuilder postFormBuilder = OkHttpUtils.post().url(mapUrls).params(params);
+        postFormBuilder.build().connTimeOut(20*1000)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
 
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        StateCode code = new Gson().fromJson(response.toString(),StateCode.class);
+                        if(1 == code.getCode()){
+                            RankLastBean rankMainBean = new Gson().fromJson(response.toString(),RankLastBean.class);
+                            MData<RankLastBean> mData  = new MData<RankLastBean>();
+                            mData.setType(MDataType.RANK_LAST);
+                            mData.setData(rankMainBean);
+                            callBack.onProgress(mData);
+                        }
+                    }
+                });
+    }
 }

@@ -2,14 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:orientation="horizontal"
         android:weightSum="4">
         <TextView
-            android:id="@+id/item_number_tv"
+            android:id="@+id/item_last_number_tv"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:textColor="@color/tx_gray"
@@ -19,7 +18,7 @@
             android:gravity="center"
             android:layout_height="match_parent" />
         <TextView
-            android:id="@+id/item_city_tv"
+            android:id="@+id/item_last_city_tv"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:textSize="12sp"
@@ -29,7 +28,7 @@
             android:text="1"
             android:layout_height="match_parent" />
         <TextView
-            android:id="@+id/item_pollution_tv"
+            android:id="@+id/item_last_pollution_tv"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:textSize="12sp"
@@ -38,24 +37,22 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:layout_height="match_parent" />
-       <LinearLayout
-           android:layout_width="0dp"
-           android:layout_weight="1"
-           android:layout_height="match_parent"
-           android:gravity="center"
-           >
-           <TextView
-               android:id="@+id/item_vlaue_tv"
-               android:layout_width="50dp"
-               android:gravity="center"
-               android:text="1"
-               android:textSize="12sp"
-               android:background="@drawable/shape_item_rank"
-               android:textColor="@color/color_white"
-               android:layout_height="wrap_content" />
-       </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            >
+            <TextView
+                android:id="@+id/item_last_vlaue_tv"
+                android:layout_width="50dp"
+                android:gravity="center"
+                android:text="1"
+                android:textSize="12sp"
+                android:textColor="@color/tx_gray"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
 
     </LinearLayout>
-
 </LinearLayout>

@@ -51,6 +51,7 @@
         <activity android:name=".activity.AboutUsActivity" >
 
         </activity>
+        <activity android:name=".activity.CityActivity" />
 
     </application>
 

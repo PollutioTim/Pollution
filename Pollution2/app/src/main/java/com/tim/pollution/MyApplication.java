@@ -3,16 +3,15 @@ package com.tim.pollution;
 import android.app.Application;
 import android.content.Context;
 
+import com.tim.pollution.general.SharedPreferencesHelper;
+
 /**
  * name 项目名称
- * log 是否打印
- * initialize 是否网络初始化
- * width 适配宽度
- * scale 适配字体倍数
  */
 public class MyApplication extends Application {
     public static MyApplication instance;
     private static Context mContext;
+    private SharedPreferencesHelper myPreferences;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -24,6 +23,8 @@ public class MyApplication extends Application {
         super.onCreate();
         instance = this;
         mContext = getApplicationContext();
+        //初始化自定首选项
+        myPreferences = new SharedPreferencesHelper(mContext,"pollution");
     }
 
     /**
