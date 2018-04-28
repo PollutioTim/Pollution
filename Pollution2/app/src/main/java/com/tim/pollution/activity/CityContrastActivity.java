@@ -30,6 +30,7 @@ import com.tim.pollution.bean.changetrend.ChangeTrendMessageBean;
 import com.tim.pollution.bean.changetrend.DataBankNetBean;
 import com.tim.pollution.bean.changetrend.DataInfoBean;
 import com.tim.pollution.bean.changetrend.RegionNetBean;
+import com.tim.pollution.bean.weather.AQI24hBean;
 import com.tim.pollution.callback.ICallBack;
 import com.tim.pollution.general.Constants;
 import com.tim.pollution.general.MData;
@@ -52,9 +53,12 @@ import butterknife.ButterKnife;
 import lecho.lib.hellocharts.gesture.ZoomType;
 import lecho.lib.hellocharts.model.Axis;
 import lecho.lib.hellocharts.model.AxisValue;
+import lecho.lib.hellocharts.model.Column;
+import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
+import lecho.lib.hellocharts.model.SubcolumnValue;
 import lecho.lib.hellocharts.model.ValueShape;
 import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.util.ChartUtils;
@@ -271,29 +275,31 @@ public class CityContrastActivity extends AppCompatActivity implements ICallBack
         if (citys.size() < 3) {
             return;
         }
-        // TODO Auto-generated method stub
-        int numberOfPoints = citys.get(1).getAQI_data().size();
+//        int numberOfPoints = citys.get(1).getAQI_data().size();
         // Column can have many subcolumns, here by default I use 1 subcolumn in each of 8 columns.
         List<AxisValue> axisXValues = new ArrayList<AxisValue>();
         List<Line> lines = new ArrayList<Line>();
-        for (int i = 0; i < 3; ++i) {
-            List<PointValue> values = new ArrayList<PointValue>();
-            for (int j = 0; j < numberOfPoints; ++j) {
-                values.add(new PointValue(j,Float.valueOf(citys.get(i+1).getAQI_data().get(j).getValue())));
-
-                axisXValues.add(new AxisValue(j).setLabel(citys.get(i+1).getAQI_data().get(j).getTime()));
-            }
-
-//            Line line = new Line(values);
-//            line.setColor(ChartUtils.COLORS[i]);
-//            line.setShape(ValueShape.CIRCLE); //节点的形状
-//            line.setHasLabels(true); //是否显示标签
-//            line.setHasLabelsOnlyForSelected(false);  //标签是否只能选中
-//            line.setHasLines(true); //是否显示折线
-//            line.setHasPoints(true); //是否显示节点
-//            line.setPointColor(ChartUtils.COLORS[(i + 1) % ChartUtils.COLORS.length]);
-//            lines.add(line);
-
+//        for (int i = 0; i < 3; ++i) {
+//            List<PointValue> values = new ArrayList<PointValue>();
+//            for (int j = 0; j < numberOfPoints; ++j) {
+//                values.add(new PointValue(j,Float.valueOf(citys.get(i+1).getAQI_data().get(j).getValue())));
+//                for
+//                axisXValues.add(new AxisValue(j).setLabel(switchTime(citys.get(i+1).getAQI_data().get(j).getTime())));
+//            }
+//
+////            Line line = new Line(values);
+////            line.setColor(ChartUtils.COLORS[i]);
+////            line.setShape(ValueShape.CIRCLE); //节点的形状
+////            line.setHasLabels(true); //是否显示标签
+////            line.setHasLabelsOnlyForSelected(false);  //标签是否只能选中
+////            line.setHasLines(true); //是否显示折线
+////            line.setHasPoints(true); //是否显示节点
+////            line.setPointColor(ChartUtils.COLORS[(i + 1) % ChartUtils.COLORS.length]);
+////            lines.add(line);
+//
+//        }
+        for(int i=0;i<citys.get(1).getAQI_data().size();i++){
+            axisXValues.add(new AxisValue(i).setLabel(switchTime(citys.get(1).getAQI_data().get(i).getTime())));
         }
         lines.add(getLine(citys.get(1).getAQI_data(),"#FFF1C55F"));
         lines.add(getLine(citys.get(2).getAQI_data(),"#FF47F646"));
@@ -301,8 +307,8 @@ public class CityContrastActivity extends AppCompatActivity implements ICallBack
         LineChartData data = new LineChartData(lines);
 
         if (true) {
-            data.setAxisXBottom(new Axis(axisXValues).setHasLines(true).setTextColor(Color.WHITE).setName("").setHasTiltedLabels(false).setMaxLabelChars(7));
-            data.setAxisYLeft(new Axis().setHasLines(true).setName("").setTextColor(Color.WHITE).setMaxLabelChars(4));
+            data.setAxisXBottom(new Axis(axisXValues).setHasLines(false).setTextColor(Color.WHITE).setName("").setHasTiltedLabels(false).setMaxLabelChars(7));
+            data.setAxisYLeft(new Axis().setHasLines(false).setName("").setTextColor(Color.WHITE).setMaxLabelChars(4));
         } else {
             data.setAxisXBottom(null);
             data.setAxisYLeft(null);
@@ -311,8 +317,11 @@ public class CityContrastActivity extends AppCompatActivity implements ICallBack
         data.setBaseValue(Float.NEGATIVE_INFINITY);
         cityContrastChart.setValueSelectionEnabled(false);
         cityContrastChart.setLineChartData(data);
-        cityContrastChart.setZoomEnabled(false);
+        cityContrastChart.setZoomEnabled(true);
     }
+
+
+
 
     private Line getLine(List<DataInfoBean> data, String color) {
         if (data == null) {

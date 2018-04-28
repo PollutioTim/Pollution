@@ -5,4 +5,6 @@
     <string name="about_us">关于我们</string>
 
     <string name="air_quality">空气质量</string>
+    
+    <string name="air_indicators">PM25\nPM10\nSO2\nNO2\nO3\nCO</string>
 </resources>

@@ -1,7 +1,6 @@
 package com.tim.pollution.fragment;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -26,16 +25,19 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.tim.pollution.MyApplication;
 import com.tim.pollution.R;
+import com.tim.pollution.activity.HomeActivity;
 import com.tim.pollution.activity.WeatherDetailActivity;
 import com.tim.pollution.activity.WeatherMainActivity;
 import com.tim.pollution.adapter.WeatherPointAdapter;
 import com.tim.pollution.bean.RegionWeather;
 import com.tim.pollution.bean.weather.AQI24hBean;
+import com.tim.pollution.bean.weather.MessageBean;
 import com.tim.pollution.callback.ICallBack;
 import com.tim.pollution.general.Constants;
 import com.tim.pollution.general.MData;
 import com.tim.pollution.general.MDataType;
 import com.tim.pollution.net.WeatherDal;
+import com.tim.pollution.view.ProgressView;
 import com.tim.pollution.view.WrapContentListView;
 import com.woodnaonly.arcprogress.ArcProgress;
 
@@ -47,13 +49,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import lecho.lib.hellocharts.model.Axis;
 import lecho.lib.hellocharts.model.AxisValue;
 import lecho.lib.hellocharts.model.Column;
 import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.SubcolumnValue;
-import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.ColumnChartView;
 
 /**
@@ -62,43 +65,42 @@ import lecho.lib.hellocharts.view.ColumnChartView;
 public class WeatherFragment extends Fragment implements ICallBack, View.OnClickListener, AdapterView.OnItemClickListener {
 
 
-    TextView weatherTitleLocation;
-    TextView textView;
-    TextView weatherTitleLocationSelect;
+    Unbinder unbinder;
     TextView weatherLocationTime;
     ArcProgress weatherArcProgress;
     ImageView weatherInfoImg;
     TextView weatherTemperature;
     TextView weatherWind;
     TextView weatherPm25;
-    ProgressBar weatherPm25Pro;
+    ProgressView weatherPm25Pro;
     TextView weatherPm10;
-    ProgressBar weatherPm10Pro;
+    ProgressView weatherPm10Pro;
     TextView weatherSo2;
-    ProgressBar weatherSo2Pro;
+    ProgressView weatherSo2Pro;
     TextView weatherNo2;
-    ProgressBar weatherNo2Pro;
+    ProgressView weatherNo2Pro;
     TextView weatherO3;
-    ProgressBar weatherO3Pro;
+    ProgressView weatherO3Pro;
     TextView weatherCo;
-    ProgressBar weatherCoPro;
-    TextView weatherHealthTip;
-    TextView weatherDetail;
-    ColumnChartView weatherChart;
-    WrapContentListView weatherPointList;
-    Unbinder unbinder;
+    ProgressView weatherCoPro;
+    ImageView weatherHealthTip;
+    Unbinder unbinder1;
     private RegionWeather regionWeather;
 
-    String regionId="";
+    String regionId = "";
+
+    private FragmentCallBack callBack;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //引用创建好的xml布局
         View view = inflater.inflate(R.layout.activity_weather, container, false);
         Bundle bundle = getArguments();
-         regionId = bundle.getString("regionId");
+        regionId = bundle.getString("regionId");
         findView(view);
         setClick();
         SeekBar seekBar;
+        unbinder1 = ButterKnife.bind(this, view);
         return view;
 
     }
@@ -124,9 +126,9 @@ public class WeatherFragment extends Fragment implements ICallBack, View.OnClick
      * 点击事件
      */
     private void setClick() {
-        weatherDetail.setOnClickListener(this);
+//        weatherDetail.setOnClickListener(this);
         weatherHealthTip.setOnClickListener(this);
-        weatherTitleLocationSelect.setOnClickListener(this);
+//        weatherTitleLocationSelect.setOnClickListener(this);
     }
 
 
@@ -147,43 +149,40 @@ public class WeatherFragment extends Fragment implements ICallBack, View.OnClick
     private void setData(RegionWeather regionWeather) {
         if (regionWeather != null) {
             if (regionWeather.getMessage().getRegionList() != null) {
-                weatherTitleLocation.setText(regionWeather.getMessage().getRegionList().getRegionName());
-                weatherLocationTime.setText("地址 " + regionWeather.getMessage().getRegionList().getTime());
+//                weatherTitleLocation.setText(regionWeather.getMessage().getRegionList().getRegionName());
+                weatherLocationTime.setText(regionWeather.getMessage().getRegionList().getRegionName()+" " + regionWeather.getMessage().getRegionList().getTime());
                 weatherArcProgress.setProgressTextTop(regionWeather.getMessage().getRegionList().getPollutionLevel());
                 weatherArcProgress.setProgressTextBottom("首要污染物 " + regionWeather.getMessage().getRegionList().getTopPollution());
                 weatherArcProgress.setProgress(Double.valueOf(getTopPollutionPrograss(regionWeather, regionWeather.getMessage().getRegionList().getTopPollution())));
-                String name = "w"+ regionWeather.getMessage().getRegionList().getWeathercode();
+                String name = "w" + regionWeather.getMessage().getRegionList().getWeathercode();
                 weatherInfoImg.setImageResource(getImageResourceId(name));
                 weatherTemperature.setText(regionWeather.getMessage().getRegionList().getTemperature() + " °C");
                 weatherWind.setText(regionWeather.getMessage().getRegionList().getWind() + "\n" + "湿度" + regionWeather.getMessage().getRegionList().getHumidity() + "%");
                 weatherPm25.setText(regionWeather.getMessage().getRegionList().getPM25());
-                weatherPm25Pro.setProgress(getIntFromString(regionWeather.getMessage().getRegionList().getPM25()));
-//                weatherPm25Pro.setProgressDrawable(getDrawableFormString(regionWeather.getMessage().getRegionList().getPM25color()));
-
-                weatherPm25Pro.setProgressTintList(ColorStateList.valueOf(Color.parseColor(regionWeather.getMessage().getRegionList().getPM25color())));
+                weatherPm25Pro.setMaxCount(500);
+                weatherPm25Pro.setCurrentCount(getIntFromString(regionWeather.getMessage().getRegionList().getPM25()));
+                weatherPm25Pro.setPrograssColor(regionWeather.getMessage().getRegionList().getPM25color());
+//                weatherPm25Pro.setProgressTintList(ColorStateList.valueOf(Color.parseColor(regionWeather.getMessage().getRegionList().getPM25color())));
                 weatherPm10.setText(regionWeather.getMessage().getRegionList().getPM10());
-                weatherPm10Pro.setProgress(getIntFromString(regionWeather.getMessage().getRegionList().getPM10()));
-//                weatherPm10Pro.setProgressDrawable(getDrawableFormString(regionWeather.getMessage().getRegionList().getPM10color()));
-                weatherPm10Pro.setProgressTintList(ColorStateList.valueOf(Color.parseColor(regionWeather.getMessage().getRegionList().getPM10color())));
+                weatherPm10Pro.setMaxCount(500);
+                weatherPm10Pro.setCurrentCount(getIntFromString(regionWeather.getMessage().getRegionList().getPM10()));
+                weatherPm10Pro.setPrograssColor(regionWeather.getMessage().getRegionList().getPM10color());
                 weatherSo2.setText(regionWeather.getMessage().getRegionList().getSO2());
-                weatherSo2Pro.setProgress(getIntFromString(regionWeather.getMessage().getRegionList().getSO2()));
-//                weatherSo2Pro.setProgressDrawable(getDrawableFormString(regionWeather.getMessage().getRegionList().getSO2color()));
-                weatherSo2Pro.setProgressTintList(ColorStateList.valueOf(Color.parseColor(regionWeather.getMessage().getRegionList().getSO2color())));
+                weatherSo2Pro.setMaxCount(500);
+                weatherSo2Pro.setCurrentCount(getIntFromString(regionWeather.getMessage().getRegionList().getSO2()));
+                weatherSo2Pro.setPrograssColor(regionWeather.getMessage().getRegionList().getSO2color());
                 weatherNo2.setText(regionWeather.getMessage().getRegionList().getNO2());
-                weatherNo2Pro.setProgress(getIntFromString(regionWeather.getMessage().getRegionList().getNO2()));
-//                weatherNo2Pro.setProgressDrawable(getDrawableFormString(regionWeather.getMessage().getRegionList().getNO2color()));
-                weatherNo2Pro.setProgressTintList(ColorStateList.valueOf(Color.parseColor(regionWeather.getMessage().getRegionList().getNO2color())));
+                weatherNo2Pro.setMaxCount(500);
+                weatherNo2Pro.setCurrentCount(getIntFromString(regionWeather.getMessage().getRegionList().getNO2()));
+                weatherNo2Pro.setPrograssColor(regionWeather.getMessage().getRegionList().getNO2color());
                 weatherO3.setText(regionWeather.getMessage().getRegionList().getO3());
-                weatherO3Pro.setProgress(getIntFromString(regionWeather.getMessage().getRegionList().getO3()));
-//                weatherO3Pro.setProgressDrawable(getDrawableFormString(regionWeather.getMessage().getRegionList().getO3color()));
-                weatherO3Pro.setProgressTintList(ColorStateList.valueOf(Color.parseColor(regionWeather.getMessage().getRegionList().getO3color())));
+                weatherO3Pro.setMaxCount(500);
+                weatherO3Pro.setCurrentCount(getIntFromString(regionWeather.getMessage().getRegionList().getO3()));
+                weatherO3Pro.setPrograssColor(regionWeather.getMessage().getRegionList().getO3color());
                 weatherCo.setText(regionWeather.getMessage().getRegionList().getCO());
-                weatherCoPro.setProgress(getIntFromString(regionWeather.getMessage().getRegionList().getCO()));
-//                weatherCoPro.setProgressDrawable(getDrawableFormString(regionWeather.getMessage().getRegionList().getCOcolor()));
-                weatherCoPro.setProgressTintList(ColorStateList.valueOf(Color.parseColor(regionWeather.getMessage().getRegionList().getCOcolor())));
-//                initForm(regionWeather);
-                initCharts();
-                intList(regionWeather);
+                weatherCoPro.setMaxCount(500);
+                weatherCoPro.setCurrentCount(getIntFromString(regionWeather.getMessage().getRegionList().getCO()));
+                weatherCoPro.setPrograssColor(regionWeather.getMessage().getRegionList().getCOcolor());
             }
 
         }
@@ -203,17 +202,11 @@ public class WeatherFragment extends Fragment implements ICallBack, View.OnClick
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        activity = getActivity();
+        if (activity instanceof HomeActivity) {
+            callBack = (FragmentCallBack) getActivity();
+        }
     }
 
-    private void intList(RegionWeather regionWeather) {
-        if (regionWeather != null) {
-            if (regionWeather.getMessage().getPoint_AQI() != null) {
-                weatherPointList.setAdapter(new WeatherPointAdapter(getContext(), regionWeather.getMessage().getPoint_AQI()));
-            }
-        }
-        weatherPointList.setOnItemClickListener(this);
-    }
 
     /**
      * string-->int
@@ -222,10 +215,10 @@ public class WeatherFragment extends Fragment implements ICallBack, View.OnClick
      * @return
      */
     private int getIntFromString(String s) {
-        try{
+        try {
             int i = (int) Math.ceil(Double.valueOf(s));
             return i;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return 0;
         }
@@ -288,56 +281,12 @@ public class WeatherFragment extends Fragment implements ICallBack, View.OnClick
             //属性值含义同X轴
             data.setAxisYLeft(new Axis().setHasLines(false).setTextColor(Color.WHITE).setMaxLabelChars(10));
             //最后将所有值显示在View中
-            weatherChart.setColumnChartData(data);
+//            weatherChart.setColumnChartData(data);
         }
 
 
     }
-    private void initCharts(){
-        if (regionWeather.getMessage().getAQI_24h() != null&&regionWeather.getMessage().getAQI_24h() .size()>0) {
-            List<AQI24hBean> list = regionWeather.getMessage().getAQI_24h();
-            //每个集合显示几条柱子
-            int numSubcolumns = 1;
-            //显示多少个集合
-            int numColumns = list.size();
-            //保存所有的柱子
-            List<Column> columns = new ArrayList<Column>();
-            //保存每个竹子的值
-            List<SubcolumnValue> values;
-            List<AxisValue> axisXValues = new ArrayList<AxisValue>();
-            //对每个集合的柱子进行遍历
-            for (int i = 0; i < numColumns; ++i) {
 
-                values = new ArrayList<SubcolumnValue>();
-                //循环所有柱子（list）
-                for (int j = 0; j < numSubcolumns; ++j) {
-                    //创建一个柱子，然后设置值和颜色，并添加到list中
-                    values.add(new SubcolumnValue(Float.valueOf(list.get(i).getAQI()),Color.parseColor(list.get(i).getAQIcolor())));
-                    //设置X轴的柱子所对应的属性名称
-                    axisXValues.add(new AxisValue(i).setLabel(list.get(i).getTime()));
-                }
-                //将每个属性的拥有的柱子，添加到Column中
-                Column column = new Column(values);
-                //是否显示每个柱子的Lable
-                column.setHasLabels(false);
-                //设置每个柱子的Lable是否选中，为false，表示不用选中，一直显示在柱子上
-                column.setHasLabelsOnlyForSelected(false);
-                //将每个属性得列全部添加到List中
-                columns.add(column);
-            }
-            //设置Columns添加到Data中
-            ColumnChartData data = new ColumnChartData(columns);
-            //设置X轴显示在底部，并且显示每个属性的Lable，字体颜色为黑色，X轴的名字为“学历”，每个柱子的Lable斜着显示，距离X轴的距离为8
-            data.setAxisXBottom(new Axis(axisXValues).setHasLines(true).setTextColor(Color.WHITE).setName("").setHasTiltedLabels(false).setMaxLabelChars(8));
-            //属性值含义同X轴
-            data.setAxisYLeft(new Axis().setHasLines(true).setName("").setTextColor(Color.WHITE).setMaxLabelChars(5));
-            //最后将所有值显示在View中
-            weatherChart.setColumnChartData(data);
-            weatherChart.setZoomEnabled(false);
-        }else{
-            weatherChart.setVisibility(View.GONE);
-        }
-    }
 
     private ColorDrawable getDrawableFormString(String colorStr) {
         ColorDrawable colorDrawable = new ColorDrawable();
@@ -347,17 +296,17 @@ public class WeatherFragment extends Fragment implements ICallBack, View.OnClick
     }
 
     private String getTopPollutionPrograss(RegionWeather regionWeather, String top) {
-        if ("PM25".equals(top)) {
+        if (top.contains("PM25")) {
             return regionWeather.getMessage().getRegionList().getPM25();
-        } else if ("PM10".equals(top)) {
+        } else if (top.contains("PM10")) {
             return regionWeather.getMessage().getRegionList().getPM10();
-        } else if ("SO2".equals(top)) {
+        } else if (top.contains("SO2")) {
             return regionWeather.getMessage().getRegionList().getSO2();
-        } else if ("NO2".equals(top)) {
+        } else if (top.contains("NO2")) {
             return regionWeather.getMessage().getRegionList().getNO2();
-        } else if ("O3".equals(top)) {
+        } else if (top.contains("O3")) {
             return regionWeather.getMessage().getRegionList().getO3();
-        } else if ("CO".equals(top)) {
+        } else if (top.contains("CO")) {
             return regionWeather.getMessage().getRegionList().getCO();
         }
         return "0";
@@ -374,53 +323,53 @@ public class WeatherFragment extends Fragment implements ICallBack, View.OnClick
      *
      */
     private void findView(View view) {
-         weatherTitleLocation= (TextView) view.findViewById(R.id.weather_title_location);
+//        weatherTitleLocation = (TextView) view.findViewById(R.id.weather_title_location);
+//
+//        textView = (TextView) view.findViewById(R.id.textView);
+//
+//        weatherTitleLocationSelect = (TextView) view.findViewById(R.id.weather_title_location_select);
 
-         textView= (TextView) view.findViewById(R.id.textView);
+        weatherLocationTime = (TextView) view.findViewById(R.id.weather_location_time);
 
-         weatherTitleLocationSelect= (TextView) view.findViewById(R.id.weather_title_location_select);
+        weatherArcProgress = (ArcProgress) view.findViewById(R.id.weather_arcProgress);
 
-         weatherLocationTime= (TextView) view.findViewById(R.id.weather_location_time);
+        weatherInfoImg = (ImageView) view.findViewById(R.id.weather_info_img);
 
-         weatherArcProgress= (ArcProgress) view.findViewById(R.id.weather_arcProgress);
+        weatherTemperature = (TextView) view.findViewById(R.id.weather_temperature);
 
-         weatherInfoImg= (ImageView) view.findViewById(R.id.weather_info_img);
+        weatherWind = (TextView) view.findViewById(R.id.weather_wind);
 
-         weatherTemperature= (TextView) view.findViewById(R.id.weather_temperature);
+        weatherPm25 = (TextView) view.findViewById(R.id.weather_pm25);
 
-         weatherWind= (TextView) view.findViewById(R.id.weather_wind);
+        weatherPm25Pro = (ProgressView) view.findViewById(R.id.weather_pm25_pro);
 
-         weatherPm25= (TextView) view.findViewById(R.id.weather_pm25);
+        weatherPm10 = (TextView) view.findViewById(R.id.weather_pm10);
 
-         weatherPm25Pro= (ProgressBar) view.findViewById(R.id.weather_pm25_pro);
+        weatherPm10Pro = (ProgressView) view.findViewById(R.id.weather_pm10_pro);
 
-         weatherPm10= (TextView) view.findViewById(R.id.weather_pm10);
+        weatherSo2 = (TextView) view.findViewById(R.id.weather_so2);
 
-         weatherPm10Pro= (ProgressBar) view.findViewById(R.id.weather_pm10_pro);
+        weatherSo2Pro = (ProgressView) view.findViewById(R.id.weather_so2_pro);
 
-         weatherSo2= (TextView) view.findViewById(R.id.weather_so2);
+        weatherNo2 = (TextView) view.findViewById(R.id.weather_no2);
 
-         weatherSo2Pro= (ProgressBar) view.findViewById(R.id.weather_so2_pro);
+        weatherNo2Pro = (ProgressView) view.findViewById(R.id.weather_no2_pro);
 
-        weatherNo2= (TextView) view.findViewById(R.id.weather_no2);
+        weatherO3 = (TextView) view.findViewById(R.id.weather_o3);
 
-        weatherNo2Pro= (ProgressBar) view.findViewById(R.id.weather_no2_pro);
+        weatherO3Pro = (ProgressView) view.findViewById(R.id.weather_o3_pro);
 
-         weatherO3= (TextView) view.findViewById(R.id.weather_o3);
+        weatherCo = (TextView) view.findViewById(R.id.weather_co);
 
-         weatherO3Pro= (ProgressBar) view.findViewById(R.id.weather_o3_pro);
+        weatherCoPro = (ProgressView) view.findViewById(R.id.weather_co_pro);
 
-         weatherCo= (TextView) view.findViewById(R.id.weather_co);
+        weatherHealthTip = (ImageView) view.findViewById(R.id.weather_health_tip);
 
-        weatherCoPro= (ProgressBar) view.findViewById(R.id.weather_co_pro);
-
-         weatherHealthTip= (TextView) view.findViewById(R.id.weather_health_tip);
-
-         weatherDetail= (TextView) view.findViewById(R.id.weather_detail);
-
-         weatherChart= (ColumnChartView) view.findViewById(R.id.weather_chart);
-
-         weatherPointList= (WrapContentListView) view.findViewById(R.id.weather_point_list);
+//        weatherDetail = (TextView) view.findViewById(R.id.weather_detail);
+//
+//        weatherChart = (ColumnChartView) view.findViewById(R.id.weather_chart);
+//
+//        weatherPointList = (WrapContentListView) view.findViewById(R.id.weather_point_list);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -429,10 +378,12 @@ public class WeatherFragment extends Fragment implements ICallBack, View.OnClick
         MData mData = (MData) data;
         if (MDataType.REGION_WEATHER.equals(mData.getType())) {
             regionWeather = (RegionWeather) mData.getData();
-
 //            regionWeather = getTest();
             if (regionWeather != null) {
                 setData(regionWeather);
+                if (callBack != null) {
+                    callBack.prograss(regionWeather.getMessage());
+                }
             }
 
         }
@@ -463,11 +414,11 @@ public class WeatherFragment extends Fragment implements ICallBack, View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.weather_detail://变化趋势
-                Intent intent = new Intent(getContext(), WeatherDetailActivity.class);
-                intent.putExtra("regionid", regionid);
-                startActivity(intent);
-                break;
+//            case R.id.weather_detail://变化趋势
+//                Intent intent = new Intent(getContext(), WeatherDetailActivity.class);
+//                intent.putExtra("regionid", regionid);
+//                startActivity(intent);
+//                break;
             case R.id.weather_health_tip://健康提示
                 showTip();
                 break;
@@ -486,7 +437,7 @@ public class WeatherFragment extends Fragment implements ICallBack, View.OnClick
         //点击对话框以外的区域是否让对话框消失
         builder.setCancelable(true);
         AlertDialog dialog = builder.create();
-        if(dialog!=null){
+        if (dialog != null) {
             //显示对话框
             dialog.show();
         }
@@ -504,5 +455,7 @@ public class WeatherFragment extends Fragment implements ICallBack, View.OnClick
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        unbinder1.unbind();
     }
 }
+

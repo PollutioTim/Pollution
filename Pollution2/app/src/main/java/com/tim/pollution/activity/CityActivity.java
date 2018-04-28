@@ -8,7 +8,8 @@ import com.tim.pollution.R;
 import com.tim.pollution.adapter.CityAdapter;
 import com.tim.pollution.general.BaseActivity;
 
-import butterknife.Bind;
+import butterknife.BindView;
+
 
 /**
  * Created by lenovo on 2018/4/27.
@@ -16,9 +17,9 @@ import butterknife.Bind;
 
 public class CityActivity extends BaseActivity {
 
-    @Bind(R.id.city_recyview)
+    @BindView(R.id.city_recyview)
     RecyclerView recyclerView;
-    @Bind(R.id.city_back_iv)
+    @BindView(R.id.city_back_iv)
     ImageView ivBack;
 
     private CityAdapter adapter;

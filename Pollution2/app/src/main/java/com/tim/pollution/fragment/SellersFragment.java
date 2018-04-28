@@ -68,23 +68,23 @@ public class SellersFragment extends Fragment implements ICallBack{
     TextView tvLast;
     @BindView(R.id.last_view)
     View vLast;
-    @Bind(R.id.pm2_tv)
+    @BindView(R.id.pm2_tv)
     TextView tvPM2;
-    @Bind(R.id.index_all_tv)
+    @BindView(R.id.index_all_tv)
     TextView tvIndex;
-    @Bind(R.id.pm10_tv)
+    @BindView(R.id.pm10_tv)
     TextView tvPM10;
-    @Bind(R.id.so2_tv)
+    @BindView(R.id.so2_tv)
     TextView tvSO2;
-    @Bind(R.id.o3_tv)
+    @BindView(R.id.o3_tv)
     TextView tvO3;
-    @Bind(R.id.sellers_co_tv)
+    @BindView(R.id.sellers_co_tv)
     TextView tvCO;
-    @Bind(R.id.no2_tv)
+    @BindView(R.id.no2_tv)
     TextView tvNO2;
-    @Bind(R.id.item_rank_type_tv)
+    @BindView(R.id.item_rank_type_tv)
     TextView tvTitleType;
-    @Bind(R.id.sellers_recyview)
+    @BindView(R.id.sellers_recyview)
     RecyclerView recyclerView;
     private Map<String ,String>parms;
     private List<RankMainBean.Message>datas;

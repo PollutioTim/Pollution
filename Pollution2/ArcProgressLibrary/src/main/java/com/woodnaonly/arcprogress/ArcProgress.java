@@ -453,16 +453,16 @@ public class ArcProgress extends View {
                     "fonts/t1.otf");
             textPaint.setTypeface(fontFace);
             if (isText) {
-                canvas.drawText(mText, (getWidth() - textPaint.measureText(text)) / 2.0f, textBaseline, textPaint);
+                canvas.drawText(mText, (getWidth() - textPaint.measureText(text)) / 2.0f, textBaseline + textHeight - Utils.dp2px(getResources(), 1), textPaint);
             } else {
-                canvas.drawText(text, (getWidth() - textPaint.measureText(text)) / 2.0f, textBaseline, textPaint);
+                canvas.drawText(text, (getWidth() - textPaint.measureText(text)) / 2.0f, textBaseline + textHeight - Utils.dp2px(getResources(), 1), textPaint);
             }
 
 
             if (!TextUtils.isEmpty(getProgressTextTop())) {
                 textPaint.setTextSize(progressTextTopSize);
                 textPaint.setColor(progressTextTopColor);
-                canvas.drawText(getProgressTextTop(), (getWidth() - textPaint.measureText(getProgressTextTop())) / 2.0f, textBaseline + textHeight - Utils.dp2px(getResources(), 20), textPaint);
+                canvas.drawText(getProgressTextTop(), (getWidth() - textPaint.measureText(getProgressTextTop())) / 2.0f,textBaseline, textPaint);
             }
             if (!TextUtils.isEmpty(getProgressTextBottom())) {
                 textPaint.setTextSize(progressTextBottomSize);
