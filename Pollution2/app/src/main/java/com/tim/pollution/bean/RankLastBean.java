@@ -9,8 +9,7 @@ import java.util.List;
  * Created by lenovo on 2018/4/25.
  */
 
-public class RankMainBean extends StateCode implements Serializable {
-
+public class RankLastBean extends StateCode implements Serializable {
     @SerializedName("message")
     private List<Message> messages;
 
@@ -25,10 +24,8 @@ public class RankMainBean extends StateCode implements Serializable {
     public class Message{
         private String ranking;
         private String name;
-        private String toppoll;
+        private String mainpoll;
         private String value;
-        @SerializedName("valuecolor")
-        private String valueColor;
 
         public String getRanking() {
             return ranking;
@@ -46,12 +43,12 @@ public class RankMainBean extends StateCode implements Serializable {
             this.name = name;
         }
 
-        public String getToppoll() {
-            return toppoll;
+        public String getMainpoll() {
+            return mainpoll;
         }
 
-        public void setToppoll(String toppoll) {
-            this.toppoll = toppoll;
+        public void setMainpoll(String mainpoll) {
+            this.mainpoll = mainpoll;
         }
 
         public String getValue() {
@@ -62,23 +59,5 @@ public class RankMainBean extends StateCode implements Serializable {
             this.value = value;
         }
 
-        public String getValueColor() {
-            return valueColor;
-        }
-
-        public void setValueColor(String valueColor) {
-            this.valueColor = valueColor;
-        }
-
-        @Override
-        public String toString() {
-            return "Message{" +
-                    "ranking='" + ranking + '\'' +
-                    ", name='" + name + '\'' +
-                    ", toppoll='" + toppoll + '\'' +
-                    ", value='" + value + '\'' +
-                    ", valueColor='" + valueColor + '\'' +
-                    '}';
-        }
     }
 }

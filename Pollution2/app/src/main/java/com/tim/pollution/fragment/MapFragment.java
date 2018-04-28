@@ -57,11 +57,15 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.baidu.location.d.a.i;
+import static com.baidu.location.d.j.I;
+
 /**
  * Created by lenovo on 2018/4/20.
  */
 
-public class MapFragment extends Fragment implements ICallBack ,OnGetDistricSearchResultListener{
+public class MapFragment extends Fragment implements ICallBack,
+        OnGetDistricSearchResultListener {
 
     @BindView(R.id.fg_mTexturemap)
     MapView mapView;
@@ -84,42 +88,34 @@ public class MapFragment extends Fragment implements ICallBack ,OnGetDistricSear
     private LocationClient mLocClient;
     private LocationUtil locationUtil;
     private boolean isFirstLocate = true;
-    private Map<String ,String >parms;
-    private List<CityBean>cityBeens = new LinkedList<>();
+    private Map<String, String> parms;
+    private List<CityBean> cityBeens = new LinkedList<>();
     private DistrictSearch mDistrictSearch;
-    private int count = 0;
+    private String colors = "";
     private DistrictSearchOption districtSearchOption;
-
-    public static MapFragment newInstance(String param1) {
-        MapFragment fragment = new MapFragment();
-        Bundle args = new Bundle();
-        args.putString("agrs1", param1);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SDKInitializer.initialize(getActivity().getApplicationContext());
-        View view = inflater.inflate(R.layout.fragment_map,null);
+        View view = inflater.inflate(R.layout.fragment_map, null);
         ButterKnife.bind(this, view);
         mapView = (MapView) view.findViewById(R.id.fg_mTexturemap);
         mCurrentMode = MyLocationConfiguration.LocationMode.NORMAL;
         mBaiduMap = mapView.getMap();
         mBaiduMap.setMyLocationConfigeration(new MyLocationConfiguration(mCurrentMode,
                 true, null));
-        locationUtil = new LocationUtil(getActivity(),this);
+        locationUtil = new LocationUtil(getActivity(), this);
         return view;
     }
 
     private void init() {
-        if(parms == null){
+        if (parms == null) {
             parms = new HashMap<>();
         }
-        parms.put("key","6DlLqAyx3mY=");
-        parms.put("regiontype","area");
-        MapDAL.getInstance().getCityData(parms,this);
+        parms.put("key", "6DlLqAyx3mY=");
+        parms.put("regiontype", "area");
+        MapDAL.getInstance().getCityData(parms, this);
     }
 
     @Override
@@ -144,25 +140,25 @@ public class MapFragment extends Fragment implements ICallBack ,OnGetDistricSear
     @Override
     public void onProgress(Object data) {
         MData data1 = (MData) data;
-        if(data1.getType().equals(MDataType.MAP_DATA)){
-            MapBean mapBean= (MapBean) data1.getData();
-            if(cityBeens.size() >0){
+        if (data1.getType().equals(MDataType.MAP_DATA)) {
+            MapBean mapBean = (MapBean) data1.getData();
+            if (cityBeens.size() > 0) {
                 cityBeens.clear();
             }
             cityBeens = mapBean.getMessage().getCityBeens();
             getArea(cityBeens);
-        }else if(data1.getType().equals(MDataType.MAP)){
+        } else if (data1.getType().equals(MDataType.MAP)) {
             BDLocation location = (BDLocation) data1.getData();
-            if (isFirstLocate){
-                LatLng ll = new LatLng(location.getLatitude(),location.getLongitude());
+            if (isFirstLocate) {
+                LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
                 MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(ll);
                 mBaiduMap.animateMapStatus(update);
                 update = MapStatusUpdateFactory.zoomTo(9f);
                 mBaiduMap.animateMapStatus(update);
-	        /*判断baiduMap是已经移动到指定位置*/
-                if (mBaiduMap.getLocationData()!=null)
-                    if (mBaiduMap.getLocationData().latitude==location.getLatitude()
-                            &&mBaiduMap.getLocationData().longitude==location.getLongitude()){
+            /*判断baiduMap是已经移动到指定位置*/
+                if (mBaiduMap.getLocationData() != null)
+                    if (mBaiduMap.getLocationData().latitude == location.getLatitude()
+                            && mBaiduMap.getLocationData().longitude == location.getLongitude()) {
                         isFirstLocate = false;
                     }
             }
@@ -180,13 +176,20 @@ public class MapFragment extends Fragment implements ICallBack ,OnGetDistricSear
 
     }
 
-    private void getArea(List<CityBean>cityBeens){
-        mDistrictSearch = DistrictSearch.newInstance();
-        //初始化行政区检索
-        mDistrictSearch.setOnDistrictSearchListener(this);//设置回调监听
-        districtSearchOption = new DistrictSearchOption();
-        for(int i=0;i<cityBeens.size();i++){
-            new DownTask().execute(cityBeens.get(i));
+    private void getArea(List<CityBean> cityBeens) {
+
+        for(int i= 0;i<cityBeens.size();i++){
+            if(mDistrictSearch !=null || districtSearchOption != null){
+                mDistrictSearch = null;
+                districtSearchOption = null;
+            }
+            mDistrictSearch = DistrictSearch.newInstance();
+            //初始化行政区检索
+            mDistrictSearch.setOnDistrictSearchListener(this);//设置回调监听
+            districtSearchOption = new DistrictSearchOption();
+            districtSearchOption.cityName(cityBeens.get(i).getRegionName());//检索城市名称
+            mDistrictSearch.searchDistrict(districtSearchOption);//请求行政区数据
+            colors = cityBeens.get(i).getAQIColor();
         }
     }
 
@@ -195,7 +198,7 @@ public class MapFragment extends Fragment implements ICallBack ,OnGetDistricSear
     public void onGetDistrictResult(DistrictResult districtResult) {
         districtResult.getCenterPt();//获取行政区中心坐标点
         districtResult.getCityName();//获取行政区域名称
-        Log.e("lili","getCityName"+districtResult.getCityName());
+        Log.e("lili", "getCityName" + districtResult.getCityName());
         List<List<LatLng>> polyLines = districtResult.getPolylines();
         //获取行政区域边界坐标点 //边界就是坐标点的集合，在地图上画出来就是多边形图层。
         // 有的行政区可能有多个区域，所以会有多个点集合。
@@ -206,13 +209,10 @@ public class MapFragment extends Fragment implements ICallBack ,OnGetDistricSear
             OverlayOptions ooPolyline11 = new PolylineOptions().width(10)
                     .points(polyline).dottedLine(true).color(Color.RED);
             mBaiduMap.addOverlay(ooPolyline11);//添加OverLay
-
-            for (CityBean ci:cityBeens){
-                OverlayOptions ooPolygon = new PolygonOptions().points(polyline).
+            OverlayOptions ooPolygon = new PolygonOptions().points(polyline).
                         stroke(new Stroke(2, 0xAA00FF88)).
-                        fillColor(Color.parseColor(ci.getAQIColor()));
-                mBaiduMap.addOverlay(ooPolygon);//添加OverLay
-            }
+                        fillColor(Color.parseColor(colors));
+            mBaiduMap.addOverlay(ooPolygon);//添加OverLay
             for (LatLng latLng : polyline) {
                 builder.include(latLng);//包含这些点
             }
@@ -233,13 +233,14 @@ public class MapFragment extends Fragment implements ICallBack ,OnGetDistricSear
         @Override
         //在界面上显示进度条
         protected void onPreExecute() {
-        };
+        }
+
+        ;
+
         //主要是更新UI
         @Override
         protected void onPostExecute(CityBean result) {
-            Log.e("lili","result="+result.getRegionName());
-            districtSearchOption.cityName(result.getRegionName());//检索城市名称
-            mDistrictSearch.searchDistrict(districtSearchOption);//请求行政区数据
+
             super.onPostExecute(result);
         }
     }

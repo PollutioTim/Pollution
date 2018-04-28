@@ -57,10 +57,17 @@
         <activity android:name=".activity.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--设置-->
+        <activity android:name=".activity.RelesExplainActvity" />
+        <activity android:name=".activity.QualityReleaseActivity" />
+        <activity android:name=".activity.AboutUsActivity" >
+
+        </activity>
+        <activity android:name=".activity.CityActivity" />
+
     </application>
 
 </manifest>

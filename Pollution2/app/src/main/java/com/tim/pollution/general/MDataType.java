@@ -8,6 +8,7 @@ public class MDataType {
     public static String MAP_DATA = "mapdata";
     public static String MAP = "map";
     public static String RANK = "rank";
+    public static String RANK_LAST = "rank_last";
 
     public static String REGION_WEATHER="com.tim.pollution.bean.RegionWeather";
 
