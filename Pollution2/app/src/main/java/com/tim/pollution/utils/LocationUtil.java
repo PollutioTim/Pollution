@@ -1,6 +1,7 @@
 package com.tim.pollution.utils;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
@@ -43,6 +44,7 @@ public class LocationUtil extends BDAbstractLocationListener {
 
     @Override
     public void onReceiveLocation(BDLocation location) {
+        Log.e("test",location.toString());
         //此处的BDLocation为定位结果信息类，通过它的各种get方法可获取定位相关的全部结果
         //以下只列举部分获取经纬度相关（常用）的结果信息
         if (location != null) {

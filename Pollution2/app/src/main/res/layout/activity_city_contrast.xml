@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/weather_background"
+    tools:context="com.tim.pollution.activity.CityContrastActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="城市对比"
+                android:textColor="@color/color_white"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <TextView
+                    android:id="@+id/city_contrast_sp1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawablePadding="-30dp"
+                    android:drawableRight="@mipmap/spinner_icon"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="太原"
+                    android:textColor="@color/color_white" />
+
+                <TextView
+                    android:id="@+id/city_contrast_sp2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawablePadding="-30dp"
+                    android:drawableRight="@mipmap/spinner_icon"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="太原"
+                    android:textColor="@color/color_white" />
+
+                <TextView
+                    android:id="@+id/city_contrast_sp3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawablePadding="-30dp"
+                    android:drawableRight="@mipmap/spinner_icon"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="太原"
+                    android:textColor="@color/color_white" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <lecho.lib.hellocharts.view.LineChartView
+                    android:id="@+id/city_contrast_chart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="300dp"
+                    android:layout_margin="10dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#FF9DD4D6"
+                        android:drawableRight="@mipmap/bbd"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="12H"
+                        android:textColor="@color/color_white"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/city_contrast_info"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="#FF9DD4D6"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="AQI 14:00\n太原 255\n大同 100\n临汾 150"
+                        android:textColor="@color/color_white"
+                        android:textSize="10sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <RadioGroup
+                android:id="@+id/city_contrast_rg_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FF42969D"
+                android:checkedButton="@+id/city_contrast_rbpm25_type"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/city_contrast_rbpm25_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="PM2.5"
+                    android:textColor="@drawable/white_green_selector" />
+
+                <RadioButton
+                    android:id="@+id/city_contrast_rbpm10_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="PM10"
+                    android:textColor="@drawable/white_green_selector" />
+
+                <RadioButton
+                    android:id="@+id/city_contrast_rbso2_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="SO2"
+                    android:textColor="@drawable/white_green_selector" />
+
+                <RadioButton
+                    android:id="@+id/city_contrast_rbno2_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="NO2"
+                    android:textColor="@drawable/white_green_selector" />
+
+                <RadioButton
+                    android:id="@+id/city_contrast_rbo3_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="O₃"
+                    android:textColor="@drawable/white_green_selector" />
+
+                <RadioButton
+                    android:id="@+id/city_contrast_rbco_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="CO"
+                    android:textColor="@drawable/white_green_selector" />
+            </RadioGroup>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:paddingRight="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="6"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="时间"
+                    android:textColor="@color/color_white"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/city_contrast_city1"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="太原"
+                    android:textColor="@color/color_white"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/city_contrast_city2"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="大同"
+                    android:textColor="@color/color_white"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/city_contrast_city3"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="临汾"
+                    android:textColor="@color/color_white"
+                    android:textSize="15dp" />
+            </LinearLayout>
+
+            <com.tim.pollution.view.WrapContentListView
+                android:id="@+id/city_contrast_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

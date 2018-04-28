@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/weather_location_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="太原 18.03.27 15：00"
+                android:textColor="@color/color_white" />
+
+            <com.woodnaonly.arcprogress.ArcProgress
+                android:id="@+id/weather_arcProgress"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/ArcProgress2"
+                android:padding="5dp"
+                app:arc_finished_color="@color/next_good"
+                app:arc_max="500"
+                app:arc_progress="100"
+                app:arc_progress_text_bottom_color="@color/color_white"
+                app:arc_progress_text_bottom_size="12sp"
+                app:arc_progress_text_bottom_text="首要污染物 PM10"
+                app:arc_progress_text_color="@color/color_white"
+                app:arc_progress_text_size="50sp"
+                app:arc_progress_text_top_color="@color/color_white"
+                app:arc_progress_text_top_size="18sp"
+                app:arc_progress_text_top_text="良"
+                app:arc_stroke_width="8dp"
+                app:arc_unfinished_color="@color/color_white"
+                app:decimal_digits="0" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/weather_info_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/sunny" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/weather_temperature"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="8G"
+                        android:textColor="@color/color_white"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/weather_wind"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="东南风2级\n湿度49%"
+                        android:textColor="@color/color_white"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+
+       //
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:orientation="vertical"
+            android:paddingRight="10dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PM2.5"
+                    android:textColor="@color/color_white" />
+
+                <TextView
+                    android:id="@+id/weather_pm25"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="66"
+                    android:textColor="@color/color_white"
+                    android:textSize="12sp" />
+
+                <ProgressBar
+                    android:id="@+id/weather_pm25_pro"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:max="500"
+                    android:progress="100" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PM10"
+                    android:textColor="@color/color_white" />
+
+                <TextView
+                    android:id="@+id/weather_pm10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="66"
+                    android:textColor="@color/color_white"
+                    android:textSize="12sp" />
+
+                <ProgressBar
+                    android:id="@+id/weather_pm10_pro"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:max="500"
+                    android:progress="100" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SO2"
+                    android:textColor="@color/color_white" />
+
+                <TextView
+                    android:id="@+id/weather_so2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="66"
+                    android:textColor="@color/color_white"
+                    android:textSize="12sp" />
+
+                <ProgressBar
+                    android:id="@+id/weather_so2_pro"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:max="500"
+                    android:progress="100" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="NO2"
+                    android:textColor="@color/color_white" />
+
+                <TextView
+                    android:id="@+id/weather_no2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="66"
+                    android:textColor="@color/color_white"
+                    android:textSize="12sp" />
+
+                <ProgressBar
+                    android:id="@+id/weather_no2_pro"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:max="500"
+                    android:progress="100" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="O3"
+                    android:textColor="@color/color_white" />
+
+                <TextView
+                    android:id="@+id/weather_o3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="66"
+                    android:textColor="@color/color_white"
+                    android:textSize="12sp" />
+
+                <ProgressBar
+                    android:id="@+id/weather_o3_pro"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:max="500"
+                    android:progress="100" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CO"
+                    android:textColor="@color/color_white" />
+
+                <TextView
+                    android:id="@+id/weather_co"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="66"
+                    android:textColor="@color/color_white"
+                    android:textSize="12sp" />
+
+                <ProgressBar
+                    android:id="@+id/weather_co_pro"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:max="500"
+                    android:progress="100" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/weather_health_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@drawable/button_translucent_white_radius"
+                android:drawableLeft="@mipmap/prompt"
+                android:drawablePadding="3dp"
+                android:gravity="center"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="健康提示"
+                android:textColor="@color/color_white"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="变化趋势"
+                android:textColor="@color/color_white"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/weather_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="详情>"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:textColor="@color/color_white"
+                android:textSize="12dp" />
+
+        </LinearLayout>
+        <lecho.lib.hellocharts.view.ColumnChartView
+            android:id="@+id/weather_chart"
+            android:layout_width="match_parent"
+            android:layout_marginTop="30dp"
+            android:layout_height="300dp"
+            android:layout_margin="10dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

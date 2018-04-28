@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -40,33 +40,33 @@ import butterknife.OnClick;
 
 
 public class SellersFragment extends Fragment implements ICallBack{
-    @Bind(R.id.sellers_station_tv)
+    @BindView(R.id.sellers_station_tv)
     TextView tvStation;
-    @Bind(R.id.sellers_swicth_tv)
+    @BindView(R.id.sellers_swicth_tv)
     TextView tvSwitch;
-    @Bind(R.id.now_ll)
+    @BindView(R.id.now_ll)
     LinearLayout llNow;
-    @Bind(R.id.all_ll)
+    @BindView(R.id.all_ll)
     LinearLayout llAll;
-    @Bind(R.id.yesterday_ll)
+    @BindView(R.id.yesterday_ll)
     LinearLayout llYestday;
-    @Bind(R.id.last_ll)
+    @BindView(R.id.last_ll)
     LinearLayout llLast;
-    @Bind(R.id.now_tv)
+    @BindView(R.id.now_tv)
     TextView tvNow;
-    @Bind(R.id.now_view)
+    @BindView(R.id.now_view)
     View vNow;
-    @Bind(R.id.all_tv)
+    @BindView(R.id.all_tv)
     TextView tvAll;
-    @Bind(R.id.all_view)
+    @BindView(R.id.all_view)
     View vAll;
-    @Bind(R.id.yesterday_tv)
+    @BindView(R.id.yesterday_tv)
     TextView tvYesterday;
-    @Bind(R.id.yesterday_view)
+    @BindView(R.id.yesterday_view)
     View vYesterday;
-    @Bind(R.id.last_tv)
+    @BindView(R.id.last_tv)
     TextView tvLast;
-    @Bind(R.id.last_view)
+    @BindView(R.id.last_view)
     View vLast;
     @Bind(R.id.pm2_tv)
     TextView tvPM2;

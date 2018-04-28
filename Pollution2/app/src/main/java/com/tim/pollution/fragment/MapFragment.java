@@ -54,7 +54,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.baidu.location.d.a.i;
@@ -67,21 +67,21 @@ import static com.baidu.location.d.j.I;
 public class MapFragment extends Fragment implements ICallBack,
         OnGetDistricSearchResultListener {
 
-    @Bind(R.id.fg_mTexturemap)
+    @BindView(R.id.fg_mTexturemap)
     MapView mapView;
-    @Bind(R.id.pm_2)
+    @BindView(R.id.pm_2)
     LinearLayout llPM2;
-    @Bind(R.id.pm_10)
+    @BindView(R.id.pm_10)
     LinearLayout llPM10;
-    @Bind(R.id.so_2)
+    @BindView(R.id.so_2)
     LinearLayout llSO2;
-    @Bind(R.id.o_3)
+    @BindView(R.id.o_3)
     LinearLayout llO3;
-    @Bind(R.id.co_tv)
+    @BindView(R.id.co_tv)
     TextView tvCo;
-    @Bind(R.id.map_swicth_tv)
+    @BindView(R.id.map_swicth_tv)
     TextView tvSwicth;
-    @Bind(R.id.map_time_tv)
+    @BindView(R.id.map_time_tv)
     TextView tvTime;
     private BaiduMap mBaiduMap;
     private MyLocationConfiguration.LocationMode mCurrentMode;

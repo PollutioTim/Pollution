@@ -15,18 +15,19 @@ import com.tim.pollution.R;
 import com.tim.pollution.general.BaseActivity;
 import com.tim.pollution.utils.niorgai.StatusBarCompat;
 
-import butterknife.Bind;
+import butterknife.BindView;
+
 
 /**
  * Created by lenovo on 2018/4/19.
  */
 
 public class AboutUsActivity extends BaseActivity {
-    @Bind(R.id.appbar)
+    @BindView(R.id.appbar)
     AppBarLayout appBarLayout;
-    @Bind(R.id.collapsing_toolbar)
+    @BindView(R.id.collapsing_toolbar)
     CollapsingToolbarLayout collapsingToolbarLayout;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
     @Override
