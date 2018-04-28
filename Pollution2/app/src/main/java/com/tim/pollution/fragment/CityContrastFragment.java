@@ -1,14 +1,20 @@
-package com.tim.pollution.activity;
+package com.tim.pollution.fragment;
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
@@ -20,6 +26,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.tim.pollution.MyApplication;
 import com.tim.pollution.R;
 import com.tim.pollution.adapter.CityContrastAdapter;
 import com.tim.pollution.adapter.CitySpinnerAdapter;
@@ -32,6 +39,7 @@ import com.tim.pollution.bean.changetrend.DataInfoBean;
 import com.tim.pollution.bean.changetrend.RegionNetBean;
 import com.tim.pollution.bean.weather.AQI24hBean;
 import com.tim.pollution.callback.ICallBack;
+import com.tim.pollution.fragment.FragmentCallBack;
 import com.tim.pollution.general.Constants;
 import com.tim.pollution.general.MData;
 import com.tim.pollution.general.MDataType;
@@ -65,7 +73,10 @@ import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.ColumnChartView;
 import lecho.lib.hellocharts.view.LineChartView;
 
-public class CityContrastActivity extends AppCompatActivity implements ICallBack, AdapterView.OnItemSelectedListener, View.OnClickListener,RadioGroup.OnCheckedChangeListener {
+/**
+ * 城市对比
+ */
+public class CityContrastFragment extends Fragment implements ICallBack, AdapterView.OnItemSelectedListener, View.OnClickListener,RadioGroup.OnCheckedChangeListener {
 
     @BindView(R.id.city_contrast_sp1)
     TextView cityContrastSp1;
@@ -101,7 +112,6 @@ public class CityContrastActivity extends AppCompatActivity implements ICallBack
     TextView cityContrastCity2;
     @BindView(R.id.city_contrast_city3)
     TextView cityContrastCity3;
-    private String pointtype;
     RegionNetBean regionNetBean;
 
     private CityContrastAdapter cityContrastAdapter;
@@ -110,21 +120,62 @@ public class CityContrastActivity extends AppCompatActivity implements ICallBack
 
     private PopupWindow mPopupWindow;
 
+
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_city_contrast);
-        ButterKnife.bind(this);
-        pointtype = getIntent().getStringExtra("regiontype");
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+//        return super.onCreateView(inflater, container, savedInstanceState);
+        View view = inflater.inflate(R.layout.activity_city_contrast, container, false);
+        findView(view);
         loadRegionData();
         initOnclick();
-        cityContrastRgType.setOnCheckedChangeListener(this);
+        return view;
+    }
+
+    /**
+     * 初始化控件
+     */
+    private void findView(View view) {
+
+         cityContrastSp1= (TextView) view.findViewById(R.id.city_contrast_sp1);
+
+        cityContrastSp2= (TextView) view.findViewById(R.id.city_contrast_sp2);
+
+        cityContrastSp3= (TextView) view.findViewById(R.id.city_contrast_sp3);
+
+        cityContrastChart = (LineChartView) view.findViewById(R.id.city_contrast_chart);
+
+        cityContrastInfo= (TextView) view.findViewById(R.id.city_contrast_info);
+
+        cityContrastRbpm25Type= (RadioButton) view.findViewById(R.id.city_contrast_rbpm25_type);
+
+        cityContrastRbpm10Type= (RadioButton) view.findViewById(R.id.city_contrast_rbpm10_type);
+
+        cityContrastRbso2Type= (RadioButton) view.findViewById(R.id.city_contrast_rbso2_type);
+
+        cityContrastRbno2Type= (RadioButton) view.findViewById(R.id.city_contrast_rbno2_type);
+
+        cityContrastRbo3Type= (RadioButton) view.findViewById(R.id.city_contrast_rbo3_type);
+
+        cityContrastRbcoType= (RadioButton) view.findViewById(R.id.city_contrast_rbco_type);
+
+        cityContrastRgType= (RadioGroup) view.findViewById(R.id.city_contrast_rg_type);
+
+        cityContrastList= (WrapContentListView) view.findViewById(R.id.city_contrast_list);
+
+        cityContrastCity1= (TextView) view.findViewById(R.id.city_contrast_city1);
+
+        cityContrastCity2= (TextView) view.findViewById(R.id.city_contrast_city2);
+
+        cityContrastCity3= (TextView) view.findViewById(R.id.city_contrast_city3);
     }
 
     private void initOnclick() {
         cityContrastSp1.setOnClickListener(this);
         cityContrastSp2.setOnClickListener(this);
         cityContrastSp3.setOnClickListener(this);
+        cityContrastRgType.setOnCheckedChangeListener(this);
     }
 
     /**
@@ -197,12 +248,26 @@ public class CityContrastActivity extends AppCompatActivity implements ICallBack
        cityContrastInfo.setText(value);
 //        initChars();
         initFrom();
-        cityContrastAdapter=new CityContrastAdapter(this,citys,CityContrastAdapter.PM25);
+        cityContrastAdapter=new CityContrastAdapter(getContext(),citys,CityContrastAdapter.PM25);
         cityContrastList.setAdapter(cityContrastAdapter);
     }
     private String switchTime(String time){
         SimpleDateFormat sdf=new SimpleDateFormat("HH:mm");
         return sdf.format(DateUtil.strToDateLong(time));
+    }
+
+    private Activity activity;
+
+    public Context getContext() {
+        if (activity == null) {
+            return MyApplication.getContext();
+        }
+        return activity;
+    }
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+     this.activity=activity;
     }
 
     /**
@@ -419,13 +484,13 @@ public class CityContrastActivity extends AppCompatActivity implements ICallBack
             return;
         }
         // 将布局文件转换成View对象，popupview 内容视图
-        final View mPopView = getLayoutInflater().inflate(R.layout.pop_window, null);
+        final View mPopView = LayoutInflater.from(getContext()).inflate(R.layout.pop_window, null);
         // 将转换的View放置到 新建一个popuwindow对象中
         mPopupWindow = new PopupWindow(mPopView,
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
         ListView listview = (ListView) mPopView.findViewById(R.id.pop_window_list);
-        listview.setAdapter(new CitySpinnerAdapter(this, regionNetBean.getMessage()));
+        listview.setAdapter(new CitySpinnerAdapter(getContext(), regionNetBean.getMessage()));
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

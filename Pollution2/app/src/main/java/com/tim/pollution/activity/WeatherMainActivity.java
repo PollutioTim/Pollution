@@ -44,6 +44,9 @@ import lecho.lib.hellocharts.model.SubcolumnValue;
 import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.ColumnChartView;
 
+/**
+ * 站点
+ */
 public class WeatherMainActivity extends AppCompatActivity implements ICallBack {
 
     @BindView(R.id.weather_main_location_time)

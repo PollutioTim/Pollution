@@ -1,23 +1,29 @@
 package com.tim.pollution.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.tim.pollution.MyApplication;
 import com.tim.pollution.R;
 import com.tim.pollution.adapter.HomeFragmentAdapter;
 import com.tim.pollution.adapter.WeatherPointAdapter;
@@ -51,7 +57,7 @@ import lecho.lib.hellocharts.model.SubcolumnValue;
 import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.ColumnChartView;
 
-public class HomeActivity extends AppCompatActivity implements ICallBack, AdapterView.OnItemClickListener, FragmentCallBack {
+public class HomeFragment extends Fragment implements ICallBack, AdapterView.OnItemClickListener, FragmentCallBack {
 
 
     @BindView(R.id.weather_title_location)
@@ -82,32 +88,74 @@ public class HomeActivity extends AppCompatActivity implements ICallBack, Adapte
     TextView homeWeatherInfoCityVa;
     private ArrayList<ImageView> dotsList;
 
-    private List<Fragment> fragments = new ArrayList<>();
+    private List<Fragment> fragments;
     private RegionNetBean regionNetBean;
     private ArrayList<String> regionIds;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);// 隐藏标题
-//
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//
-//                WindowManager.LayoutParams.FLAG_FULLSCREEN);// 设置全屏
 
-        setContentView(R.layout.activity_home);
-        ButterKnife.bind(this);
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //引用创建好的xml布局
+        View view = inflater.inflate(R.layout.activity_home, container, false);
+        findView(view);
         loadLocation();
         initClick();
-//        loadData();
+        return view;
 
     }
 
+    /**
+     *
+     */
+    private void findView(View view) {
+
+         weatherTitleLocation= (TextView) view.findViewById(R.id.weather_title_location);
+
+         textView= (TextView) view.findViewById(R.id.textView);
+
+         weatherTitleLocationSelect= (TextView) view.findViewById(R.id.weather_title_location_select);
+
+         homeVp= (WrapContentHeightViewPager) view.findViewById(R.id.home_vp);
+
+         llDots= (LinearLayout) view.findViewById(R.id.ll_dots);
+
+         homeTop= (LinearLayout) view.findViewById(R.id.home_top);
+
+         homeDetail= (TextView) view.findViewById(R.id.home_detail);
+
+         homeChart= (ColumnChartView) view.findViewById(R.id.home_chart);
+
+         homeList= (WrapContentListView) view.findViewById(R.id.home_list);
+
+         homeWeatherInfoName= (TextView) view.findViewById(R.id.home_weather_info_name);
+
+         homeWeatherInfoVa= (TextView) view.findViewById(R.id.home_weather_info_va);
+
+         homeWeatherInfoCity= (TextView) view.findViewById(R.id.home_weather_info_city);
+
+         homeWeatherInfoCityVa= (TextView) view.findViewById(R.id.home_weather_info_city_va);
+    }
+
+    private Activity activity;
+
+    public Context getContext() {
+        if (activity == null) {
+            return MyApplication.getContext();
+        }
+        return activity;
+    }
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+       activity=activity;
+    }
     private void initClick() {
         homeDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, WeatherDetailActivity.class);
+                Intent intent = new Intent(getContext(), WeatherDetailActivity.class);
                 int position = homeVp.getCurrentItem();
                 intent.putExtra("regionid", regionIds.get(position));
                 startActivity(intent);
@@ -116,7 +164,7 @@ public class HomeActivity extends AppCompatActivity implements ICallBack, Adapte
         weatherTitleLocationSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, CityActivity.class);
+                Intent intent = new Intent(getContext(), CityActivity.class);
                 startActivity(intent);
             }
         });
@@ -142,7 +190,7 @@ public class HomeActivity extends AppCompatActivity implements ICallBack, Adapte
             return;
         }
         regionIds.add(regionNetBean.getMessage().get(0).getRegionId());
-
+        fragments = new ArrayList<>();
         for (int i = 0; i < regionIds.size(); i++) {
             WeatherFragment fragment = new WeatherFragment();
             Bundle bundle = new Bundle();
@@ -152,7 +200,7 @@ public class HomeActivity extends AppCompatActivity implements ICallBack, Adapte
         }
 //        loadWeatherData(regionIds.get(0));
         initDots();
-        homeVp.setAdapter(new HomeFragmentAdapter(getSupportFragmentManager(), fragments));
+        homeVp.setAdapter(new HomeFragmentAdapter(getChildFragmentManager(), fragments));
         homeVp.setCurrentItem(0);
         // 设置ViewPager的监听
         homeVp.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -207,7 +255,7 @@ public class HomeActivity extends AppCompatActivity implements ICallBack, Adapte
         llDots.removeAllViews();
         for (int i = 0; i < fragments.size(); i++) {
             //创建小点点图片
-            ImageView imageView = new ImageView(this);
+            ImageView imageView = new ImageView(getContext());
             Drawable drawable = null;
             if (i == 0) {
                 // 亮色图片
@@ -218,9 +266,9 @@ public class HomeActivity extends AppCompatActivity implements ICallBack, Adapte
             }
             imageView.setImageDrawable(drawable);
             // 考虑屏幕适配
-            LayoutParams params = new LayoutParams(dip2px(this, 10), dip2px(this, 10));
+            LayoutParams params = new LayoutParams(dip2px(getContext(), 10), dip2px(getContext(), 10));
             //设置小点点之间的间距    
-            params.setMargins(dip2px(this, 5), 0, dip2px(this, 5), 0);
+            params.setMargins(dip2px(getContext(), 5), 0, dip2px(getContext(), 5), 0);
             //将小点点添加大线性布局中
             llDots.addView(imageView, params);
             // 将小点的控件添加到集合中
@@ -374,6 +422,8 @@ public class HomeActivity extends AppCompatActivity implements ICallBack, Adapte
             v.right = 10;
             v.top = 500;
             homeChart.setCurrentViewport(v);
+        }else{
+            homeChart.setColumnChartData(null);
         }
     }
 
@@ -390,13 +440,13 @@ public class HomeActivity extends AppCompatActivity implements ICallBack, Adapte
     private void initList(MessageBean msg) {
         if (msg != null) {
             if (msg.getPoint_AQI() != null) {
-                homeList.setAdapter(new WeatherPointAdapter(this, msg.getPoint_AQI()));
+                homeList.setAdapter(new WeatherPointAdapter(getContext(), msg.getPoint_AQI()));
             }
         }
         homeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(HomeActivity.this, WeatherMainActivity.class);
+                Intent intent = new Intent(getContext(), WeatherMainActivity.class);
                 String regionid = regionIds.get(homeVp.getCurrentItem());
                 String pointcode = weatherDatamap.get(regionid).getPoint_AQI().get(position).getPointCode();
                 intent.putExtra("pointcode", pointcode);

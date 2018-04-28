@@ -3,7 +3,6 @@ package com.tim.pollution.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -11,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,27 +18,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.tim.pollution.MyApplication;
 import com.tim.pollution.R;
-import com.tim.pollution.activity.HomeActivity;
-import com.tim.pollution.activity.WeatherDetailActivity;
 import com.tim.pollution.activity.WeatherMainActivity;
-import com.tim.pollution.adapter.WeatherPointAdapter;
 import com.tim.pollution.bean.RegionWeather;
 import com.tim.pollution.bean.weather.AQI24hBean;
-import com.tim.pollution.bean.weather.MessageBean;
 import com.tim.pollution.callback.ICallBack;
 import com.tim.pollution.general.Constants;
 import com.tim.pollution.general.MData;
 import com.tim.pollution.general.MDataType;
 import com.tim.pollution.net.WeatherDal;
 import com.tim.pollution.view.ProgressView;
-import com.tim.pollution.view.WrapContentListView;
 import com.woodnaonly.arcprogress.ArcProgress;
 
 import java.io.BufferedReader;
@@ -49,7 +43,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import lecho.lib.hellocharts.model.Axis;
@@ -57,10 +50,9 @@ import lecho.lib.hellocharts.model.AxisValue;
 import lecho.lib.hellocharts.model.Column;
 import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.SubcolumnValue;
-import lecho.lib.hellocharts.view.ColumnChartView;
 
 /**
- * 首页
+ * 首页-》上
  */
 public class WeatherFragment extends Fragment implements ICallBack, View.OnClickListener, AdapterView.OnItemClickListener {
 
@@ -199,14 +191,15 @@ public class WeatherFragment extends Fragment implements ICallBack, View.OnClick
         return activity;
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        if (activity instanceof HomeActivity) {
-            callBack = (FragmentCallBack) getActivity();
-        }
-    }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+//        callBack = (FragmentCallBack) context;
+//        FragmentManager manager = getFragmentManager();
+//        callBack= (FragmentCallBack) manager.getFragments().get(0);
+       callBack= (FragmentCallBack) getParentFragment();
+    }
 
     /**
      * string-->int
@@ -455,7 +448,6 @@ public class WeatherFragment extends Fragment implements ICallBack, View.OnClick
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder1.unbind();
     }
 }
 
