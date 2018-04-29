@@ -232,12 +232,21 @@
 
         </LinearLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/sellers_recyview"
-            android:layout_below="@+id/title_below_ll"
-            android:layout_above="@+id/bottom_ll"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title_below_ll"
+            android:layout_above="@+id/bottom_ll">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/sellers_recyview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/sellers_month_recyview"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </FrameLayout>
 
         <LinearLayout
             android:id="@+id/bottom_ll"

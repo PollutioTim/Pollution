@@ -7,6 +7,7 @@
         android:layout_width="73dp"
         android:layout_height="22dp"
         android:gravity="center"
+        android:id="@+id/item_city_ll"
         android:background="@drawable/shape_border_blue"
         android:orientation="horizontal"
         >
@@ -26,6 +27,7 @@
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:layout_marginLeft="3dp"
+            android:visibility="gone"
             android:src="@mipmap/ic_select"
             android:layout_gravity="center"/>
 

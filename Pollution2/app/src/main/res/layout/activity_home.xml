@@ -1,186 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_bg"
-    android:orientation="vertical"
-    tools:context="com.tim.pollution.activity.HomeFragment">
+    android:background="@mipmap/weather_background"
+    tools:context="com.tim.pollution.activity.HomeActivity">
 
     <LinearLayout
         android:id="@+id/home_top"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:visibility="visible"
-        android:background="@mipmap/bg"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:padding="@dimen/padding">
+        <include
 
-            <TextView
-                android:id="@+id/weather_title_location"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="3dp"
-                android:drawableLeft="@mipmap/location"
-                android:drawablePadding="7dp"
-                android:gravity="center_vertical"
-                android:text="小店区"
-                android:layout_alignParentLeft="true"
-                android:textColor="@color/color_white" />
+            layout="@layout/weather_title"
+            android:visibility="gone"/>
 
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/air_quality"
-                android:layout_centerInParent="true"
-                android:textColor="@color/color_white"
-                android:textSize="@dimen/text_size_large" />
-
-            <TextView
-                android:id="@+id/weather_title_location_select"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="太原+"
-                android:layout_alignParentRight="true"
-                android:textColor="@color/color_white"
-                android:textSize="@dimen/text_size_normal" />
-
-
-        </RelativeLayout>
-
-        <com.tim.pollution.view.WrapContentHeightViewPager
+        <android.support.v4.view.ViewPager
             android:id="@+id/home_vp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
+            android:layout_height="match_parent" />
     </LinearLayout>
-
     <LinearLayout
         android:id="@+id/ll_dots"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/main"
         android:gravity="center"
-        android:minHeight="10dp"
         android:orientation="horizontal"
-        android:layout_marginBottom="10dp"
-        android:padding="10dp" />
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/main"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:padding="10dp"
-                    android:text="变化趋势"
-                    android:textColor="@color/color_white"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/home_detail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    android:padding="10dp"
-                    android:text="详情 >"
-                    android:textColor="@color/color_white"
-                    android:textSize="15sp" />
-            </LinearLayout>
-
-            <lecho.lib.hellocharts.view.ColumnChartView
-                android:id="@+id/home_chart"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_margin="10dp"
-                android:background="@color/main"
-                android:layout_marginTop="30dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:background="@color/main_bg"/>
-            <com.tim.pollution.view.WrapContentListView
-                android:id="@+id/home_list"
-                android:layout_width="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_height="wrap_content" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:gravity="center"
-                android:layout_margin="10dp"
-                android:background="#FF367980"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/home_weather_info_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/air_indicators"
-                    android:padding="10dp"
-                    android:textColor="@color/color_white"
-                    android:textSize="18sp"/>
-                <TextView
-                    android:id="@+id/home_weather_info_va"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="pm25\npm10"
-                    android:padding="10dp"
-                    android:textColor="@color/color_white"
-                    android:textSize="18sp"/>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:padding="10dp"
-                    android:orientation="vertical">
-                    <TextView
-                        android:id="@+id/home_weather_info_city"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/color_white"
-                        android:text="太原"
-                        android:textSize="15sp"/>
-                    <TextView
-                        android:id="@+id/home_weather_info_city_va"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/color_white"
-                        android:layout_marginRight="10dp"
-                        android:text="3"
-                        android:textSize="50sp"/>
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-
-    </ScrollView>
-</LinearLayout>
+        android:padding="10dp"
+        android:layout_alignParentBottom="true">
+    </LinearLayout>
+</RelativeLayout>

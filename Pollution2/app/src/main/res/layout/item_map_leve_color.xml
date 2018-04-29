@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/item_map_color_view"
+            android:layout_width="7dp"
+            android:layout_height="28dp"
+            android:background="@color/serious_pollution"
+            />
+
+        <TextView
+            android:id="@+id/item_map_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="严重污染"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_gravity="center"
+            android:textSize="12sp"
+            android:textColor="@color/color_white"/>
+    </LinearLayout>
+</LinearLayout>

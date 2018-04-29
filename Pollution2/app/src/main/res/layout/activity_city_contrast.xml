@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/weather_background"
-    tools:context="com.tim.pollution.fragment.CityContrastFragment">
+    tools:context="com.tim.pollution.activity.CityContrastActivity">
 
     <ScrollView
         android:layout_width="match_parent"

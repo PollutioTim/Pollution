@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!--头部-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gree_blue">
+
+        <TextView
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="46dp"
+            android:textColor="@color/color_white"
+            android:textSize="17sp"
+            android:text="地图"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/map_swicth_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="46dp"
+            android:textColor="@color/color_white"
+            android:textSize="14sp"
+            android:drawablePadding="2dp"
+            android:drawableLeft="@mipmap/ic_switch"
+            android:text="城市"
+            android:layout_marginRight="12dp"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            />
+    </RelativeLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.baidu.mapapi.map.MapView
+            android:id="@+id/map_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </com.baidu.mapapi.map.MapView>
+
+        <LinearLayout
+            android:layout_width="68dp"
+            android:layout_height="22dp"
+            android:gravity="center"
+            android:layout_marginTop="18dp"
+            android:layout_marginRight="18dp"
+            android:background="@drawable/shape_map_bg"
+            android:layout_gravity="right"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="全部"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/color_white"
+                android:textSize="12sp"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_switch"/>
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/map_recyview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#7e7a7a7a"
+            android:layout_gravity="center|left"/>
+
+
+    </FrameLayout>
+</LinearLayout>
