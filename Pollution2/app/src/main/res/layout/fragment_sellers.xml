@@ -266,7 +266,7 @@
                 android:textSize="15sp"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:textColor="@drawable/selector_white_gree"
+                android:textColor="@drawable/selector_white_green"
                 />
                 <TextView
                     android:id="@+id/pm2_tv"
@@ -277,7 +277,7 @@
                     android:textSize="15sp"
                     android:gravity="center"
                     android:layout_gravity="center"
-                    android:textColor="@drawable/selector_white_gree"
+                    android:textColor="@drawable/selector_white_green"
                     />
                 <TextView
                     android:id="@+id/pm10_tv"
@@ -288,7 +288,7 @@
                     android:textSize="15sp"
                     android:gravity="center"
                     android:layout_gravity="center"
-                    android:textColor="@drawable/selector_white_gree"
+                    android:textColor="@drawable/selector_white_green"
                     />
                 <TextView
                     android:id="@+id/no2_tv"
@@ -299,7 +299,7 @@
                     android:layout_weight="1"
                     android:textSize="15sp"
                     android:layout_gravity="center"
-                    android:textColor="@drawable/selector_white_gree"
+                    android:textColor="@drawable/selector_white_green"
                     />
 
                 <TextView
@@ -311,7 +311,7 @@
                     android:layout_weight="1"
                     android:textSize="15sp"
                     android:layout_gravity="center"
-                    android:textColor="@drawable/selector_white_gree"
+                    android:textColor="@drawable/selector_white_green"
                     />
                 <TextView
                     android:id="@+id/o3_tv"
@@ -322,7 +322,7 @@
                     android:layout_weight="1"
                     android:textSize="15sp"
                     android:layout_gravity="center"
-                    android:textColor="@drawable/selector_white_gree"
+                    android:textColor="@drawable/selector_white_green"
                     />
             <TextView
                 android:id="@+id/sellers_co_tv"
@@ -333,7 +333,7 @@
                 android:textSize="15sp"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:textColor="@drawable/selector_white_gree"
+                android:textColor="@drawable/selector_white_green"
                 />
 
         </LinearLayout>

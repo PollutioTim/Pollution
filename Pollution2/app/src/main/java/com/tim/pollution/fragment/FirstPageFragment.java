@@ -1,13 +1,17 @@
 package com.tim.pollution.fragment;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.tim.pollution.MyApplication;
 import com.tim.pollution.R;
@@ -32,6 +37,7 @@ import com.tim.pollution.general.Constants;
 import com.tim.pollution.general.MData;
 import com.tim.pollution.general.MDataType;
 import com.tim.pollution.net.WeatherDal;
+import com.tim.pollution.utils.CityListSaveUtil;
 import com.tim.pollution.utils.DateUtil;
 import com.tim.pollution.view.WrapContentHeightViewPager;
 import com.tim.pollution.view.WrapContentListView;
@@ -85,8 +91,9 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
     private List<Fragment> fragments;
     private RegionNetBean regionNetBean;
     private ArrayList<String> regionIds;
-
-
+    private AlertDialog dialogAgain;
+    private TextView homeWeatherInfoTime;
+//    private SwipeRefreshLayout swipeRefreshLayout;
 
 
     @Override
@@ -104,32 +111,33 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
      *
      */
     private void findView(View view) {
+//        swipeRefreshLayout=(SwipeRefreshLayout)view.findViewById(R.id.home_rrfresh);
+        homeWeatherInfoTime=(TextView)view.findViewById(R.id.home_weather_info_time);
+        weatherTitleLocation = (TextView) view.findViewById(R.id.weather_title_location);
 
-         weatherTitleLocation= (TextView) view.findViewById(R.id.weather_title_location);
+        textView = (TextView) view.findViewById(R.id.textView);
 
-         textView= (TextView) view.findViewById(R.id.textView);
+        weatherTitleLocationSelect = (TextView) view.findViewById(R.id.weather_title_location_select);
 
-         weatherTitleLocationSelect= (TextView) view.findViewById(R.id.weather_title_location_select);
+        homeVp = (WrapContentHeightViewPager) view.findViewById(R.id.home_vp);
 
-         homeVp= (WrapContentHeightViewPager) view.findViewById(R.id.home_vp);
+        llDots = (LinearLayout) view.findViewById(R.id.ll_dots);
 
-         llDots= (LinearLayout) view.findViewById(R.id.ll_dots);
+        homeTop = (LinearLayout) view.findViewById(R.id.home_top);
 
-         homeTop= (LinearLayout) view.findViewById(R.id.home_top);
+        homeDetail = (TextView) view.findViewById(R.id.home_detail);
 
-         homeDetail= (TextView) view.findViewById(R.id.home_detail);
+        homeChart = (ColumnChartView) view.findViewById(R.id.home_chart);
 
-         homeChart= (ColumnChartView) view.findViewById(R.id.home_chart);
+        homeList = (WrapContentListView) view.findViewById(R.id.home_list);
 
-         homeList= (WrapContentListView) view.findViewById(R.id.home_list);
+        homeWeatherInfoName = (TextView) view.findViewById(R.id.home_weather_info_name);
 
-         homeWeatherInfoName= (TextView) view.findViewById(R.id.home_weather_info_name);
+        homeWeatherInfoVa = (TextView) view.findViewById(R.id.home_weather_info_va);
 
-         homeWeatherInfoVa= (TextView) view.findViewById(R.id.home_weather_info_va);
+        homeWeatherInfoCity = (TextView) view.findViewById(R.id.home_weather_info_city);
 
-         homeWeatherInfoCity= (TextView) view.findViewById(R.id.home_weather_info_city);
-
-         homeWeatherInfoCityVa= (TextView) view.findViewById(R.id.home_weather_info_city_va);
+        homeWeatherInfoCityVa = (TextView) view.findViewById(R.id.home_weather_info_city_va);
     }
 
     private Activity activity;
@@ -140,11 +148,14 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
         }
         return activity;
     }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-       activity=activity;
+        activity = activity;
+
     }
+
     private void initClick() {
         homeDetail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,14 +170,23 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), CityActivity.class);
-               startActivity(intent);
+                startActivity(intent);
             }
         });
 
-
+//        swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
+//                android.R.color.holo_orange_light, android.R.color.holo_red_light);
+//
+//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                loadLocation();
+//            }
+//        });
     }
 
     private void loadLocation() {
+
         if (true) {
             Map<String, String> params = new HashMap<>();
             params.put("key", Constants.key);
@@ -176,14 +196,29 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
     }
 
     private void loadData() {
-        //todo 写死
         regionIds = new ArrayList<>();
-        regionIds.add("140123");
-        regionIds.add("140201");
-        if (regionNetBean == null || regionNetBean.getMessage() == null) {
-            return;
+        List<RegionNetBean.RegionBean> regionBeans = CityListSaveUtil.getList(getContext(), CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY);
+        if (regionBeans != null && regionBeans.size() > 0) {
+            for (RegionNetBean.RegionBean rb : regionBeans) {
+                regionIds.add(rb.getRegionId());
+            }
+        } else {
+            if (regionNetBean == null || regionNetBean.getMessage() == null) {
+                Toast.makeText(getContext(), "服务器异常，请稍后重试", Toast.LENGTH_LONG);
+                return;
+            }
+            regionIds.add(regionNetBean.getMessage().get(0).getRegionId());
+            regionIds.add("140123");
+            regionIds.add("140201");
         }
-        regionIds.add(regionNetBean.getMessage().get(0).getRegionId());
+//        //todo 写死
+//
+//        regionIds.add("140123");
+//        regionIds.add("140201");
+//        if (regionNetBean == null || regionNetBean.getMessage() == null) {
+//            return;
+//        }
+//        regionIds.add(regionNetBean.getMessage().get(0).getRegionId());
         fragments = new ArrayList<>();
         for (int i = 0; i < regionIds.size(); i++) {
             FirstPageTopFragment fragment = new FirstPageTopFragment();
@@ -282,6 +317,7 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
 
     @Override
     public void onProgress(Object data) {
+//        swipeRefreshLayout.setRefreshing(false);
         MData mData = (MData) data;
         if (MDataType.REGIONNET_BEAN.equals(mData.getType())) {
             regionNetBean = (RegionNetBean) mData.getData();
@@ -296,7 +332,44 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
 
     @Override
     public void onError(String msg, String eCode) {
+//        swipeRefreshLayout.setRefreshing(false);
+        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG);
+        showAgainDailog(msg);
+    }
 
+    /**
+     * 重试
+     */
+    private void showAgainDailog(String msg) {
+        if (dialogAgain != null) {
+            dialogAgain.show();
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("提示");
+        builder.setMessage(msg + "是否重试？");
+        builder.setIcon(R.mipmap.prompt);
+        //点击对话框以外的区域是否让对话框消失
+        builder.setCancelable(false);
+        builder.setNegativeButton("是", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                loadLocation();
+                showLoadingDailog();
+                dialogAgain.dismiss();
+            }
+        });
+        dialogAgain = builder.create();
+        if (dialogAgain != null) {
+            //显示对话框
+            dialogAgain.show();
+        }
+    }
+
+    /**
+     * 等待
+     */
+    private void showLoadingDailog() {
+//        ProgressDialog dialog = ProgressDialog.show(getContext(), "提示", "正在登陆中…", true, false, null);
     }
 
     /**
@@ -416,7 +489,7 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
             v.right = 10;
             v.top = 500;
             homeChart.setCurrentViewport(v);
-        }else{
+        } else {
             homeChart.setColumnChartData(null);
         }
     }
@@ -472,6 +545,7 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
     }
 
     private void initBaseInfo(MessageBean messageBean) {
+        homeWeatherInfoTime.setText(messageBean.getRegionList().getTime());
         weatherTitleLocation.setText(messageBean.getRegionList().getRegionName());
         String info = messageBean.getRegionList().getPM25() + "\n" + messageBean.getRegionList().getPM10() + "\n" + messageBean.getRegionList().getSO2() + "\n" + messageBean.getRegionList().getNO2() + "\n" + messageBean.getRegionList().getO3() + "\n" + messageBean.getRegionList().getCO();
         homeWeatherInfoVa.setText(info);

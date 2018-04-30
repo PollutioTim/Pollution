@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.tim.pollution.R;
 import com.tim.pollution.bean.changetrend.DataInfoBean;
@@ -163,7 +164,7 @@ public class SiteWeatherDetailActivity extends AppCompatActivity implements ICal
         weatherMainArcProgress.setProgressTextTop(pointInfoNetBean.getMessage().getPointListBean().getPollutionLevel());
         weatherMainArcProgress.setProgressTextBottom("首要污染物 " + pointInfoNetBean.getMessage().getPointListBean().getTopPollution());
         weatherMainArcProgress.setProgress(Double.valueOf(getTopPollutionPrograss(pointInfoNetBean, pointInfoNetBean.getMessage().getPointListBean().getTopPollution())));
-        String name = "R.mipmap.w" + pointInfoNetBean.getMessage().getPointListBean().getWeathercode();
+        String name = "w" + pointInfoNetBean.getMessage().getPointListBean().getWeathercode();
         weatherMainInfoImg.setImageResource(getImageResourceId(name));
         weatherMainTemperature.setText(pointInfoNetBean.getMessage().getPointListBean().getTemperature() + " °C");
         weatherMainWind.setText(pointInfoNetBean.getMessage().getPointListBean().getWind() + "\n" + "湿度" + pointInfoNetBean.getMessage().getPointListBean().getHumidity() + "%");
@@ -383,6 +384,7 @@ public class SiteWeatherDetailActivity extends AppCompatActivity implements ICal
 
     @Override
     public void onError(String msg, String eCode) {
+        Toast.makeText(this,msg,Toast.LENGTH_LONG);
 
     }
 }

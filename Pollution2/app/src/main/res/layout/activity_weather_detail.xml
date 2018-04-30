@@ -110,7 +110,7 @@
             android:padding="10dp"
             android:textColor="@drawable/white_green_selector"
             android:button="@null"
-            android:text="SO2"/>
+            android:text="@string/SO2"/>
         <RadioButton
             android:id="@+id/weather_detail_rbno2_type"
             android:layout_width="wrap_content"

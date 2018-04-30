@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.tim.pollution.R;
 import com.tim.pollution.adapter.ChangeTrendAdapter;
@@ -256,6 +257,6 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
 
     @Override
     public void onError(String msg, String eCode) {
-
+        Toast.makeText(this,msg,Toast.LENGTH_LONG);
     }
 }

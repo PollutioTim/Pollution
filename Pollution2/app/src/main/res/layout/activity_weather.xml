@@ -92,7 +92,7 @@
 
                 app:arc_progress_text_top_color="@color/color_white"
 
-                app:arc_progress_text_top_size="18sp"
+                app:arc_progress_text_top_size="16sp"
 
                 app:arc_progress_text_top_text="良"
 
@@ -382,10 +382,9 @@
 
                     android:layout_height="wrap_content"
 
-                    android:text="SO2"
+                    android:text="@string/SO2"
 
                     android:textColor="@color/color_white" />
-
 
 
                 <TextView
@@ -458,7 +457,7 @@
 
                     android:layout_height="wrap_content"
 
-                    android:text="NO2"
+                    android:text="@string/NO2"
 
                     android:textColor="@color/color_white" />
 
@@ -536,7 +535,7 @@
 
                     android:layout_height="wrap_content"
 
-                    android:text="O3"
+                    android:text="@string/O3"
 
                     android:textColor="@color/color_white" />
 

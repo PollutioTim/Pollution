@@ -79,6 +79,7 @@ public class WeatherDal {
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
+                        callBack.onError("网络不可用",id+"");
                     }
 
                     @Override
@@ -86,8 +87,6 @@ public class WeatherDal {
                         Log.e("test","response:"+response);
                         StateCode code = new Gson().fromJson(response.toString(),StateCode.class);
                         if(1 == code.getCode()){
-
-
                             RegionWeather regionWeather=new Gson().fromJson(response.toString(),RegionWeather.class);
                             MData<RegionWeather>mData  = new MData<RegionWeather>();
                             mData.setType(MDataType.REGION_WEATHER);
@@ -114,6 +113,7 @@ public class WeatherDal {
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
+                        callBack.onError("网络不可用",id+"");
                     }
 
                     @Override
@@ -145,6 +145,7 @@ public class WeatherDal {
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
+                        callBack.onError("网络不可用",id+"");
                     }
 
                     @Override
@@ -177,6 +178,7 @@ public class WeatherDal {
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
+                        callBack.onError("网络不可用",id+"");
                     }
 
                     @Override
@@ -209,6 +211,7 @@ public class WeatherDal {
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
+                        callBack.onError("网络不可用",id+"");
 
                     }
 

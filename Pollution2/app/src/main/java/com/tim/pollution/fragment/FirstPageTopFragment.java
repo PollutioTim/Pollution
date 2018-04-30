@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.tim.pollution.MyApplication;
@@ -383,6 +384,7 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
 
     @Override
     public void onError(String msg, String eCode) {
+        Toast.makeText(getContext(),msg,Toast.LENGTH_LONG);
 
     }
 

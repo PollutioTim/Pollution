@@ -7,6 +7,16 @@
     android:background="@color/main_bg"
     android:orientation="vertical"
     tools:context="com.tim.pollution.fragment.FirstPageFragment">
+<!--<android.support.v4.widget.SwipeRefreshLayout-->
+    <!--android:id="@+id/home_rrfresh"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:orientation="vertical">-->
+
+
 
     <LinearLayout
         android:id="@+id/home_top"
@@ -33,6 +43,7 @@
                 android:drawablePadding="7dp"
                 android:gravity="center_vertical"
                 android:text="小店区"
+                android:textSize="13sp"
                 android:layout_alignParentLeft="true"
                 android:textColor="@color/color_white" />
 
@@ -55,7 +66,7 @@
                 android:text="太原+"
                 android:layout_alignParentRight="true"
                 android:textColor="@color/color_white"
-                android:textSize="@dimen/text_size_normal" />
+                android:textSize="14sp" />
 
 
         </RelativeLayout>
@@ -101,7 +112,7 @@
                     android:padding="10dp"
                     android:text="变化趋势"
                     android:textColor="@color/color_white"
-                    android:textSize="15sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/home_detail"
@@ -112,7 +123,7 @@
                     android:padding="10dp"
                     android:text="详情 >"
                     android:textColor="@color/color_white"
-                    android:textSize="15sp" />
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <lecho.lib.hellocharts.view.ColumnChartView
@@ -127,12 +138,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
                 android:background="@color/main_bg"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="站点列表"
+                android:textColor="@color/color_white"
+                android:textSize="12sp"
+                android:padding="5dp"/>
             <com.tim.pollution.view.WrapContentListView
                 android:id="@+id/home_list"
                 android:layout_width="match_parent"
                 android:layout_marginTop="10dp"
                 android:layout_height="wrap_content" />
-
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@color/main_bg"/>
+            <TextView
+                android:id="@+id/home_weather_info_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dp"
+                android:textSize="12sp"
+                android:paddingTop="10dp"
+                android:textColor="@color/color_white"
+                android:gravity="right"
+                android:text="18.3.28"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -148,7 +179,7 @@
                     android:text="@string/air_indicators"
                     android:padding="10dp"
                     android:textColor="@color/color_white"
-                    android:textSize="18sp"/>
+                    android:textSize="14sp"/>
                 <TextView
                     android:id="@+id/home_weather_info_va"
                     android:layout_width="wrap_content"
@@ -156,7 +187,8 @@
                     android:text="pm25\npm10"
                     android:padding="10dp"
                     android:textColor="@color/color_white"
-                    android:textSize="18sp"/>
+                    android:textSize="14sp"/>
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -169,7 +201,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/color_white"
                         android:text="太原"
-                        android:textSize="15sp"/>
+                        android:textSize="14sp"/>
 
 
                     <TextView
@@ -185,4 +217,6 @@
         </LinearLayout>
 
     </ScrollView>
+    <!--</LinearLayout>-->
+<!--</android.support.v4.widget.SwipeRefreshLayout>-->
 </LinearLayout>

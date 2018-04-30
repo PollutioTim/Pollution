@@ -24,6 +24,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.tim.pollution.MyApplication;
@@ -444,7 +445,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
 
     @Override
     public void onError(String msg, String eCode) {
-
+        Toast.makeText(getContext(),msg,Toast.LENGTH_LONG);
     }
 
 

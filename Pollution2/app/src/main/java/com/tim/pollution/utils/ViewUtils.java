@@ -21,7 +21,7 @@ public class ViewUtils {
         /**
          * 外部矩形弧度
         */
-        float[] outerRadian = new float[]{20, 20, 20, 20, 20, 20, 20, 20};
+        float[] outerRadian = new float[]{40, 40, 40, 40, 40, 40, 40, 40};
         /**
          * 内部矩形与外部矩形的距离
         */
@@ -33,7 +33,7 @@ public class ViewUtils {
         /**
         * 如果insetDistance与insideRadian设为null亦可
         */
-        RoundRectShape roundRectShape = new RoundRectShape(outerRadian, insetDistance, insideRadian);
+        RoundRectShape roundRectShape = new RoundRectShape(outerRadian, null, insideRadian);
         ShapeDrawable drawable = new ShapeDrawable(roundRectShape);
         /**
         * 指定填充颜色

@@ -16,6 +16,7 @@ import com.tim.pollution.bean.changetrend.ChangeTrendMessageBean;
 import com.tim.pollution.bean.changetrend.DataInfoBean;
 import com.tim.pollution.bean.weather.PointAQIBean;
 import com.tim.pollution.utils.DateUtil;
+import com.tim.pollution.utils.ViewUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -128,18 +129,18 @@ public class CityContrastAdapter extends BaseAdapter {
         holder = (ViewHolder) convertView.getTag();
         holder.tvCity.setText(switchTime(data1.getTime()));
         holder.tvCode1.setText(data1.getValue());
-        holder.tvCode1.setBackground(new ColorDrawable(Color.parseColor(data1.getValuecolor())));
+        holder.tvCode1.setBackground(ViewUtils.getShapeDrawable(data1.getValuecolor()));
         holder.tvCode2.setText(data2.getValue());
-        holder.tvCode2.setBackground(new ColorDrawable(Color.parseColor(data2.getValuecolor())));
+        holder.tvCode2.setBackground(ViewUtils.getShapeDrawable(data2.getValuecolor()));
         holder.tvCode3.setText(data3.getValue());
-        holder.tvCode3.setBackground(new ColorDrawable(Color.parseColor(data3.getValuecolor())));
+        holder.tvCode3.setBackground(ViewUtils.getShapeDrawable(data3.getValuecolor()));
 
         return convertView;
     }
 
 
     private String switchTime(String time){
-        SimpleDateFormat sdf=new SimpleDateFormat("mm.dd HH:mm");
+        SimpleDateFormat sdf=new SimpleDateFormat("MM.dd HH:mm");
         return sdf.format(DateUtil.strToDateLong(time));
     }
 
