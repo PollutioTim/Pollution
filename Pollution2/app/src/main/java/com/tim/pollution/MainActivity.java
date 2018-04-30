@@ -11,9 +11,9 @@ import android.widget.RadioGroup;
 
 import com.hjm.bottomtabbar.BottomTabBar;
 import com.tim.pollution.activity.AboutUsActivity;
-import com.tim.pollution.activity.HomeFragment;
 import com.tim.pollution.fragment.AboutFragment;
 import com.tim.pollution.fragment.CityContrastFragment;
+import com.tim.pollution.fragment.FirstPageFragment;
 import com.tim.pollution.fragment.MainFragment;
 import com.tim.pollution.fragment.MapFragment;
 import com.tim.pollution.fragment.PKFragment;
@@ -57,8 +57,8 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         fragments = new ArrayList<>();
-        fragments.add(new HomeFragment());
-        fragments.add(new MapFragment());
+        fragments.add(new FirstPageFragment());
+//        fragments.add(new MapFragment());
         fragments.add(new SellersFragment());
         fragments.add(new CityContrastFragment());
         fragments.add(new AboutFragment());

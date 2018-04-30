@@ -62,6 +62,8 @@
         <activity android:name=".activity.CityActivity" >
 
         </activity>
+        <activity android:name=".activity.WeatherVariationTrendActivity" />
+        <activity android:name=".activity.SiteWeatherDetailActivity" />
 
     </application>
 
