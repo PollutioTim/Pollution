@@ -248,6 +248,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
        cityContrastInfo.setText(value);
 //        initChars();
         initFrom();
+        cityContrastRgType.check(R.id.city_contrast_rbpm25_type);
         cityContrastAdapter=new CityContrastAdapter(getContext(),citys,CityContrastAdapter.PM25);
         cityContrastList.setAdapter(cityContrastAdapter);
     }
