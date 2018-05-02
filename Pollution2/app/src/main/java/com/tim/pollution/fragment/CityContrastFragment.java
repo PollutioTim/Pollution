@@ -89,6 +89,8 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
     LineChartView cityContrastChart;
     @BindView(R.id.city_contrast_info)
     TextView cityContrastInfo;
+
+    RadioButton cityContrastRbaqiType;
     @BindView(R.id.city_contrast_rbpm25_type)
     RadioButton cityContrastRbpm25Type;
     @BindView(R.id.city_contrast_rbpm10_type)
@@ -148,7 +150,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         cityContrastChart = (LineChartView) view.findViewById(R.id.city_contrast_chart);
 
         cityContrastInfo= (TextView) view.findViewById(R.id.city_contrast_info);
-
+        cityContrastRbaqiType=(RadioButton)view.findViewById(R.id.city_contrast_rbaqi_type);
         cityContrastRbpm25Type= (RadioButton) view.findViewById(R.id.city_contrast_rbpm25_type);
 
         cityContrastRbpm10Type= (RadioButton) view.findViewById(R.id.city_contrast_rbpm10_type);
@@ -193,7 +195,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
     private String ranktype = "real";
 
     private void loadData(String regionid, final int state) {
-        cityContrastRgType.check(R.id.city_contrast_rbpm25_type);
+        cityContrastRgType.check(R.id.city_contrast_rbaqi_type);
         Map<String, String> params = new HashMap<>();
         params.put("key", Constants.key);
         params.put("type", "12h");
@@ -373,9 +375,37 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         for(int i=0;i<citys.get(1).getAQI_data().size();i++){
             axisXValues.add(new AxisValue(i).setLabel(switchTime(citys.get(1).getAQI_data().get(i).getTime())));
         }
-        lines.add(getLine(citys.get(1).getAQI_data(),"#FFF1C55F"));
-        lines.add(getLine(citys.get(2).getAQI_data(),"#FF47F646"));
-        lines.add(getLine(citys.get(3).getAQI_data(),"#FF42DAFC"));
+        int id = cityContrastRgType.getCheckedRadioButtonId();
+        if (id == R.id.city_contrast_rbpm25_type) {
+            lines.add(getLine(citys.get(1).getPM25_data(),"#FFF1C55F"));
+            lines.add(getLine(citys.get(2).getPM25_data(),"#FF47F646"));
+            lines.add(getLine(citys.get(3).getPM25_data(),"#FF42DAFC"));
+        } else if (id == R.id.city_contrast_rbpm10_type) {
+            lines.add(getLine(citys.get(1).getPM10_data(),"#FFF1C55F"));
+            lines.add(getLine(citys.get(2).getPM10_data(),"#FF47F646"));
+            lines.add(getLine(citys.get(3).getPM10_data(),"#FF42DAFC"));
+        } else if (id == R.id.city_contrast_rbso2_type) {
+            lines.add(getLine(citys.get(1).getSO2_data(),"#FFF1C55F"));
+            lines.add(getLine(citys.get(2).getSO2_data(),"#FF47F646"));
+            lines.add(getLine(citys.get(3).getSO2_data(),"#FF42DAFC"));
+        } else if (id == R.id.city_contrast_rbno2_type) {
+            lines.add(getLine(citys.get(1).getNO2_data(),"#FFF1C55F"));
+            lines.add(getLine(citys.get(2).getNO2_data(),"#FF47F646"));
+            lines.add(getLine(citys.get(3).getNO2_data(),"#FF42DAFC"));
+        } else if (id == R.id.city_contrast_rbo3_type) {
+            lines.add(getLine(citys.get(1).getO3_data(),"#FFF1C55F"));
+            lines.add(getLine(citys.get(2).getO3_data(),"#FF47F646"));
+            lines.add(getLine(citys.get(3).getO3_data(),"#FF42DAFC"));
+        } else if (id == R.id.city_contrast_rbco_type) {
+            lines.add(getLine(citys.get(1).getCO_data(),"#FFF1C55F"));
+            lines.add(getLine(citys.get(2).getCO_data(),"#FF47F646"));
+            lines.add(getLine(citys.get(3).getCO_data(),"#FF42DAFC"));
+        }else if(id==R.id.city_contrast_rbaqi_type){
+            lines.add(getLine(citys.get(1).getAQI_data(),"#FFF1C55F"));
+            lines.add(getLine(citys.get(2).getAQI_data(),"#FF47F646"));
+            lines.add(getLine(citys.get(3).getAQI_data(),"#FF42DAFC"));
+        }
+
         LineChartData data = new LineChartData(lines);
 
         if (true) {
@@ -545,17 +575,83 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         int id = group.getCheckedRadioButtonId();
         if (id == R.id.city_contrast_rbpm25_type) {
             datatype = cityContrastAdapter.PM25;
+            try{
+                String time=citys.get(1).getPM25_data().get(citys.get(1).getPM25_data().size()-1).getTime();
+                String vaule1=cityContrastSp1.getText()+" "+citys.get(1).getPM25_data().get(citys.get(1).getPM25_data().size()-1).getValue();
+                String vaule2=cityContrastSp2.getText()+" "+citys.get(2).getPM25_data().get(citys.get(2).getPM25_data().size()-1).getValue();
+                String vaule3=cityContrastSp3.getText()+" "+citys.get(3).getPM25_data().get(citys.get(3).getPM25_data().size()-1).getValue();
+                String value="PM2.5 "+switchTime(time)+"\n"+vaule1+"\n"+vaule2+"\n"+vaule3;
+                cityContrastInfo.setText(value);
+            }catch (Exception e){}
+
         } else if (id == R.id.city_contrast_rbpm10_type) {
+            try{
+                String time=citys.get(1).getPM10_data().get(citys.get(1).getPM10_data().size()-1).getTime();
+                String vaule1=cityContrastSp1.getText()+" "+citys.get(1).getPM10_data().get(citys.get(1).getPM10_data().size()-1).getValue();
+                String vaule2=cityContrastSp2.getText()+" "+citys.get(2).getPM10_data().get(citys.get(2).getPM10_data().size()-1).getValue();
+                String vaule3=cityContrastSp3.getText()+" "+citys.get(3).getPM10_data().get(citys.get(3).getPM10_data().size()-1).getValue();
+                String value="PM10 "+switchTime(time)+"\n"+vaule1+"\n"+vaule2+"\n"+vaule3;
+                cityContrastInfo.setText(value);
+            }catch (Exception e){}
+
             datatype =cityContrastAdapter. PM10;
         } else if (id == R.id.city_contrast_rbso2_type) {
+            try{
+                String time=citys.get(1).getSO2_data().get(citys.get(1).getSO2_data().size()-1).getTime();
+                String vaule1=cityContrastSp1.getText()+" "+citys.get(1).getSO2_data().get(citys.get(1).getSO2_data().size()-1).getValue();
+                String vaule2=cityContrastSp2.getText()+" "+citys.get(2).getSO2_data().get(citys.get(2).getSO2_data().size()-1).getValue();
+                String vaule3=cityContrastSp3.getText()+" "+citys.get(3).getSO2_data().get(citys.get(3).getSO2_data().size()-1).getValue();
+                String value="SO₂ "+switchTime(time)+"\n"+vaule1+"\n"+vaule2+"\n"+vaule3;
+                cityContrastInfo.setText(value);
+            }catch (Exception e){}
+
             datatype = cityContrastAdapter.SO2;
         } else if (id == R.id.city_contrast_rbno2_type) {
+            try{
+                String time=citys.get(1).getNO2_data().get(citys.get(1).getNO2_data().size()-1).getTime();
+                String vaule1=cityContrastSp1.getText()+" "+citys.get(1).getNO2_data().get(citys.get(1).getNO2_data().size()-1).getValue();
+                String vaule2=cityContrastSp2.getText()+" "+citys.get(2).getNO2_data().get(citys.get(2).getNO2_data().size()-1).getValue();
+                String vaule3=cityContrastSp3.getText()+" "+citys.get(3).getNO2_data().get(citys.get(3).getNO2_data().size()-1).getValue();
+                String value="NO₂ "+switchTime(time)+"\n"+vaule1+"\n"+vaule2+"\n"+vaule3;
+                cityContrastInfo.setText(value);
+            }catch (Exception e){}
+
             datatype = cityContrastAdapter.NO2;
         } else if (id == R.id.city_contrast_rbo3_type) {
+            try{
+                String time=citys.get(1).getO3_data().get(citys.get(1).getO3_data().size()-1).getTime();
+                String vaule1=cityContrastSp1.getText()+" "+citys.get(1).getO3_data().get(citys.get(1).getO3_data().size()-1).getValue();
+                String vaule2=cityContrastSp2.getText()+" "+citys.get(2).getO3_data().get(citys.get(2).getO3_data().size()-1).getValue();
+                String vaule3=cityContrastSp3.getText()+" "+citys.get(3).getO3_data().get(citys.get(3).getO3_data().size()-1).getValue();
+                String value="O₃ "+switchTime(time)+"\n"+vaule1+"\n"+vaule2+"\n"+vaule3;
+                cityContrastInfo.setText(value);
+            }catch (Exception e){}
+
             datatype = cityContrastAdapter.O3;
         } else if (id == R.id.city_contrast_rbco_type) {
+            try{
+                String time=citys.get(1).getCO_data().get(citys.get(1).getCO_data().size()-1).getTime();
+                String vaule1=cityContrastSp1.getText()+" "+citys.get(1).getCO_data().get(citys.get(1).getCO_data().size()-1).getValue();
+                String vaule2=cityContrastSp2.getText()+" "+citys.get(2).getCO_data().get(citys.get(2).getCO_data().size()-1).getValue();
+                String vaule3=cityContrastSp3.getText()+" "+citys.get(3).getCO_data().get(citys.get(3).getCO_data().size()-1).getValue();
+                String value="CO "+switchTime(time)+"\n"+vaule1+"\n"+vaule2+"\n"+vaule3;
+                cityContrastInfo.setText(value);
+            }catch (Exception e){}
+
             datatype = cityContrastAdapter.CO;
+        }else if(id==R.id.city_contrast_rbaqi_type){
+            try{
+                String time=citys.get(1).getAQI_data().get(citys.get(1).getAQI_data().size()-1).getTime();
+                String vaule1=cityContrastSp1.getText()+" "+citys.get(1).getAQI_data().get(citys.get(1).getAQI_data().size()-1).getValue();
+                String vaule2=cityContrastSp2.getText()+" "+citys.get(2).getAQI_data().get(citys.get(2).getAQI_data().size()-1).getValue();
+                String vaule3=cityContrastSp3.getText()+" "+citys.get(3).getAQI_data().get(citys.get(3).getAQI_data().size()-1).getValue();
+                String value="AQI "+switchTime(time)+"\n"+vaule1+"\n"+vaule2+"\n"+vaule3;
+                cityContrastInfo.setText(value);
+            }catch (Exception e){}
+
+            datatype=CityContrastAdapter.AQI;
         }
+        initFrom();
         if(cityContrastAdapter!=null){
             cityContrastAdapter.setCode(datatype);
             cityContrastAdapter.notifyDataSetChanged();

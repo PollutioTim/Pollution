@@ -39,6 +39,7 @@ public class CityContrastAdapter extends BaseAdapter {
     public static String O3 = "O3";
     public static String NO2 = "NO2";
     public static String CO = "CO";
+    public static String AQI = "AQI";
 
     public CityContrastAdapter(Context context, Map<Integer, ChangeTrendMessageBean> map, String code) {
         this.context = context;
@@ -98,6 +99,10 @@ public class CityContrastAdapter extends BaseAdapter {
             dataInfoBeanMap.put(1, map.get(1).getCO_data());
             dataInfoBeanMap.put(2, map.get(2).getCO_data());
             dataInfoBeanMap.put(3, map.get(3).getCO_data());
+        }else if(AQI.equals(code)){
+            dataInfoBeanMap.put(1, map.get(1).getAQI_data());
+            dataInfoBeanMap.put(2, map.get(2).getAQI_data());
+            dataInfoBeanMap.put(3, map.get(3).getAQI_data());
         }
         return dataInfoBeanMap;
     }
