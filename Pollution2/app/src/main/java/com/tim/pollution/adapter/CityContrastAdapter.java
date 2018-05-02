@@ -135,6 +135,7 @@ public class CityContrastAdapter extends BaseAdapter {
             holder.tvCode3 = (TextView) convertView.findViewById(R.id.city_contrast_item_city3);
             convertView.setTag(holder);
         }
+
         holder = (ViewHolder) convertView.getTag();
         if(data1!=null){
             holder.tvCity.setText(switchTime(data1.getTime()));

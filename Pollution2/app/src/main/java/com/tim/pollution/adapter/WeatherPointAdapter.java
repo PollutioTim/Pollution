@@ -60,6 +60,7 @@ public class WeatherPointAdapter extends BaseAdapter {
             holder.tvAQI= (TextView) convertView.findViewById(R.id.weather_point_item_vaule);
             convertView.setTag(holder);
         }
+
         holder = (ViewHolder) convertView.getTag();
         holder.tvCity.setText(pointAQIBean.getPointName());
         holder.tvTime.setText(pointAQIBean.getTime());

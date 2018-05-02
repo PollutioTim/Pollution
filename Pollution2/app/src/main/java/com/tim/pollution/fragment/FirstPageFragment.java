@@ -208,8 +208,8 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
                 return;
             }
             regionIds.add(regionNetBean.getMessage().get(0).getRegionId());
-//            regionIds.add("140123");
-//            regionIds.add("140201");
+            regionIds.add("140123");
+            regionIds.add("140201");
         }
 //        //todo 写死
 //

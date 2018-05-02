@@ -762,7 +762,6 @@
 
 
             <lecho.lib.hellocharts.view.ColumnChartView
-
                 android:id="@+id/weather_main_chart"
 
                 android:layout_width="match_parent"

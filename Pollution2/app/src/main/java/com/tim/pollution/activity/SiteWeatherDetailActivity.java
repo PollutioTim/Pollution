@@ -159,6 +159,7 @@ public class SiteWeatherDetailActivity extends AppCompatActivity implements ICal
             this.finish();
             return;
         }
+
         weatherMainTitle.setText(pointInfoNetBean.getMessage().getPointListBean().getPointName());
         weatherMainLocationTime.setText(pointInfoNetBean.getMessage().getPointListBean().getTime());
         weatherMainArcProgress.setProgressTextTop(pointInfoNetBean.getMessage().getPointListBean().getPollutionLevel());

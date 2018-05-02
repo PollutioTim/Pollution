@@ -214,6 +214,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
                 }
             }
 
+
             @Override
             public void onError(String msg, String eCode) {
 

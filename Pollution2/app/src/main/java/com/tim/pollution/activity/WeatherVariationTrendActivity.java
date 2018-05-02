@@ -42,6 +42,8 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
 
     String regionid;
 
+
+
     @BindView(R.id.weather_detail_rg_time)
     RadioGroup weatherDetailRgTime;
     @BindView(R.id.weather_detail_chart)
