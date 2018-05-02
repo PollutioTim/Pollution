@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
         fragments = new ArrayList<>();
         fragments.add(new FirstPageFragment());
-//        fragments.add(new MapFragment());
+        fragments.add(new MapFragment());
         fragments.add(new SellersFragment());
         fragments.add(new CityContrastFragment());
         fragments.add(new AboutFragment());

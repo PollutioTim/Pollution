@@ -32,7 +32,18 @@ public class RegionNetBean extends StateCode implements Serializable {
 
         private String RegionId;
         private String RegionName;
+        private boolean isClick;
 
+        public boolean isClick() {
+            return isClick;
+        }
+
+        public void setClick(boolean click) {
+            isClick = click;
+        }
+        public boolean getClick() {
+            return isClick;
+        }
         public String getRegionId() {
             return RegionId;
         }

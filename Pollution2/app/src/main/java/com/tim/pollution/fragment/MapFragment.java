@@ -1,5 +1,6 @@
 package com.tim.pollution.fragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -44,17 +45,23 @@ import com.baidu.mapapi.search.district.DistrictSearchOption;
 import com.baidu.mapapi.search.district.OnGetDistricSearchResultListener;
 import com.baidu.mapapi.utils.poi.DispathcPoiData;
 import com.tim.pollution.R;
+import com.tim.pollution.activity.CityActivity;
+import com.tim.pollution.activity.MapActivity;
 import com.tim.pollution.adapter.MapColorAdapter;
 import com.tim.pollution.bean.CityBean;
 import com.tim.pollution.bean.LevePollutionBean;
 import com.tim.pollution.bean.MapBean;
 import com.tim.pollution.callback.ICallBack;
 import com.tim.pollution.general.Constants;
+import com.tim.pollution.general.LocationData;
 import com.tim.pollution.general.MData;
 import com.tim.pollution.general.MDataType;
+import com.tim.pollution.general.MessageEvent;
 import com.tim.pollution.net.MapDAL;
 import com.tim.pollution.utils.ConstUtils;
 import com.tim.pollution.utils.LocationUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -65,6 +72,9 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static android.R.attr.data;
+
 
 /**
  * Created by lenovo on 2018/4/20.
@@ -118,7 +128,6 @@ public class MapFragment extends Fragment implements ICallBack,
     @BindView(R.id.map_recyview)
     RecyclerView recyclerView;
 
-
     private BaiduMap mBaiduMap;
     private MyLocationConfiguration.LocationMode mCurrentMode;
     private LocationClient mLocClient;
@@ -133,6 +142,7 @@ public class MapFragment extends Fragment implements ICallBack,
     private MapColorAdapter adapter;
     private List<LevePollutionBean> datas;
     private String colorType = "AQI";
+    private MapBean mapBean;
 
     @Nullable
     @Override
@@ -187,8 +197,9 @@ public class MapFragment extends Fragment implements ICallBack,
     @Override
     public void onProgress(Object data) {
         MData data1 = (MData) data;
-        if (data1.getType().equals(MDataType.MAP_DATA)) {
+        if (data1.getType().equals(MDataType.MAP_DATA)) {//获得城市名
             MapBean mapBean = (MapBean) data1.getData();
+            this.mapBean = mapBean;
             if (cityBeens.size() > 0) {
                 cityBeens.clear();
             }
@@ -197,6 +208,7 @@ public class MapFragment extends Fragment implements ICallBack,
             if (datas.size() > 0) {
                 datas.clear();
             }
+
             datas.addAll(mapBean.getMessage().getLevePollutionBeens());
             adapter.notifyDataSetChanged();
             getArea(cityBeens);
@@ -208,7 +220,7 @@ public class MapFragment extends Fragment implements ICallBack,
                 mBaiduMap.animateMapStatus(update);
                 update = MapStatusUpdateFactory.zoomTo(9f);
                 mBaiduMap.animateMapStatus(update);
-            /*判断baiduMap是已经移动到指定位置*/
+                /*判断baiduMap是已经移动到指定位置*/
                 if (mBaiduMap.getLocationData() != null)
                     if (mBaiduMap.getLocationData().latitude == location.getLatitude()
                             && mBaiduMap.getLocationData().longitude == location.getLongitude()) {
@@ -300,7 +312,7 @@ public class MapFragment extends Fragment implements ICallBack,
     }
 
     @OnClick({R.id.no_2, R.id.map_aqi_tv, R.id.pm_25, R.id.pm_10, R.id.so_2,
-            R.id.o_3, R.id.co_tv})
+            R.id.o_3, R.id.co_tv,R.id.map_swicth_tv})
     public void OnClick(View view) {
         switch (view.getId()) {
             case R.id.map_aqi_tv:
@@ -350,6 +362,12 @@ public class MapFragment extends Fragment implements ICallBack,
                 colorType = "CO";
                 getArea(cityBeens);
                 break;
+            case R.id.map_swicth_tv:
+                Intent intent = new Intent(getActivity(),CityActivity.class);
+                intent.putExtra("tag",1);
+                
+                startActivity(new Intent(getActivity(), CityActivity.class));
+                break;
         }
     }
 
@@ -368,12 +386,17 @@ public class MapFragment extends Fragment implements ICallBack,
         tvO3.setTextColor(getResources().getColor(R.color.gree_blue));
     }
 
-    //latitude维度
     @Override
     public void onMapClick(LatLng latLng) {
-        Log.e("lili","latlng="+latLng.latitude+","+latLng.longitude);
+        // 发布事件
+        if(mapBean != null){
+            LocationData data = new LocationData();
+            data.setLatLng(latLng);
+            data.setMapBean(mapBean);
+            EventBus.getDefault().postSticky(new MessageEvent(data));
+            startActivity(new Intent(getActivity(), MapActivity.class));
+        }
     }
-
     /**
      * 地图内 Poi 单击事件回调函数
      * @param mapPoi 点击的 poi 信息
