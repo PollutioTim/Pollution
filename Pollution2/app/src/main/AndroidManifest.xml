@@ -36,7 +36,7 @@
         tools:replace="android:icon, android:theme">
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="YtPGwLHem5IUXmpkODrgcA89mRp5HVtL" />
+            android:value="N4sLLL2BQYk2Ga04dRlOOahUG7UHOdG2" />
         <!-- android:value="YtPGwLHem5IUXmpkODrgcA89mRp5HVtL"田春艳 -->
         <!-- android:value="N4sLLL2BQYk2Ga04dRlOOahUG7UHOdG2" 李立 -->
         <activity android:name=".MainActivity" >
@@ -53,12 +53,7 @@
         <activity android:name=".activity.AboutUsActivity" />
         <activity android:name=".activity.WeatherDetailActivity" />
         <activity android:name=".activity.WeatherMainActivity" />
-        <!--设置-->
-        <activity android:name=".activity.RelesExplainActvity" />
-        <activity android:name=".activity.QualityReleaseActivity" />
-        <activity android:name=".activity.AboutUsActivity" >
 
-        </activity>
         <activity android:name=".activity.CityActivity" >
 
         </activity>

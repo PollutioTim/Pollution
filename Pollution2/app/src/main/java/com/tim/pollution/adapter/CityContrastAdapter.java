@@ -10,14 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.tim.pollution.R;
 import com.tim.pollution.bean.changetrend.ChangeTrendMessageBean;
 import com.tim.pollution.bean.changetrend.DataInfoBean;
 import com.tim.pollution.bean.weather.PointAQIBean;
 import com.tim.pollution.utils.DateUtil;
-import com.tim.pollution.utils.ViewUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -115,17 +113,9 @@ public class CityContrastAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        DataInfoBean data1 = null;
-        DataInfoBean data2 = null;
-        DataInfoBean data3 = null;
-        try{
-             data1 = getData().get(1).get(position);
-             data2 = getData().get(2).get(position);
-             data3 = getData().get(3).get(position);
-        }catch (Exception e){
-            Toast.makeText(context,"数组越界，请检查数据",Toast.LENGTH_LONG);
-        }
-
+        DataInfoBean data1 = getData().get(1).get(position);
+        DataInfoBean data2 = getData().get(2).get(position);
+        DataInfoBean data3 = getData().get(3).get(position);
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = inflater.inflate(R.layout.city_contrast_item, null);
@@ -136,25 +126,20 @@ public class CityContrastAdapter extends BaseAdapter {
             convertView.setTag(holder);
         }
         holder = (ViewHolder) convertView.getTag();
-        if(data1!=null){
-            holder.tvCity.setText(switchTime(data1.getTime()));
-            holder.tvCode1.setText(data1.getValue());
-            holder.tvCode1.setBackground(ViewUtils.getShapeDrawable(data1.getValuecolor()));
-        }
-        if(data2!=null){
-            holder.tvCode2.setText(data2.getValue());
-            holder.tvCode2.setBackground(ViewUtils.getShapeDrawable(data2.getValuecolor()));
-        }
-       if(data3!=null){
-           holder.tvCode3.setText(data3.getValue());
-           holder.tvCode3.setBackground(ViewUtils.getShapeDrawable(data3.getValuecolor()));
-       }
+        holder.tvCity.setText(switchTime(data1.getTime()));
+        holder.tvCode1.setText(data1.getValue());
+        holder.tvCode1.setBackground(new ColorDrawable(Color.parseColor(data1.getValuecolor())));
+        holder.tvCode2.setText(data2.getValue());
+        holder.tvCode2.setBackground(new ColorDrawable(Color.parseColor(data2.getValuecolor())));
+        holder.tvCode3.setText(data3.getValue());
+        holder.tvCode3.setBackground(new ColorDrawable(Color.parseColor(data3.getValuecolor())));
+
         return convertView;
     }
 
 
     private String switchTime(String time){
-        SimpleDateFormat sdf=new SimpleDateFormat("MM.dd HH:mm");
+        SimpleDateFormat sdf=new SimpleDateFormat("mm.dd HH:mm");
         return sdf.format(DateUtil.strToDateLong(time));
     }
 

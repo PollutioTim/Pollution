@@ -1,5 +1,6 @@
 package com.tim.pollution.activity;
 
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -28,7 +29,7 @@ import butterknife.OnClick;
  * Created by lenovo on 2018/4/27.
  */
 
-public class CityActivity extends BaseActivity implements ICallBack {
+public class CityActivity extends BaseActivity implements ICallBack{
 
     @BindView(R.id.city_recyview)
     RecyclerView recyclerView;
@@ -37,7 +38,7 @@ public class CityActivity extends BaseActivity implements ICallBack {
     private List<RegionNetBean.RegionBean>cityBeens;
 
     private CityAdapter adapter;
-    private LinearLayoutManager lm;
+    private GridLayoutManager lm;
     private RegionNetBean regionNetBean;
 
     @Override
@@ -49,12 +50,10 @@ public class CityActivity extends BaseActivity implements ICallBack {
     public void initView() {
         cityBeens = new ArrayList<>();
         adapter = new CityAdapter(this,cityBeens);
-        lm = new LinearLayoutManager(this);
-        lm.setOrientation(LinearLayoutManager.VERTICAL);
+        lm = new GridLayoutManager(this,4);
         recyclerView.setLayoutManager(lm);
         recyclerView.setAdapter(adapter);
-
-
+        loadRegionData();
     }
     /**
      * 加载县区列表
@@ -98,4 +97,5 @@ public class CityActivity extends BaseActivity implements ICallBack {
     public void onError(String msg, String eCode) {
 
     }
+
 }

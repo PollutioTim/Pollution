@@ -49,10 +49,9 @@
             android:gravity="center"
             android:layout_marginTop="18dp"
             android:layout_marginRight="18dp"
-
+            android:background="@drawable/shape_map_bg"
             android:layout_gravity="right"
             android:orientation="horizontal">
-            <!--android:background="@drawable/shape_map_bg"-->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -69,7 +68,7 @@
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/map_recyview"
+            android:id="@+id/map_ac_recyview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#7e7a7a7a"
