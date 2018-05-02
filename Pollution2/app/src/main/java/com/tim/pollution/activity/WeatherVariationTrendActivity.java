@@ -70,6 +70,8 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
     RadioButton weatherDetailRb24Time;
     @BindView(R.id.weather_detail_rb30_time)
     RadioButton weatherDetailRb30Time;
+    @BindView(R.id.weather_detail_rbaqi_type)
+    RadioButton weatherDetailRbaqiType;
     private ChangeTrend changeTrend;
 
 
@@ -144,7 +146,7 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
      */
     private void initData() {
 //        weatherDetailChart
-        initChart();
+
         initList();
     }
 
@@ -170,12 +172,14 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
             initData = changeTrend.getMessage().getO3_data();
         } else if (id == R.id.weather_detail_rbco_type) {
             initData = changeTrend.getMessage().getCO_data();
+        }else if(id==R.id.weather_detail_rbaqi_type){
+            initData = changeTrend.getMessage().getAQI_data();
         }
         if(initData==null){
             return;
         }
         weatherDetailList.setAdapter(new ChangeTrendAdapter(this, initData));
-
+        initChart(initData);
 
     }
 
@@ -184,11 +188,11 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
     /**
      * 初始化图标
      */
-    private void initChart() {
+    private void initChart(List<DataInfoBean> initData) {
 //        weatherDetailChart
 
-        if (changeTrend.getMessage().getAQI_data() != null) {
-            List<DataInfoBean> list = changeTrend.getMessage().getAQI_data();
+        if (initData != null) {
+            List<DataInfoBean> list =initData;
             //每个集合显示几条柱子
             int numSubcolumns = 1;
             //显示多少个集合
