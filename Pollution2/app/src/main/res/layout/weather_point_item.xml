@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:gravity="center_vertical"
+    android:gravity="center"
     android:padding="10dp"
     android:layout_gravity="right"
     android:layout_height="wrap_content">
@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:textSize="14sp"
         android:paddingRight="10dp"
+        android:layout_gravity="left"
         android:textColor="@color/color_white"
         android:text="小店"/>
     <TextView
@@ -22,7 +23,8 @@
         android:textColor="@color/color_white"
         android:textSize="12sp"
         android:gravity="right"
-        android:paddingRight="30dp"
+        android:layout_gravity="right"
+        android:paddingRight="50dp"
         android:layout_weight="1"
         android:text="201803/23 10：00"/>
     <TextView
@@ -30,9 +32,9 @@
         android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:layout_marginLeft="20dp"
+        android:layout_gravity="center"
         android:textSize="12sp"
         android:textColor="@color/color_white"
         android:background="@color/colorPrimary"

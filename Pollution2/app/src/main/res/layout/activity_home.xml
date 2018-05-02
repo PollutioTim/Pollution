@@ -64,6 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="太原+"
+                android:gravity="center"
                 android:layout_alignParentRight="true"
                 android:textColor="@color/color_white"
                 android:textSize="14sp" />
@@ -91,6 +92,9 @@
 
     <ScrollView
         android:layout_width="match_parent"
+        android:scrollbars="none"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:layout_height="wrap_content">
 
         <LinearLayout
@@ -149,6 +153,7 @@
                 android:id="@+id/home_list"
                 android:layout_width="match_parent"
                 android:layout_marginTop="10dp"
+                android:scrollbars="none"
                 android:layout_height="wrap_content" />
             <TextView
                 android:layout_width="match_parent"

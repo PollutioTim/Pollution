@@ -188,7 +188,7 @@ public class SiteWeatherDetailActivity extends AppCompatActivity implements ICal
         weatherMainO3Pro.setMaxCount(500);
         weatherMainO3Pro.setCurrentCount(getIntFromString(pointInfoNetBean.getMessage().getPointListBean().getO3()));
         weatherMainO3Pro.setPrograssColor(pointInfoNetBean.getMessage().getPointListBean().getO3color());
-        weatherMainCoVa.setText(pointInfoNetBean.getMessage().getPointListBean().getO3());
+        weatherMainCoVa.setText(pointInfoNetBean.getMessage().getPointListBean().getCO());
         weatherMainCoPro.setMaxCount(500);
         weatherMainCoPro.setCurrentCount(getIntFromString(pointInfoNetBean.getMessage().getPointListBean().getCO()));
         weatherMainCoPro.setPrograssColor(pointInfoNetBean.getMessage().getPointListBean().getCOcolor());

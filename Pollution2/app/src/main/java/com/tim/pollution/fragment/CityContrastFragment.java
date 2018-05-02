@@ -241,17 +241,22 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         if(citys.size()<3){
             return;
         }
-        String time=citys.get(1).getAQI_data().get(citys.get(1).getAQI_data().size()-1).getTime();
-        String vaule1=cityContrastSp1.getText()+" "+citys.get(1).getAQI_data().get(citys.get(1).getAQI_data().size()-1).getValue();
-        String vaule2=cityContrastSp2.getText()+" "+citys.get(2).getAQI_data().get(citys.get(2).getAQI_data().size()-1).getValue();
-        String vaule3=cityContrastSp3.getText()+" "+citys.get(3).getAQI_data().get(citys.get(3).getAQI_data().size()-1).getValue();
-        String value="AQI "+switchTime(time)+"\n"+vaule1+"\n"+vaule2+"\n"+vaule3;
-       cityContrastInfo.setText(value);
+        try{
+            String time=citys.get(1).getAQI_data().get(citys.get(1).getAQI_data().size()-1).getTime();
+            String vaule1=cityContrastSp1.getText()+" "+citys.get(1).getAQI_data().get(citys.get(1).getAQI_data().size()-1).getValue();
+            String vaule2=cityContrastSp2.getText()+" "+citys.get(2).getAQI_data().get(citys.get(2).getAQI_data().size()-1).getValue();
+            String vaule3=cityContrastSp3.getText()+" "+citys.get(3).getAQI_data().get(citys.get(3).getAQI_data().size()-1).getValue();
+            String value="AQI "+switchTime(time)+"\n"+vaule1+"\n"+vaule2+"\n"+vaule3;
+            cityContrastInfo.setText(value);
 //        initChars();
-        initFrom();
-        cityContrastRgType.check(R.id.city_contrast_rbpm25_type);
-        cityContrastAdapter=new CityContrastAdapter(getContext(),citys,CityContrastAdapter.PM25);
-        cityContrastList.setAdapter(cityContrastAdapter);
+            initFrom();
+            cityContrastRgType.check(R.id.city_contrast_rbpm25_type);
+            cityContrastAdapter=new CityContrastAdapter(getContext(),citys,CityContrastAdapter.PM25);
+            cityContrastList.setAdapter(cityContrastAdapter);
+        }catch (Exception e){
+            Toast.makeText(getContext(),"获取数据失败，请重试",Toast.LENGTH_LONG);
+        }
+
     }
     private String switchTime(String time){
         SimpleDateFormat sdf=new SimpleDateFormat("HH:mm");

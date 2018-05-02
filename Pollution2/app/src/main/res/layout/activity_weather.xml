@@ -204,16 +204,10 @@
 
             <LinearLayout
 
-                android:layout_width="wrap_content"
-
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:layout_weight="1"
-
-                android:layout_marginLeft="10dp"
-
                 android:orientation="horizontal"
-
                 android:gravity="center_vertical">
 
 
@@ -225,6 +219,8 @@
                     android:layout_height="wrap_content"
 
                     android:text="PM2.5"
+                    android:layout_weight="1"
+                    android:gravity="left"
 
                     android:textColor="@color/color_white" />
 
@@ -288,7 +284,7 @@
 
             <LinearLayout
 
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
 
                 android:layout_height="wrap_content"
 
@@ -307,6 +303,8 @@
                     android:layout_height="wrap_content"
 
                     android:text="PM10"
+                    android:layout_weight="1"
+                    android:gravity="left"
 
                     android:textColor="@color/color_white" />
 
@@ -364,7 +362,7 @@
 
             <LinearLayout
 
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
 
                 android:layout_height="wrap_content"
 
@@ -383,7 +381,8 @@
                     android:layout_height="wrap_content"
 
                     android:text="@string/SO2"
-
+                    android:layout_weight="1"
+                    android:gravity="left"
                     android:textColor="@color/color_white" />
 
 
@@ -439,7 +438,7 @@
 
             <LinearLayout
 
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
 
                 android:layout_height="wrap_content"
 
@@ -458,6 +457,8 @@
                     android:layout_height="wrap_content"
 
                     android:text="@string/NO2"
+                    android:layout_weight="1"
+                    android:gravity="left"
 
                     android:textColor="@color/color_white" />
 
@@ -517,7 +518,7 @@
 
             <LinearLayout
 
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
 
                 android:layout_height="wrap_content"
 
@@ -532,11 +533,10 @@
                 <TextView
 
                     android:layout_width="wrap_content"
-
                     android:layout_height="wrap_content"
-
                     android:text="@string/O3"
-
+                    android:layout_weight="1"
+                    android:gravity="left"
                     android:textColor="@color/color_white" />
 
 
@@ -595,7 +595,7 @@
 
             <LinearLayout
 
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
 
                 android:layout_height="wrap_content"
 
@@ -614,7 +614,8 @@
                     android:layout_height="wrap_content"
 
                     android:text="CO"
-
+                    android:layout_weight="1"
+                    android:gravity="left"
                     android:textColor="@color/color_white" />
 
 
