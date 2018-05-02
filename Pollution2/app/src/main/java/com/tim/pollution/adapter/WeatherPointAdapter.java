@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.tim.pollution.R;
 import com.tim.pollution.bean.weather.PointAQIBean;
+import com.tim.pollution.utils.ViewUtils;
 
 import java.util.List;
 
@@ -59,12 +60,12 @@ public class WeatherPointAdapter extends BaseAdapter {
             holder.tvAQI= (TextView) convertView.findViewById(R.id.weather_point_item_vaule);
             convertView.setTag(holder);
         }
-
         holder = (ViewHolder) convertView.getTag();
         holder.tvCity.setText(pointAQIBean.getPointName());
         holder.tvTime.setText(pointAQIBean.getTime());
         holder.tvAQI.setText(pointAQIBean.getAQI());
-        holder.tvAQI.setBackground(getDrawableFormString(pointAQIBean.getAQIcolor()));
+//        holder.tvAQI.setBackground(getDrawableFormString(pointAQIBean.getAQIcolor()));
+        holder.tvAQI.setBackground(ViewUtils.getShapeDrawable(pointAQIBean.getAQIcolor()));
 
         return convertView;
     }

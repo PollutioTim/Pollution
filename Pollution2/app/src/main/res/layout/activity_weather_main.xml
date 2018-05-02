@@ -10,22 +10,20 @@
 
     android:layout_height="match_parent"
 
+    android:background="@mipmap/weather_background"
+
     android:orientation="vertical"
 
     android:padding="10dp"
 
-    android:background="@mipmap/weather_background"
-
     tools:context="com.tim.pollution.activity.WeatherMainActivity">
-
 
 
     <ScrollView
 
         android:layout_width="match_parent"
-        android:scrollbars="none"
-        android:layout_height="match_parent">
-
+        android:layout_height="match_parent"
+        android:scrollbars="none">
 
 
         <LinearLayout
@@ -35,7 +33,6 @@
             android:layout_height="match_parent"
 
             android:orientation="vertical">
-
 
 
             <LinearLayout
@@ -49,7 +46,6 @@
                 android:orientation="horizontal">
 
 
-
                 <ImageView
 
                     android:id="@+id/weather_main_back"
@@ -61,7 +57,6 @@
                     android:scaleType="center"
 
                     android:src="@mipmap/back" />
-
 
 
                 <TextView
@@ -87,7 +82,6 @@
             </LinearLayout>
 
 
-
             <LinearLayout
 
                 android:layout_width="match_parent"
@@ -99,7 +93,6 @@
                 android:orientation="vertical">
 
 
-
                 <TextView
 
                     android:id="@+id/weather_main_location_time"
@@ -109,12 +102,11 @@
                     android:layout_height="wrap_content"
 
                     android:layout_marginBottom="8dp"
-                    android:textSize="12sp"
-
                     android:text="太原 18.03.27 15：00"
 
-                    android:textColor="@color/color_white" />
+                    android:textColor="@color/color_white"
 
+                    android:textSize="12sp" />
 
 
                 <com.woodnaonly.arcprogress.ArcProgress
@@ -166,7 +158,6 @@
                     app:decimal_digits="0" />
 
 
-
                 <LinearLayout
 
                     android:layout_width="wrap_content"
@@ -180,7 +171,6 @@
                     android:orientation="horizontal">
 
 
-
                     <ImageView
 
                         android:id="@+id/weather_main_info_img"
@@ -190,7 +180,6 @@
                         android:layout_height="wrap_content"
 
                         android:src="@mipmap/sunny" />
-
 
 
                     <TextView
@@ -206,7 +195,6 @@
                         android:textColor="@color/color_white"
 
                         android:textSize="20sp" />
-
 
 
                     <TextView
@@ -232,7 +220,6 @@
             </LinearLayout>
 
 
-
             <TextView
 
                 android:layout_width="wrap_content"
@@ -246,7 +233,6 @@
                 android:textColor="#FF65D0DC" />
 
 
-
             <LinearLayout
 
                 android:layout_width="match_parent"
@@ -256,7 +242,6 @@
                 android:layout_marginTop="10dp"
 
                 android:orientation="horizontal">
-
 
 
                 <LinearLayout
@@ -272,7 +257,6 @@
                     android:orientation="vertical">
 
 
-
                     <LinearLayout
 
                         android:layout_width="wrap_content"
@@ -280,7 +264,6 @@
                         android:layout_height="wrap_content"
 
                         android:orientation="horizontal">
-
 
 
                         <TextView
@@ -291,12 +274,12 @@
 
                             android:layout_height="wrap_content"
 
+                            android:drawablePadding="3dp"
+                            android:drawableEnd="@mipmap/pm25_white"
                             android:text="66"
-
                             android:textColor="@color/color_white"
 
                             android:textSize="18sp" />
-
 
 
                         <TextView
@@ -308,13 +291,13 @@
                             android:layout_marginLeft="3dp"
 
                             android:text="PM2.5"
-
                             android:textColor="@color/color_white"
 
-                            android:textSize="12sp" />
+                            android:textSize="12sp"
+
+                            android:visibility="gone" />
 
                     </LinearLayout>
-
 
 
                     <ProgressBar
@@ -334,7 +317,6 @@
                         android:visibility="gone" />
 
 
-
                     <com.tim.pollution.view.ProgressView
 
                         android:id="@+id/weather_main_pm25_pro"
@@ -342,7 +324,6 @@
                         android:layout_width="60dp"
 
                         android:layout_height="10dp" />
-
 
 
                     <LinearLayout
@@ -356,7 +337,6 @@
                         android:orientation="horizontal">
 
 
-
                         <TextView
 
                             android:id="@+id/weather_main_no2_va"
@@ -365,12 +345,12 @@
 
                             android:layout_height="wrap_content"
 
+                            android:drawablePadding="3dp"
+                            android:drawableRight="@mipmap/no2_white"
                             android:text="150"
-
                             android:textColor="@color/color_white"
 
                             android:textSize="18sp" />
-
 
 
                         <TextView
@@ -382,13 +362,13 @@
                             android:layout_marginLeft="3dp"
 
                             android:text="@string/NO2"
-
                             android:textColor="@color/color_white"
 
-                            android:textSize="12sp" />
+                            android:textSize="12sp"
+
+                            android:visibility="gone" />
 
                     </LinearLayout>
-
 
 
                     <ProgressBar
@@ -408,7 +388,6 @@
                         android:visibility="gone" />
 
 
-
                     <com.tim.pollution.view.ProgressView
 
                         android:id="@+id/weather_main_no2_pro"
@@ -418,7 +397,6 @@
                         android:layout_height="10dp" />
 
                 </LinearLayout>
-
 
 
                 <LinearLayout
@@ -434,7 +412,6 @@
                     android:orientation="vertical">
 
 
-
                     <LinearLayout
 
                         android:layout_width="wrap_content"
@@ -442,7 +419,6 @@
                         android:layout_height="wrap_content"
 
                         android:orientation="horizontal">
-
 
 
                         <TextView
@@ -453,12 +429,12 @@
 
                             android:layout_height="wrap_content"
 
+                            android:drawablePadding="3dp"
+                            android:drawableRight="@mipmap/pm10_white"
                             android:text="66"
-
                             android:textColor="@color/color_white"
 
                             android:textSize="18sp" />
-
 
 
                         <TextView
@@ -470,13 +446,13 @@
                             android:layout_marginLeft="3dp"
 
                             android:text="PM10"
-
                             android:textColor="@color/color_white"
 
-                            android:textSize="12sp" />
+                            android:textSize="12sp"
+
+                            android:visibility="gone" />
 
                     </LinearLayout>
-
 
 
                     <ProgressBar
@@ -496,7 +472,6 @@
                         android:visibility="gone" />
 
 
-
                     <com.tim.pollution.view.ProgressView
 
                         android:id="@+id/weather_main_pm10_pro"
@@ -504,7 +479,6 @@
                         android:layout_width="60dp"
 
                         android:layout_height="10dp" />
-
 
 
                     <LinearLayout
@@ -518,7 +492,6 @@
                         android:orientation="horizontal">
 
 
-
                         <TextView
 
                             android:id="@+id/weather_main_o3_va"
@@ -527,12 +500,12 @@
 
                             android:layout_height="wrap_content"
 
+                            android:drawablePadding="3dp"
+                            android:drawableRight="@mipmap/o3_white"
                             android:text="150"
-
                             android:textColor="@color/color_white"
 
                             android:textSize="18sp" />
-
 
 
                         <TextView
@@ -544,13 +517,12 @@
                             android:layout_marginLeft="3dp"
 
                             android:text="O₃"
-
                             android:textColor="@color/color_white"
+                            android:textSize="12sp"
 
-                            android:textSize="12sp" />
+                            android:visibility="gone" />
 
                     </LinearLayout>
-
 
 
                     <ProgressBar
@@ -570,7 +542,6 @@
                         android:visibility="gone" />
 
 
-
                     <com.tim.pollution.view.ProgressView
 
                         android:id="@+id/weather_main_o3_pro"
@@ -580,7 +551,6 @@
                         android:layout_height="10dp" />
 
                 </LinearLayout>
-
 
 
                 <LinearLayout
@@ -596,7 +566,6 @@
                     android:orientation="vertical">
 
 
-
                     <LinearLayout
 
                         android:layout_width="wrap_content"
@@ -604,7 +573,6 @@
                         android:layout_height="wrap_content"
 
                         android:orientation="horizontal">
-
 
 
                         <TextView
@@ -615,12 +583,12 @@
 
                             android:layout_height="wrap_content"
 
+                            android:drawablePadding="3dp"
+                            android:drawableRight="@mipmap/so2_white"
                             android:text="66"
-
                             android:textColor="@color/color_white"
 
                             android:textSize="18sp" />
-
 
 
                         <TextView
@@ -632,13 +600,13 @@
                             android:layout_marginLeft="3dp"
 
                             android:text="@string/SO2"
-
                             android:textColor="@color/color_white"
 
-                            android:textSize="12sp" />
+                            android:textSize="12sp"
+
+                            android:visibility="gone" />
 
                     </LinearLayout>
-
 
 
                     <ProgressBar
@@ -658,7 +626,6 @@
                         android:visibility="gone" />
 
 
-
                     <com.tim.pollution.view.ProgressView
 
                         android:id="@+id/weather_main_so2_pro"
@@ -666,7 +633,6 @@
                         android:layout_width="60dp"
 
                         android:layout_height="10dp" />
-
 
 
                     <LinearLayout
@@ -680,7 +646,6 @@
                         android:orientation="horizontal">
 
 
-
                         <TextView
 
                             android:id="@+id/weather_main_co_va"
@@ -689,12 +654,12 @@
 
                             android:layout_height="wrap_content"
 
+                            android:drawablePadding="3dp"
+                            android:drawableRight="@mipmap/co_white"
                             android:text="150"
-
                             android:textColor="@color/color_white"
 
                             android:textSize="18sp" />
-
 
 
                         <TextView
@@ -706,13 +671,12 @@
                             android:layout_marginLeft="3dp"
 
                             android:text="CO"
-
                             android:textColor="@color/color_white"
+                            android:textSize="12sp"
 
-                            android:textSize="12sp" />
+                            android:visibility="gone" />
 
                     </LinearLayout>
-
 
 
                     <ProgressBar
@@ -732,7 +696,6 @@
                         android:visibility="gone" />
 
 
-
                     <com.tim.pollution.view.ProgressView
 
                         android:id="@+id/weather_main_co_pro"
@@ -744,7 +707,6 @@
                 </LinearLayout>
 
             </LinearLayout>
-
 
 
             <TextView
@@ -760,7 +722,6 @@
                 android:textColor="#FF65D0DC" />
 
 
-
             <lecho.lib.hellocharts.view.ColumnChartView
                 android:id="@+id/weather_main_chart"
 
@@ -771,7 +732,6 @@
                 android:layout_margin="10dp"
 
                 android:layout_marginTop="30dp" />
-
 
 
             <RadioGroup
@@ -789,7 +749,6 @@
                 android:orientation="horizontal">
 
 
-
                 <RadioButton
 
                     android:id="@+id/weather_main_detail_rbpm25_type"
@@ -802,14 +761,13 @@
 
                     android:button="@null"
 
+                    android:drawableLeft="@drawable/pm25_selecter"
+
                     android:gravity="center"
 
                     android:padding="10dp"
 
-                    android:text="PM2.5"
-
                     android:textColor="@drawable/white_green_selector" />
-
 
 
                 <RadioButton
@@ -824,14 +782,13 @@
 
                     android:button="@null"
 
+                    android:drawableLeft="@drawable/pm10_selecter"
+
                     android:gravity="center"
 
                     android:padding="10dp"
 
-                    android:text="PM10"
-
                     android:textColor="@drawable/white_green_selector" />
-
 
 
                 <RadioButton
@@ -846,14 +803,13 @@
 
                     android:button="@null"
 
+                    android:drawableLeft="@drawable/so2_selecter"
+
                     android:gravity="center"
 
                     android:padding="10dp"
 
-                    android:text="@string/SO2"
-
                     android:textColor="@drawable/white_green_selector" />
-
 
 
                 <RadioButton
@@ -868,14 +824,13 @@
 
                     android:button="@null"
 
+                    android:drawableLeft="@drawable/no2_selecter"
+
                     android:gravity="center"
 
                     android:padding="10dp"
 
-                    android:text="@string/NO2"
-
                     android:textColor="@drawable/white_green_selector" />
-
 
 
                 <RadioButton
@@ -890,14 +845,13 @@
 
                     android:button="@null"
 
+                    android:drawableLeft="@drawable/o3_selecter"
+
                     android:gravity="center"
 
                     android:padding="10dp"
 
-                    android:text="O₃"
-
                     android:textColor="@drawable/white_green_selector" />
-
 
 
                 <RadioButton
@@ -912,11 +866,11 @@
 
                     android:button="@null"
 
+                    android:drawableLeft="@drawable/co_selecter"
+
                     android:gravity="center"
 
                     android:padding="10dp"
-
-                    android:text="CO"
 
                     android:textColor="@drawable/white_green_selector" />
 

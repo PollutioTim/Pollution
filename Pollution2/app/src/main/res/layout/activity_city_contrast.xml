@@ -136,7 +136,7 @@
                     android:button="@null"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:text="PM2.5"
+                    android:drawableLeft="@drawable/pm25_selecter"
                     android:textColor="@drawable/white_green_selector" />
 
                 <RadioButton
@@ -147,7 +147,7 @@
                     android:button="@null"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:text="PM10"
+                    android:drawableLeft="@drawable/pm10_selecter"
                     android:textColor="@drawable/white_green_selector" />
 
                 <RadioButton
@@ -158,7 +158,7 @@
                     android:button="@null"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:text="@string/SO2"
+                    android:drawableLeft="@drawable/so2_selecter"
                     android:textColor="@drawable/white_green_selector" />
 
 
@@ -171,7 +171,7 @@
                     android:button="@null"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:text="@string/NO2"
+                    android:drawableLeft="@drawable/no2_selecter"
                     android:textColor="@drawable/white_green_selector" />
 
                 <RadioButton
@@ -182,7 +182,7 @@
                     android:button="@null"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:text="O₃"
+                    android:drawableLeft="@drawable/o3_selecter"
                     android:textColor="@drawable/white_green_selector" />
 
                 <RadioButton
@@ -193,7 +193,7 @@
                     android:button="@null"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:text="CO"
+                    android:drawableLeft="@drawable/co_selecter"
                     android:textColor="@drawable/white_green_selector" />
             </RadioGroup>
 
