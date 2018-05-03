@@ -24,7 +24,7 @@ public class RegionNetBean extends StateCode implements Serializable {
         this.message = message;
     }
 
-    public static class RegionBean {
+    public static class RegionBean implements Serializable {
         /**
          * RegionId : 140101
          * RegionName : 太原市

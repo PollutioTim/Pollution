@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,10 +102,18 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
         //引用创建好的xml布局
         View view = inflater.inflate(R.layout.activity_home, container, false);
         findView(view);
-        loadLocation();
+
         initClick();
+        Log.e("tcy","onCreateView");
         return view;
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.e("tcy","onStart");
+        loadLocation();
     }
 
     /**
@@ -197,10 +206,10 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
 
     private void loadData() {
         regionIds = new ArrayList<>();
-        List<RegionNetBean.RegionBean> regionBeans = CityListSaveUtil.getList(getContext(), CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY);
+        List<String> regionBeans = CityListSaveUtil.getList(getContext(), CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY);
         if (regionBeans != null && regionBeans.size() > 0) {
-            for (RegionNetBean.RegionBean rb : regionBeans) {
-                regionIds.add(rb.getRegionId());
+            for (String rb : regionBeans) {
+                regionIds.add(rb);
             }
         } else {
             if (regionNetBean == null || regionNetBean.getMessage() == null) {
@@ -536,12 +545,15 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
     @Override
     public void prograss(MessageBean messageBean) {
         int index = regionIds.indexOf(messageBean.getRegionList().getRegionId());
-        weatherDatamap.put(regionIds.get(index), messageBean);
-        if (index == 0) {
-            initBaseInfo(messageBean);
-            initCharts2(messageBean);
-            initList(messageBean);
+        if(index>=0){
+            weatherDatamap.put(regionIds.get(index), messageBean);
+            if (index == 0) {
+                initBaseInfo(messageBean);
+                initCharts2(messageBean);
+                initList(messageBean);
+            }
         }
+
     }
 
     private void initBaseInfo(MessageBean messageBean) {

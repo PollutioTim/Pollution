@@ -10,7 +10,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.TreeSet;
 
 /**
  * 保存和获取关注的城市列表
@@ -23,6 +26,7 @@ public class CityListSaveUtil {
         SharedPreferences mySharedPreferences = context.getSharedPreferences(filename,
                 Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = mySharedPreferences.edit();
+
         try {
             String liststr =ListToString(list);
             edit.putString(key, liststr);
