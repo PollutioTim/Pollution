@@ -23,6 +23,7 @@ public class HomeFragmentAdapter extends FragmentPagerAdapter {
         return mlist.get(arg0);//显示第几个页面
     }
 
+
     @Override
     public int getCount() {
         return mlist.size();//有几个页面

@@ -125,9 +125,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#FF42969D"
-                android:checkedButton="@+id/city_contrast_rbpm25_type"
+                android:checkedButton="@+id/city_contrast_rbaqi_type"
                 android:orientation="horizontal">
-
+                <RadioButton
+                    android:id="@+id/city_contrast_rbaqi_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="AQI"
+                    android:textColor="@drawable/white_green_selector" />
                 <RadioButton
                     android:id="@+id/city_contrast_rbpm25_type"
                     android:layout_width="wrap_content"
@@ -136,7 +145,7 @@
                     android:button="@null"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:text="PM2.5"
+                    android:drawableLeft="@drawable/pm25_selecter"
                     android:textColor="@drawable/white_green_selector" />
 
                 <RadioButton
@@ -147,7 +156,7 @@
                     android:button="@null"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:text="PM10"
+                    android:drawableLeft="@drawable/pm10_selecter"
                     android:textColor="@drawable/white_green_selector" />
 
                 <RadioButton
@@ -158,8 +167,10 @@
                     android:button="@null"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:text="@string/SO2"
+                    android:drawableLeft="@drawable/so2_selecter"
                     android:textColor="@drawable/white_green_selector" />
+
+
 
                 <RadioButton
                     android:id="@+id/city_contrast_rbno2_type"
@@ -169,7 +180,7 @@
                     android:button="@null"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:text="@string/NO2"
+                    android:drawableLeft="@drawable/no2_selecter"
                     android:textColor="@drawable/white_green_selector" />
 
                 <RadioButton
@@ -180,7 +191,7 @@
                     android:button="@null"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:text="O₃"
+                    android:drawableLeft="@drawable/o3_selecter"
                     android:textColor="@drawable/white_green_selector" />
 
                 <RadioButton
@@ -191,7 +202,7 @@
                     android:button="@null"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:text="CO"
+                    android:drawableLeft="@drawable/co_selecter"
                     android:textColor="@drawable/white_green_selector" />
             </RadioGroup>
 
@@ -206,16 +217,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:layout_weight="6"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:text="时间"
+                    android:text="        时间      "
                     android:textColor="@color/color_white"
                     android:textSize="12sp" />
-
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="#00000000"
+                    android:layout_weight="1"/>
                 <TextView
                     android:id="@+id/city_contrast_city1"
-                    android:layout_width="60dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:gravity="center"
@@ -223,10 +237,14 @@
                     android:text="太原"
                     android:textColor="@color/color_white"
                     android:textSize="12sp" />
-
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="#00000000"
+                    android:layout_weight="1"/>
                 <TextView
                     android:id="@+id/city_contrast_city2"
-                    android:layout_width="60dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:gravity="center"
@@ -234,10 +252,15 @@
                     android:text="大同"
                     android:textColor="@color/color_white"
                     android:textSize="12sp" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="#00000000"
+                    android:layout_weight="1"/>
 
                 <TextView
                     android:id="@+id/city_contrast_city3"
-                    android:layout_width="60dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:gravity="center"

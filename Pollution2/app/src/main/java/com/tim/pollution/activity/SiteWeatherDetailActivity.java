@@ -159,6 +159,7 @@ public class SiteWeatherDetailActivity extends AppCompatActivity implements ICal
             this.finish();
             return;
         }
+
         weatherMainTitle.setText(pointInfoNetBean.getMessage().getPointListBean().getPointName());
         weatherMainLocationTime.setText(pointInfoNetBean.getMessage().getPointListBean().getTime());
         weatherMainArcProgress.setProgressTextTop(pointInfoNetBean.getMessage().getPointListBean().getPollutionLevel());
@@ -290,6 +291,8 @@ public class SiteWeatherDetailActivity extends AppCompatActivity implements ICal
             datas = pointInfoNetBean.getMessage().getO3_24h();
         } else if (id == R.id.weather_main_detail_rbco_type) {
             datas = pointInfoNetBean.getMessage().getCO_24h();
+        }else if(id==R.id.weather_main_detail_rbAQI_type){
+            datas=pointInfoNetBean.getMessage().getAQI_24h();
         }
         if (datas != null) {
             List<DataInfoBean> list = datas;

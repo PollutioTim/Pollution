@@ -218,7 +218,7 @@
 
                     android:layout_height="wrap_content"
 
-                    android:text="PM2.5"
+                    android:drawableLeft="@mipmap/pm25_white"
                     android:layout_weight="1"
                     android:gravity="left"
 
@@ -302,7 +302,7 @@
 
                     android:layout_height="wrap_content"
 
-                    android:text="PM10"
+                    android:drawableLeft="@mipmap/pm10_white"
                     android:layout_weight="1"
                     android:gravity="left"
 
@@ -380,7 +380,7 @@
 
                     android:layout_height="wrap_content"
 
-                    android:text="@string/SO2"
+                    android:drawableLeft="@mipmap/so2_white"
                     android:layout_weight="1"
                     android:gravity="left"
                     android:textColor="@color/color_white" />
@@ -436,6 +436,7 @@
 
 
 
+
             <LinearLayout
 
                 android:layout_width="match_parent"
@@ -456,7 +457,7 @@
 
                     android:layout_height="wrap_content"
 
-                    android:text="@string/NO2"
+                    android:drawableLeft="@mipmap/no2_white"
                     android:layout_weight="1"
                     android:gravity="left"
 
@@ -534,7 +535,7 @@
 
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/O3"
+                    android:drawableLeft="@mipmap/o3_white"
                     android:layout_weight="1"
                     android:gravity="left"
                     android:textColor="@color/color_white" />
@@ -613,7 +614,7 @@
 
                     android:layout_height="wrap_content"
 
-                    android:text="CO"
+                    android:drawableLeft="@mipmap/co_white"
                     android:layout_weight="1"
                     android:gravity="left"
                     android:textColor="@color/color_white" />

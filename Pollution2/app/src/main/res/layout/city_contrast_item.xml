@@ -2,49 +2,58 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:paddingRight="20dp"
+    android:gravity="center_vertical"
     android:layout_height="match_parent">
     <TextView
         android:id="@+id/city_contrast_item_city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="时间"
-        android:textColor="@color/color_white"
-        android:textSize="12sp"
-        android:gravity="center"
-        android:padding="5dp"
-        android:layout_margin="5dp"
-        android:layout_weight="1"/>
-    <TextView
-        android:id="@+id/city_contrast_item_city1"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:text="太原"
-        android:textColor="@color/color_white"
-        android:textSize="12sp"
-        android:gravity="center"
-        android:padding="5dp"
-        android:layout_margin="5dp"
-       />
-    <TextView
-        android:id="@+id/city_contrast_item_city2"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:text="大同"
+        android:text="   时间  "
         android:textColor="@color/color_white"
         android:textSize="12sp"
         android:gravity="center"
         android:padding="5dp"
         android:layout_margin="5dp"
         />
-
+    <View
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#00000000"
+        android:layout_weight="1"/>
+    <TextView
+        android:id="@+id/city_contrast_item_city1"
+        android:layout_width="50dp"
+        android:gravity="center"
+        android:text="1"
+        android:textSize="12sp"
+        android:textColor="@color/color_white"
+        android:layout_height="wrap_content"
+       />
+    <View
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#00000000"
+        android:layout_weight="1"/>
+    <TextView
+        android:id="@+id/city_contrast_item_city2"
+        android:layout_width="50dp"
+        android:gravity="center"
+        android:text="1"
+        android:textSize="12sp"
+        android:textColor="@color/color_white"
+        android:layout_height="wrap_content"
+        />
+    <View
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#00000000"
+        android:layout_weight="1"/>
     <TextView
         android:id="@+id/city_contrast_item_city3"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_width="50dp"
         android:gravity="center"
-        android:padding="5dp"
-        android:text="临汾"
+        android:text="1"
+        android:textSize="12sp"
         android:textColor="@color/color_white"
-        android:textSize="12sp" />
+        android:layout_height="wrap_content" />
 </LinearLayout>
