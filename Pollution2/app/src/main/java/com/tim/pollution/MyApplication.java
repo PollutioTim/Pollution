@@ -3,7 +3,11 @@ package com.tim.pollution;
 import android.app.Application;
 import android.content.Context;
 
+import com.tim.pollution.bean.LevePollutionBean;
 import com.tim.pollution.general.SharedPreferencesHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * name 项目名称
@@ -12,6 +16,15 @@ public class MyApplication extends Application {
     public static MyApplication instance;
     private static Context mContext;
     private SharedPreferencesHelper myPreferences;
+    private List<LevePollutionBean> LevePollutionBeans;
+
+    public List<LevePollutionBean> getLevePollutionBeans() {
+        return LevePollutionBeans;
+    }
+
+    public void setLevePollutionBeans(List<LevePollutionBean> levePollutionBeans) {
+        LevePollutionBeans = levePollutionBeans;
+    }
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -25,6 +38,7 @@ public class MyApplication extends Application {
         mContext = getApplicationContext();
         //初始化自定首选项
         myPreferences = new SharedPreferencesHelper(mContext,"pollution");
+        LevePollutionBeans = new ArrayList<>();
     }
 
     /**
@@ -33,5 +47,6 @@ public class MyApplication extends Application {
     public static Context getContext() {
         return mContext;
     }
+
 
 }

@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
+import static com.baidu.location.d.j.S;
 
 /**
  * Created by lenovo on 2018/4/23.

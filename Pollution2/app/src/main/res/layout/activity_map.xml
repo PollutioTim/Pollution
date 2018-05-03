@@ -74,6 +74,50 @@
             android:background="#7e7a7a7a"
             android:layout_gravity="center|left"/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#7e484848"
+            android:layout_gravity="bottom"
+            android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_marginTop="14dp"
+                android:layout_marginLeft="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/map_ac_city_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="城市"
+                    android:textColor="@color/color_white"
+                    android:textSize="12sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="国控站点"
+                    android:layout_marginLeft="27dp"
+                    android:textColor="@color/color_white"
+                    android:textSize="12sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="9:00更新"
+                    android:layout_marginLeft="27dp"
+                    android:textColor="@color/color_white"
+                    android:textSize="12sp"/>
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/map_city_recyclerview"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
     </FrameLayout>
 </LinearLayout>

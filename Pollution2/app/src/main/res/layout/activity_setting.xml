@@ -3,6 +3,7 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@color/color_white"
     android:orientation="vertical"
     >
 
@@ -73,7 +74,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:layout_marginTop="16dp"
         android:orientation="vertical">
 
@@ -117,6 +119,29 @@
             android:textColor="@color/color_gray"
             android:gravity="center|left"/>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="山西省环境监测中心站"
+            android:textSize="14sp"
+            android:textColor="@color/tx_gray"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:text="技术支持：山西艾特软件科技有限公司"
+            android:layout_marginTop="12dp"
+            android:textSize="12sp"
+            android:textColor="@color/tx_gray"
+            android:layout_gravity="center"/>
     </LinearLayout>
 
 </LinearLayout>

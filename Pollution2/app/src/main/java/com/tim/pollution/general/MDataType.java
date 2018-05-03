@@ -6,6 +6,9 @@ package com.tim.pollution.general;
 
 public class MDataType {
     public static String MAP_DATA = "mapdata";
+    public static String MAP_CLICK_DATA = "mapclick";
+    public static String MAP_POINT_DATA ="mappoint";
+    public static String MAP_POINT_CLICK_DATA ="mapclickpoint";
     public static String MAP = "map";
     public static String RANK = "rank";
     public static String RANK_LAST = "rank_last";
