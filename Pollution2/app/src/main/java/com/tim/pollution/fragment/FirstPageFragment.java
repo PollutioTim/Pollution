@@ -199,7 +199,7 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
         if (true) {
             Map<String, String> params = new HashMap<>();
             params.put("key", Constants.key);
-            params.put("regiontype", "allregion");
+            params.put("regiontype", "region");
             WeatherDal.getInstance().getRegion(params, this);
         }
     }
@@ -384,71 +384,6 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
     /**
      * 初始化表格
      */
-    private void initCharts(MessageBean msg) {
-        if (msg.getAQI_24h() != null && msg.getAQI_24h().size() > 0) {
-            List<AQI24hBean> list = msg.getAQI_24h();
-            //每个集合显示几条柱子
-            int numSubcolumns = 1;
-            //显示多少个集合
-            int numColumns = list.size();
-            //保存所有的柱子
-            List<Column> columns = new ArrayList<Column>();
-            //保存每个竹子的值
-            List<SubcolumnValue> values;
-            List<AxisValue> axisXValues = new ArrayList<AxisValue>();
-            List<AxisValue> axisYValues = new ArrayList<AxisValue>();
-            for (int i = 0; i <= 500; i += 50) {
-                axisYValues.add(new AxisValue(i).setValue(i).setLabel(i + ""));
-            }
-            //对每个集合的柱子进行遍历
-            for (int i = 0; i < numColumns; ++i) {
-
-                values = new ArrayList<SubcolumnValue>();
-                //循环所有柱子（list）
-                for (int j = 0; j < numSubcolumns; ++j) {
-                    //创建一个柱子，然后设置值和颜色，并添加到list中
-                    values.add(new SubcolumnValue(Float.valueOf(list.get(i).getAQI()), Color.parseColor(list.get(i).getAQIcolor())));
-                    //设置X轴的柱子所对应的属性名称
-                    axisXValues.add(new AxisValue(i).setLabel(switchTime(list.get(i).getTime())));
-                }
-                //将每个属性的拥有的柱子，添加到Column中
-                Column column = new Column(values);
-                //是否显示每个柱子的Lable
-                column.setHasLabels(false);
-                //设置每个柱子的Lable是否选中，为false，表示不用选中，一直显示在柱子上
-                column.setHasLabelsOnlyForSelected(false);
-                //将每个属性得列全部添加到List中
-                columns.add(column);
-            }
-            //设置Columns添加到Data中
-            ColumnChartData data = new ColumnChartData(columns);
-            //设置X轴显示在底部，并且显示每个属性的Lable，字体颜色为黑色，X轴的名字为“学历”，每个柱子的Lable斜着显示，距离X轴的距离为8
-            data.setAxisXBottom(new Axis(axisXValues).setHasLines(true).setTextColor(Color.WHITE).setName("").setHasTiltedLabels(false).setMaxLabelChars(5));
-            Axis axisY = new Axis().setHasLines(true);
-            axisY.setMaxLabelChars(6);//max label length, for example 60
-            List<AxisValue> valuesY = new ArrayList<>();
-            for (int i = 0; i < 100; i += 10) {
-                AxisValue value = new AxisValue(i);
-                String label = "";
-                value.setLabel(label);
-                valuesY.add(value);
-            }
-            axisY.setValues(valuesY);
-            //属性值含义同X轴
-//            data.setAxisYLeft(new Axis().setHasLines(true).setName("").setTextColor(Color.WHITE).setMaxLabelChars(1));
-            data.setAxisYLeft(axisY);
-            //最后将所有值显示在View中
-            homeChart.setColumnChartData(data);
-            homeChart.setZoomEnabled(true);
-            Viewport v = new Viewport(homeChart.getMaximumViewport());
-//            v.top=5000;
-            homeChart.setCurrentViewport(v);
-        } else {
-            homeChart.setColumnChartData(null);
-//            homeChart.setVisibility(View.GONE);
-        }
-    }
-
     private void initCharts2(MessageBean msg) {
         if (msg.getAQI_24h() != null && msg.getAQI_24h().size() > 0) {
             List<AQI24hBean> list = msg.getAQI_24h();

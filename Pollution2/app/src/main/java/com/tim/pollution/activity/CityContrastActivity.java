@@ -1,5 +1,6 @@
 package com.tim.pollution.activity;
 
+import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -7,8 +8,12 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
@@ -61,7 +66,7 @@ import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.ColumnChartView;
 import lecho.lib.hellocharts.view.LineChartView;
 
-public class CityContrastActivity extends AppCompatActivity implements ICallBack, AdapterView.OnItemSelectedListener, View.OnClickListener,RadioGroup.OnCheckedChangeListener {
+public class CityContrastActivity extends AppCompatActivity implements ICallBack, AdapterView.OnItemSelectedListener, View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
     @BindView(R.id.city_contrast_sp1)
     TextView cityContrastSp1;
@@ -105,6 +110,7 @@ public class CityContrastActivity extends AppCompatActivity implements ICallBack
     private Map<Integer, ChangeTrendMessageBean> citys = new HashMap<>();
 
     private PopupWindow mPopupWindow;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,22 +188,23 @@ public class CityContrastActivity extends AppCompatActivity implements ICallBack
      * 显示数据
      */
     private void initData(int state) {
-        if(citys.size()<3){
+        if (citys.size() < 3) {
             return;
         }
-        String time=citys.get(1).getAQI_data().get(citys.get(1).getAQI_data().size()-1).getTime();
-        String vaule1=cityContrastSp1.getText()+" "+citys.get(1).getAQI_data().get(citys.get(1).getAQI_data().size()-1).getValue();
-        String vaule2=cityContrastSp2.getText()+" "+citys.get(2).getAQI_data().get(citys.get(2).getAQI_data().size()-1).getValue();
-        String vaule3=cityContrastSp3.getText()+" "+citys.get(3).getAQI_data().get(citys.get(3).getAQI_data().size()-1).getValue();
-        String value="AQI "+switchTime(time)+"\n"+vaule1+"\n"+vaule2+"\n"+vaule3;
-       cityContrastInfo.setText(value);
+        String time = citys.get(1).getAQI_data().get(citys.get(1).getAQI_data().size() - 1).getTime();
+        String vaule1 = cityContrastSp1.getText() + " " + citys.get(1).getAQI_data().get(citys.get(1).getAQI_data().size() - 1).getValue();
+        String vaule2 = cityContrastSp2.getText() + " " + citys.get(2).getAQI_data().get(citys.get(2).getAQI_data().size() - 1).getValue();
+        String vaule3 = cityContrastSp3.getText() + " " + citys.get(3).getAQI_data().get(citys.get(3).getAQI_data().size() - 1).getValue();
+        String value = "AQI " + switchTime(time) + "\n" + vaule1 + "\n" + vaule2 + "\n" + vaule3;
+        cityContrastInfo.setText(value);
 //        initChars();
         initFrom();
-        cityContrastAdapter=new CityContrastAdapter(this,citys,CityContrastAdapter.PM25);
+        cityContrastAdapter = new CityContrastAdapter(this, citys, CityContrastAdapter.PM25);
         cityContrastList.setAdapter(cityContrastAdapter);
     }
-    private String switchTime(String time){
-        SimpleDateFormat sdf=new SimpleDateFormat("HH:mm");
+
+    private String switchTime(String time) {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         return sdf.format(DateUtil.strToDateLong(time));
     }
 
@@ -232,17 +239,17 @@ public class CityContrastActivity extends AppCompatActivity implements ICallBack
 
         List<Line> lines = new ArrayList<Line>();//定义线的集合
 
-        lines.add(getLine(citys.get(1).getAQI_data(),"#FFF1C55F"));
-        lines.add(getLine(citys.get(2).getAQI_data(),"#FF47F646"));
-        lines.add(getLine(citys.get(3).getAQI_data(),"#FF42DAFC"));
+        lines.add(getLine(citys.get(1).getAQI_data(), "#FFF1C55F"));
+        lines.add(getLine(citys.get(2).getAQI_data(), "#FF47F646"));
+        lines.add(getLine(citys.get(3).getAQI_data(), "#FF42DAFC"));
 
         for (int j = 0; j <= 5; j += 1) {//循环为节点、X、Y轴添加数据
-            axisValuesY.add(new AxisValue(j).setValue(j).setLabel(j*100+""));// 添加Y轴显示的刻度值
+            axisValuesY.add(new AxisValue(j).setValue(j).setLabel(j * 100 + ""));// 添加Y轴显示的刻度值
         }
-        int x=Integer.valueOf(citys.get(1).getAQI_data().get(0).getTime().substring(12,13))+1;
-        for (int j = 1; j <=13; j += 3) {//循环为节点、X、Y轴添加数据
-            axisValuesX.add(new AxisValue(j).setValue(j).setLabel(x+":00"));// 添加Y轴显示的刻度值
-            x=x+3;
+        int x = Integer.valueOf(citys.get(1).getAQI_data().get(0).getTime().substring(12, 13)) + 1;
+        for (int j = 1; j <= 13; j += 3) {//循环为节点、X、Y轴添加数据
+            axisValuesX.add(new AxisValue(j).setValue(j).setLabel(x + ":00"));// 添加Y轴显示的刻度值
+            x = x + 3;
         }
 
         LineChartData chartData = new LineChartData(lines);//将线的集合设置为折线图的数据
@@ -267,7 +274,7 @@ public class CityContrastActivity extends AppCompatActivity implements ICallBack
         cityContrastChart.setCurrentViewport(v);
     }
 
-    private  void initFrom(){
+    private void initFrom() {
         if (citys.size() < 3) {
             return;
         }
@@ -279,9 +286,9 @@ public class CityContrastActivity extends AppCompatActivity implements ICallBack
         for (int i = 0; i < 3; ++i) {
             List<PointValue> values = new ArrayList<PointValue>();
             for (int j = 0; j < numberOfPoints; ++j) {
-                values.add(new PointValue(j,Float.valueOf(citys.get(i+1).getAQI_data().get(j).getValue())));
+                values.add(new PointValue(j, Float.valueOf(citys.get(i + 1).getAQI_data().get(j).getValue())));
 
-                axisXValues.add(new AxisValue(j).setLabel(citys.get(i+1).getAQI_data().get(j).getTime()));
+                axisXValues.add(new AxisValue(j).setLabel(citys.get(i + 1).getAQI_data().get(j).getTime()));
             }
 
 //            Line line = new Line(values);
@@ -295,9 +302,9 @@ public class CityContrastActivity extends AppCompatActivity implements ICallBack
 //            lines.add(line);
 
         }
-        lines.add(getLine(citys.get(1).getAQI_data(),"#FFF1C55F"));
-        lines.add(getLine(citys.get(2).getAQI_data(),"#FF47F646"));
-        lines.add(getLine(citys.get(3).getAQI_data(),"#FF42DAFC"));
+        lines.add(getLine(citys.get(1).getAQI_data(), "#FFF1C55F"));
+        lines.add(getLine(citys.get(2).getAQI_data(), "#FF47F646"));
+        lines.add(getLine(citys.get(3).getAQI_data(), "#FF42DAFC"));
         LineChartData data = new LineChartData(lines);
 
         if (true) {
@@ -320,7 +327,7 @@ public class CityContrastActivity extends AppCompatActivity implements ICallBack
         }
         List<PointValue> pointValues = new ArrayList<PointValue>();// 节点数据结合
         for (int i = 0; i < data.size(); i++) {
-            pointValues.add(new PointValue(i, Float.parseFloat(data.get(i).getValue())/100));
+            pointValues.add(new PointValue(i, Float.parseFloat(data.get(i).getValue()) / 100));
         }
         Line line = new Line(pointValues);//将值设置给折线
         line.setColor(Color.parseColor(color));// 设置折线颜色
@@ -383,44 +390,88 @@ public class CityContrastActivity extends AppCompatActivity implements ICallBack
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.city_contrast_sp1:
-                openPopwindow(cityContrastSp1, 1);
+                showCitySelect(cityContrastSp1, 1);
                 break;
             case R.id.city_contrast_sp2:
-                openPopwindow(cityContrastSp2, 2);
+                showCitySelect(cityContrastSp2, 2);
 
                 break;
             case R.id.city_contrast_sp3:
-                openPopwindow(cityContrastSp3, 3);
+                showCitySelect(cityContrastSp3, 3);
                 break;
         }
     }
 
     private int state1;
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    private void openPopwindow(View view, int state) {
+//    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+//    private void openPopwindow(View view, int state) {
+//        this.state1 = state;
+//        if (mPopupWindow != null) {
+//            mPopupWindow.showAsDropDown(view, 0, 0, 30);
+//            return;
+//        }
+//        // 将布局文件转换成View对象，popupview 内容视图
+//        final View mPopView = getLayoutInflater().inflate(R.layout.pop_window, null);
+//        // 将转换的View放置到 新建一个popuwindow对象中
+//        mPopupWindow = new PopupWindow(mPopView,
+//                LinearLayout.LayoutParams.WRAP_CONTENT,
+//                LinearLayout.LayoutParams.WRAP_CONTENT);
+//        ListView listview = (ListView) mPopView.findViewById(R.id.pop_window_list);
+//        listview.setAdapter(new CitySpinnerAdapter(this, regionNetBean.getMessage()));
+//        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//                loadData(regionNetBean.getMessage().get(position).getRegionId(), state1);
+//                if (state1 == 1) {
+//                    cityContrastSp1.setText(regionNetBean.getMessage().get(position).getRegionName());
+//                    cityContrastCity1.setText(regionNetBean.getMessage().get(position).getRegionName());
+//                } else if (state1 == 2) {
+//                    cityContrastCity2.setText(regionNetBean.getMessage().get(position).getRegionName());
+//                    cityContrastSp2.setText(regionNetBean.getMessage().get(position).getRegionName());
+//                } else {
+//                    cityContrastCity3.setText(regionNetBean.getMessage().get(position).getRegionName());
+//                    cityContrastSp3.setText(regionNetBean.getMessage().get(position).getRegionName());
+//                }
+//                if (mPopupWindow.isShowing()) {
+//                    mPopupWindow.dismiss();
+//                }
+//            }
+//        });
+//        // 点击popuwindow外让其消失
+//        mPopupWindow.setOutsideTouchable(true);
+////        mPopupWindow.showAsDropDown(view, Gravity.CENTER, 200, 300);
+//        mPopupWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
+//    }
+
+    private void showCitySelect(View view, int state) {
         this.state1 = state;
-        if (mPopupWindow != null) {
-            mPopupWindow.showAsDropDown(view, 0, 0, 30);
-            return;
+        if (dialog != null) {
+            dialog.show();
         }
-        // 将布局文件转换成View对象，popupview 内容视图
-        final View mPopView = getLayoutInflater().inflate(R.layout.pop_window, null);
-        // 将转换的View放置到 新建一个popuwindow对象中
-        mPopupWindow = new PopupWindow(mPopView,
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        ListView listview = (ListView) mPopView.findViewById(R.id.pop_window_list);
+        View viewDialog = getLayoutInflater().inflate(R.layout.pop_window, null);
+        dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(viewDialog, new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        Window window = dialog.getWindow();
+        WindowManager m = getWindowManager();
+        Display d = m.getDefaultDisplay(); // 获取屏幕宽、高用
+        WindowManager.LayoutParams p = window.getAttributes(); // 获取对话框当前的参数值
+        p.height = (int) (d.getHeight() * 0.6); // 高度设置为屏幕的0.6
+        p.width = (int) (d.getWidth() * 0.65); // 宽度设置为屏幕的0.65
+        window.setAttributes(p);
+        dialog.onWindowAttributesChanged(p);
+        ListView listview = (ListView) viewDialog.findViewById(R.id.pop_window_list);
         listview.setAdapter(new CitySpinnerAdapter(this, regionNetBean.getMessage()));
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 loadData(regionNetBean.getMessage().get(position).getRegionId(), state1);
                 if (state1 == 1) {
                     cityContrastSp1.setText(regionNetBean.getMessage().get(position).getRegionName());
@@ -432,14 +483,19 @@ public class CityContrastActivity extends AppCompatActivity implements ICallBack
                     cityContrastCity3.setText(regionNetBean.getMessage().get(position).getRegionName());
                     cityContrastSp3.setText(regionNetBean.getMessage().get(position).getRegionName());
                 }
-                if(mPopupWindow.isShowing()){
+                if (mPopupWindow.isShowing()) {
                     mPopupWindow.dismiss();
                 }
             }
         });
-        // 点击popuwindow外让其消失
-        mPopupWindow.setOutsideTouchable(true);
-        mPopupWindow.showAsDropDown(view, Gravity.CENTER, 200, 300);
+        TextView close = (TextView) viewDialog.findViewById(R.id.pop_window_close);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
     private RegionNetBean getTest() {
@@ -465,7 +521,7 @@ public class CityContrastActivity extends AppCompatActivity implements ICallBack
         if (id == R.id.city_contrast_rbpm25_type) {
             datatype = cityContrastAdapter.PM25;
         } else if (id == R.id.city_contrast_rbpm10_type) {
-            datatype =cityContrastAdapter. PM10;
+            datatype = cityContrastAdapter.PM10;
         } else if (id == R.id.city_contrast_rbso2_type) {
             datatype = cityContrastAdapter.SO2;
         } else if (id == R.id.city_contrast_rbno2_type) {
@@ -475,7 +531,7 @@ public class CityContrastActivity extends AppCompatActivity implements ICallBack
         } else if (id == R.id.city_contrast_rbco_type) {
             datatype = cityContrastAdapter.CO;
         }
-        if(cityContrastAdapter!=null){
+        if (cityContrastAdapter != null) {
             cityContrastAdapter.setCode(datatype);
             cityContrastAdapter.notifyDataSetChanged();
         }

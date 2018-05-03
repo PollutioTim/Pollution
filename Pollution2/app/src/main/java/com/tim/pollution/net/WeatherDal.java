@@ -69,7 +69,7 @@ public class WeatherDal {
     }
 
     /**
-     * http:// 218.26.106.43:10009/AppInterface/HomeData?key=6DlLqAyx3mY=&regionid=140101
+     * http://218.26.106.43:10009/AppInterface/HomeData?key=6DlLqAyx3mY=&regionid=140201
      * @param params
      * @param callBack
      */

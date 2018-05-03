@@ -7,6 +7,7 @@
     android:background="@color/main_bg"
     android:orientation="vertical"
     tools:context="com.tim.pollution.fragment.FirstPageFragment">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,7 +25,6 @@
                 android:id="@+id/home_top"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:background="@mipmap/bg"
                 android:orientation="vertical"
@@ -70,7 +70,6 @@
                         android:text="太原+"
                         android:textColor="@color/color_white"
                         android:textSize="14sp" />
-
 
 
                 </RelativeLayout>
@@ -186,39 +185,46 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        android:visibility="gone"
                         android:text="@string/air_indicators"
                         android:textColor="@color/color_white"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:visibility="gone" />
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:drawableLeft="@mipmap/pm25_white"/>
+                            android:drawableLeft="@mipmap/pm25_white" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:drawableLeft="@mipmap/pm10_white"/>
+                            android:drawableLeft="@mipmap/pm10_white" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:drawableLeft="@mipmap/so2_white"/>
+                            android:drawableLeft="@mipmap/so2_white" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:drawableLeft="@mipmap/no2_white"/>
+                            android:drawableLeft="@mipmap/no2_white" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:drawableLeft="@mipmap/o3_white"/>
+                            android:drawableLeft="@mipmap/o3_white" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:drawableLeft="@mipmap/co_white"/>
+                            android:drawableLeft="@mipmap/co_white" />
                     </LinearLayout>
 
                     <TextView
