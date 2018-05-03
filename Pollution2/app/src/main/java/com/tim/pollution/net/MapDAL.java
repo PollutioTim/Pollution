@@ -1,7 +1,11 @@
 package com.tim.pollution.net;
 
 import com.google.gson.Gson;
+import com.tim.pollution.bean.ClickMapBean;
+import com.tim.pollution.bean.ClickMapListBean;
+import com.tim.pollution.bean.ClickPointBean;
 import com.tim.pollution.bean.MapBean;
+import com.tim.pollution.bean.MapPointBean;
 import com.tim.pollution.bean.StateCode;
 import com.tim.pollution.callback.ICallBack;
 import com.tim.pollution.general.MData;
@@ -67,5 +71,72 @@ public class MapDAL {
                     }
                 });
     }
+    public void getClickCityData(Map<String ,String>params, final ICallBack callBack){
+        PostFormBuilder postFormBuilder = OkHttpUtils.post().url(mapUrls).params(params);
+        postFormBuilder.build().connTimeOut(20*1000)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
 
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        StateCode code = new Gson().fromJson(response.toString(),StateCode.class);
+                        if(1 == code.getCode()){
+                            ClickMapListBean mapBean = new Gson().fromJson(response.toString(),ClickMapListBean.class);
+                            MData<ClickMapListBean>mData  = new MData<ClickMapListBean>();
+                            mData.setType(MDataType.MAP_CLICK_DATA);
+                            mData.setData(mapBean);
+                            callBack.onProgress(mData);
+                        }
+                    }
+                });
+    }
+    public void getPointData(Map<String ,String>params, final ICallBack callBack){
+        PostFormBuilder postFormBuilder = OkHttpUtils.post().url(mapUrls).params(params);
+        postFormBuilder.build().connTimeOut(20*1000)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        StateCode code = new Gson().fromJson(response.toString(),StateCode.class);
+                        if(1 == code.getCode()){
+                            MapPointBean mapBean = new Gson().fromJson(response.toString(),
+                                    MapPointBean.class);
+                            MData<MapPointBean>mData  = new MData<MapPointBean>();
+                            mData.setType(MDataType.MAP_POINT_DATA);
+                            mData.setData(mapBean);
+                            callBack.onProgress(mData);
+                        }
+                    }
+                });
+    }
+    public void getPointClickData(Map<String ,String>params, final ICallBack callBack){
+        PostFormBuilder postFormBuilder = OkHttpUtils.post().url(mapUrls).params(params);
+        postFormBuilder.build().connTimeOut(20*1000)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        StateCode code = new Gson().fromJson(response.toString(),StateCode.class);
+                        if(1 == code.getCode()){
+                            ClickPointBean mapBean = new Gson().fromJson(response.toString(),
+                                    ClickPointBean.class);
+                            MData<ClickPointBean>mData  = new MData<ClickPointBean>();
+                            mData.setType(MDataType.MAP_POINT_CLICK_DATA);
+                            mData.setData(mapBean);
+                            callBack.onProgress(mData);
+                        }
+                    }
+                });
+    }
 }

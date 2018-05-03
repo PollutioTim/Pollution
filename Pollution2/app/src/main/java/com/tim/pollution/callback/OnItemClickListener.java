@@ -5,5 +5,5 @@ package com.tim.pollution.callback;
  */
 
 public interface OnItemClickListener {
-    
+    void onItemClick(int position);
 }

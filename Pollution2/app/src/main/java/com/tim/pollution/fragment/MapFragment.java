@@ -24,6 +24,12 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
+import com.baidu.mapapi.cloud.CloudListener;
+import com.baidu.mapapi.cloud.CloudManager;
+import com.baidu.mapapi.cloud.CloudRgcInfo;
+import com.baidu.mapapi.cloud.CloudRgcResult;
+import com.baidu.mapapi.cloud.CloudSearchResult;
+import com.baidu.mapapi.cloud.DetailSearchResult;
 import com.baidu.mapapi.http.HttpClient;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BaiduMap.OnMapClickListener;
@@ -39,11 +45,18 @@ import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.map.Stroke;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.model.LatLngBounds;
+import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.district.DistrictResult;
 import com.baidu.mapapi.search.district.DistrictSearch;
 import com.baidu.mapapi.search.district.DistrictSearchOption;
 import com.baidu.mapapi.search.district.OnGetDistricSearchResultListener;
+import com.baidu.mapapi.search.geocode.GeoCodeResult;
+import com.baidu.mapapi.search.geocode.GeoCoder;
+import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.baidu.mapapi.utils.poi.DispathcPoiData;
+import com.tim.pollution.MyApplication;
 import com.tim.pollution.R;
 import com.tim.pollution.activity.CityActivity;
 import com.tim.pollution.activity.MapActivity;
@@ -81,7 +94,7 @@ import static android.R.attr.data;
  */
 
 public class MapFragment extends Fragment implements ICallBack,
-        OnGetDistricSearchResultListener ,OnMapClickListener{
+        OnGetDistricSearchResultListener, OnMapClickListener, OnGetGeoCoderResultListener {
 
     @BindView(R.id.fg_mTexturemap)
     MapView mapView;
@@ -143,6 +156,7 @@ public class MapFragment extends Fragment implements ICallBack,
     private List<LevePollutionBean> datas;
     private String colorType = "AQI";
     private MapBean mapBean;
+    private GeoCoder mSearch;
 
     @Nullable
     @Override
@@ -192,6 +206,9 @@ public class MapFragment extends Fragment implements ICallBack,
         super.onDestroy();
         //在Fragment执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
         mapView.onDestroy();
+        if (mSearch != null) {
+            mSearch.destroy();
+        }
     }
 
     @Override
@@ -208,8 +225,9 @@ public class MapFragment extends Fragment implements ICallBack,
             if (datas.size() > 0) {
                 datas.clear();
             }
-
+            MyApplication myApplication = (MyApplication) getActivity().getApplication();
             datas.addAll(mapBean.getMessage().getLevePollutionBeens());
+            myApplication.setLevePollutionBeans(datas);
             adapter.notifyDataSetChanged();
             getArea(cityBeens);
         } else if (data1.getType().equals(MDataType.MAP)) {
@@ -270,7 +288,7 @@ public class MapFragment extends Fragment implements ICallBack,
         for (CityBean cityBean : cityBeens) {
             if (districtResult.getCityName().contains(cityBean.getRegionName())) {
                 for (List<LatLng> polyline : polyLines) {
-                    setColor(polyline,cityBean);
+                    setColor(polyline, cityBean);
                     for (LatLng latLng : polyline) {
                         builder.include(latLng);//包含这些点
                     }
@@ -285,26 +303,26 @@ public class MapFragment extends Fragment implements ICallBack,
         OverlayOptions ooPolyline11 = new PolylineOptions().width(10)
                 .points(polyline).dottedLine(true).color(Color.RED);
         mBaiduMap.addOverlay(ooPolyline11);//添加OverLay
-        OverlayOptions ooPolygon= null;
-        if(colorType.equals("AQI")){
+        OverlayOptions ooPolygon = null;
+        if (colorType.equals("AQI")) {
             ooPolygon = new PolygonOptions().points(polyline).
                     fillColor(Color.parseColor(cityBean.getAQIColor()));
-        }else if(colorType.equals("PM25")){
+        } else if (colorType.equals("PM25")) {
             ooPolygon = new PolygonOptions().points(polyline).
                     fillColor(Color.parseColor(cityBean.getPM25Color()));
-        }else if(colorType.equals("PM10")){
+        } else if (colorType.equals("PM10")) {
             ooPolygon = new PolygonOptions().points(polyline).
                     fillColor(Color.parseColor(cityBean.getPM10Color()));
-        }else if(colorType.equals("NO2")){
+        } else if (colorType.equals("NO2")) {
             ooPolygon = new PolygonOptions().points(polyline).
                     fillColor(Color.parseColor(cityBean.getNO2Color()));
-        }else if(colorType.equals("SO2")){
+        } else if (colorType.equals("SO2")) {
             ooPolygon = new PolygonOptions().points(polyline).
                     fillColor(Color.parseColor(cityBean.getSO2Color()));
-        }else if(colorType.equals("O3")){
+        } else if (colorType.equals("O3")) {
             ooPolygon = new PolygonOptions().points(polyline).
                     fillColor(Color.parseColor(cityBean.getO3Color()));
-        }else if(colorType.equals("CO")){
+        } else if (colorType.equals("CO")) {
             ooPolygon = new PolygonOptions().points(polyline).
                     fillColor(Color.parseColor(cityBean.getCOColor()));
         }
@@ -312,7 +330,7 @@ public class MapFragment extends Fragment implements ICallBack,
     }
 
     @OnClick({R.id.no_2, R.id.map_aqi_tv, R.id.pm_25, R.id.pm_10, R.id.so_2,
-            R.id.o_3, R.id.co_tv,R.id.map_swicth_tv})
+            R.id.o_3, R.id.co_tv, R.id.map_swicth_tv})
     public void OnClick(View view) {
         switch (view.getId()) {
             case R.id.map_aqi_tv:
@@ -363,10 +381,10 @@ public class MapFragment extends Fragment implements ICallBack,
                 getArea(cityBeens);
                 break;
             case R.id.map_swicth_tv:
-                Intent intent = new Intent(getActivity(),CityActivity.class);
-                intent.putExtra("tag",1);
-                
-                startActivity(new Intent(getActivity(), CityActivity.class));
+                EventBus.getDefault().postSticky(new MessageEvent(datas));
+                Intent intent = new Intent(getActivity(), CityActivity.class);
+                intent.putExtra("tag", 1);
+                startActivity(intent);
                 break;
         }
     }
@@ -388,21 +406,61 @@ public class MapFragment extends Fragment implements ICallBack,
 
     @Override
     public void onMapClick(LatLng latLng) {
-        // 发布事件
-        if(mapBean != null){
-            LocationData data = new LocationData();
-            data.setLatLng(latLng);
-            data.setMapBean(mapBean);
-            EventBus.getDefault().postSticky(new MessageEvent(data));
-            startActivity(new Intent(getActivity(), MapActivity.class));
-        }
+        mSearch = GeoCoder.newInstance();
+        mSearch.setOnGetGeoCodeResultListener(this);
+        mSearch.reverseGeoCode(new ReverseGeoCodeOption()
+                .location(latLng));
+
+//        // 发布事件
+//
     }
+
     /**
      * 地图内 Poi 单击事件回调函数
+     *
      * @param mapPoi 点击的 poi 信息
      */
     @Override
     public boolean onMapPoiClick(MapPoi mapPoi) {
         return false;
+    }
+
+
+    /**
+     * 实现经纬度逆编码
+     *
+     * @param result
+     */
+    @Override
+    public void onGetGeoCodeResult(GeoCodeResult result) {
+        if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
+            //没有检索到结果
+        }
+
+        //获取地理编码结果
+        Log.e("lili", "GeoCodeResult=" + result);
+    }
+
+    @Override
+    public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
+        if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
+            //没有找到检索结果
+
+        }
+        for (CityBean cityBean : cityBeens) {
+            if (result.getAddress().contains(cityBean.getRegionName())) {
+                //获取到城市的ID；
+                if (mapBean != null) {
+                    LocationData data = new LocationData();
+                    data.setLatLng(result.getLocation());
+                    EventBus.getDefault().postSticky(new MessageEvent(data));
+
+                    Intent intent = new Intent(getActivity(), MapActivity.class);
+                    intent.putExtra("id",cityBean.getRegionId());
+                    startActivity(intent);
+                }
+            }
+        }
+        Log.e("lili", "ReverseGeoCodeResult=" + result.getAddress() + "-" + result.getLocation() + "-" + result.getCityCode());
     }
 }

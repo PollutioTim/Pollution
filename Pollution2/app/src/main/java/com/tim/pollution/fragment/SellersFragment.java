@@ -26,6 +26,7 @@ import com.tim.pollution.net.RankDAL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -68,20 +69,44 @@ public class SellersFragment extends Fragment implements ICallBack {
     TextView tvLast;
     @BindView(R.id.last_view)
     View vLast;
-    @BindView(R.id.pm2_tv)
-    TextView tvPM2;
+
+
     @BindView(R.id.index_all_tv)
     TextView tvIndex;
-    @BindView(R.id.pm10_tv)
+    @BindView(R.id.sellers_pm_25)
+    LinearLayout llPM25;
+    @BindView(R.id.sellers_pm_10)
+    LinearLayout llPM10;
+    @BindView(R.id.sellers_no_2)
+    LinearLayout llNO2;
+    @BindView(R.id.sellers_so_2)
+    LinearLayout llSO2;
+    @BindView(R.id.sellers_o_3)
+    LinearLayout llO3;
+
+    @BindView(R.id.sellers_pm_25_tv)
+    TextView tvPM2;
+    @BindView(R.id.sellers_2_5_tv)
+    TextView tv25;
+    @BindView(R.id.sellers_pm_10_tv)
     TextView tvPM10;
-    @BindView(R.id.so2_tv)
+    @BindView(R.id.sellers_10_tv)
+    TextView tv10;
+    @BindView(R.id.sellers_no_2_tv)
+    TextView tvNO;
+    @BindView(R.id.sellers_2_tv)
+    TextView tv2;
+    @BindView(R.id.sellers_so_tv)
+    TextView tvSO;
+    @BindView(R.id.sellers_so_2_tv)
     TextView tvSO2;
-    @BindView(R.id.o3_tv)
+    @BindView(R.id.sellers_o_3_tv)
+    TextView tvO;
+    @BindView(R.id.sellers_3_tv)
     TextView tvO3;
     @BindView(R.id.sellers_co_tv)
     TextView tvCO;
-    @BindView(R.id.no2_tv)
-    TextView tvNO2;
+
     @BindView(R.id.item_rank_type_tv)
     TextView tvTitleType;
     @BindView(R.id.sellers_recyview)
@@ -157,8 +182,8 @@ public class SellersFragment extends Fragment implements ICallBack {
     }
 
     @OnClick({R.id.now_ll, R.id.last_ll, R.id.yesterday_ll, R.id.all_ll, R.id.sellers_swicth_tv
-            , R.id.o3_tv, R.id.index_all_tv, R.id.pm2_tv, R.id.pm10_tv, R.id.so2_tv,
-            R.id.sellers_co_tv, R.id.no2_tv})
+            , R.id.sellers_o_3, R.id.index_all_tv, R.id.sellers_pm_25, R.id.sellers_pm_10, R.id.sellers_so_2,
+            R.id.sellers_co_tv, R.id.sellers_no_2})
     public void OnClick(View view) {
         switch (view.getId()) {
             case R.id.now_ll://实时
@@ -238,8 +263,9 @@ public class SellersFragment extends Fragment implements ICallBack {
                 Log.e("lili","rankType="+ranktype+"dataType="+datatype+"pointtype="+pointtype);
                 getData();
                 break;
-            case R.id.o3_tv:
+            case R.id.sellers_o_3:
                 setTextColor();
+                tvO.setTextColor(getResources().getColor(R.color.color_white));
                 tvO3.setTextColor(getResources().getColor(R.color.color_white));
                 ranktype = "O3";
                 tvTitleType.setText("O3");
@@ -258,24 +284,27 @@ public class SellersFragment extends Fragment implements ICallBack {
                 Log.e("lili","rankType="+ranktype+"dataType="+datatype+"pointtype="+pointtype);
                 getData();
                 break;
-            case R.id.pm2_tv:
+            case R.id.sellers_pm_25:
                 setTextColor();
+                tv25.setTextColor(getResources().getColor(R.color.color_white));
                 tvPM2.setTextColor(getResources().getColor(R.color.color_white));
                 ranktype = "PM25";
                 tvTitleType.setText("PM25");
                 Log.e("lili","rankType="+ranktype+"dataType="+datatype+"pointtype="+pointtype);
                 getData();
                 break;
-            case R.id.pm10_tv:
+            case R.id.sellers_pm_10:
                 setTextColor();
+                tv10.setTextColor(getResources().getColor(R.color.color_white));
                 tvPM10.setTextColor(getResources().getColor(R.color.color_white));
                 ranktype = "PM10";
                 tvTitleType.setText("PM10");
                 Log.e("lili","rankType="+ranktype+"dataType="+datatype+"pointtype="+pointtype);
                 getData();
                 break;
-            case R.id.so2_tv:
+            case R.id.sellers_so_2:
                 setTextColor();
+                tvSO.setTextColor(getResources().getColor(R.color.color_white));
                 tvSO2.setTextColor(getResources().getColor(R.color.color_white));
                 ranktype = "SO2";
                 tvTitleType.setText("SO2");
@@ -290,9 +319,10 @@ public class SellersFragment extends Fragment implements ICallBack {
                 Log.e("lili","rankType="+ranktype+"dataType="+datatype+"pointtype="+pointtype);
                 getData();
                 break;
-            case R.id.no2_tv:
+            case R.id.sellers_no_2:
                 setTextColor();
-                tvNO2.setTextColor(getResources().getColor(R.color.color_white));
+                tvNO.setTextColor(getResources().getColor(R.color.color_white));
+                tv2.setTextColor(getResources().getColor(R.color.color_white));
                 ranktype = "NO2";
                 tvTitleType.setText("NO2");
                 Log.e("lili","rankType="+ranktype+"dataType="+datatype+"pointtype="+pointtype);
@@ -320,10 +350,15 @@ public class SellersFragment extends Fragment implements ICallBack {
         tvIndex.setTextColor(getResources().getColor(R.color.gree_blue));
         tvO3.setTextColor(getResources().getColor(R.color.gree_blue));
         tvCO.setTextColor(getResources().getColor(R.color.gree_blue));
-        tvNO2.setTextColor(getResources().getColor(R.color.gree_blue));
+        tvO.setTextColor(getResources().getColor(R.color.gree_blue));
         tvPM2.setTextColor(getResources().getColor(R.color.gree_blue));
+        tv2.setTextColor(getResources().getColor(R.color.gree_blue));
+        tv10.setTextColor(getResources().getColor(R.color.gree_blue));
+        tvSO.setTextColor(getResources().getColor(R.color.gree_blue));
         tvPM10.setTextColor(getResources().getColor(R.color.gree_blue));
         tvSO2.setTextColor(getResources().getColor(R.color.gree_blue));
+        tv25.setTextColor(getResources().getColor(R.color.gree_blue));
+        tvNO.setTextColor(getResources().getColor(R.color.gree_blue));
     }
 
     @Override
