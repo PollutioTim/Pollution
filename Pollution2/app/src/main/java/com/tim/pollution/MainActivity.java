@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        Log.d("test","00001");
+        Log.d("test","00002");
         fragments = new ArrayList<>();
         fragments.add(new FirstPageFragment());
         fragments.add(new MapFragment());
