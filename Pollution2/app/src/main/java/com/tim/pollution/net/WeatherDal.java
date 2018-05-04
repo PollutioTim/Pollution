@@ -74,6 +74,7 @@ public class WeatherDal {
      * @param callBack
      */
     public void getHomeData(Map<String ,String> params, final ICallBack callBack){
+
         PostFormBuilder postFormBuilder = OkHttpUtils.post().url(weatherUal).params(params);
         postFormBuilder.build().connTimeOut(20*1000)
                 .execute(new StringCallback() {

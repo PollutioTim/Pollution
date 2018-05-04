@@ -159,8 +159,13 @@ public class CityContrastAdapter extends BaseAdapter {
 
 
     private String switchTime(String time){
-        SimpleDateFormat sdf=new SimpleDateFormat("MM.dd HH:mm");
-        return sdf.format(DateUtil.strToDateLong(time));
+        try{
+            SimpleDateFormat sdf=new SimpleDateFormat("MM.dd HH:mm");
+            return sdf.format(DateUtil.strToDateLong(time));
+        }catch (Exception e){
+            return time;
+        }
+
     }
 
 

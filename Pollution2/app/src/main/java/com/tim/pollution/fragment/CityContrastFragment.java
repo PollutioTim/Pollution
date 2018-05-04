@@ -272,6 +272,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
             cityContrastAdapter = new CityContrastAdapter(getContext(), citys, CityContrastAdapter.PM25);
             cityContrastList.setAdapter(cityContrastAdapter);
         } catch (Exception e) {
+            e.printStackTrace();
             Toast.makeText(getContext(), "获取数据失败，请重试", Toast.LENGTH_LONG);
         }
     }
@@ -306,6 +307,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
      */
     private void initFrom() {
         if (citys.size() < 3) {
+            cityContrastChart.setLineChartData(null);
             return;
         }
         List<AxisValue> axisXValues = new ArrayList<AxisValue>();
@@ -504,6 +506,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
                 }
                 Log.e("index", "index:" + index);
                 timeType = timeTypes.get(index);
+                citys.clear();
                 initSpinner();
                 break;
         }

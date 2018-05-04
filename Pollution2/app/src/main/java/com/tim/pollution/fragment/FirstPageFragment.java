@@ -104,7 +104,7 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
         findView(view);
 
         initClick();
-        Log.e("tcy","onCreateView");
+        Log.e("tcy", "onCreateView");
         return view;
 
     }
@@ -112,7 +112,7 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
     @Override
     public void onStart() {
         super.onStart();
-        Log.e("tcy","onStart");
+        Log.e("tcy", "onStart");
         loadLocation();
     }
 
@@ -121,7 +121,7 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
      */
     private void findView(View view) {
 //        swipeRefreshLayout=(SwipeRefreshLayout)view.findViewById(R.id.home_rrfresh);
-        homeWeatherInfoTime=(TextView)view.findViewById(R.id.home_weather_info_time);
+        homeWeatherInfoTime = (TextView) view.findViewById(R.id.home_weather_info_time);
         weatherTitleLocation = (TextView) view.findViewById(R.id.weather_title_location);
 
         textView = (TextView) view.findViewById(R.id.textView);
@@ -194,6 +194,8 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
 //        });
     }
 
+    Map<String, Fragment> fragmentMap = new HashMap<>();
+
     private void loadLocation() {
 
         if (true) {
@@ -204,10 +206,13 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
         }
     }
 
+    private HomeFragmentAdapter homeFragmentAdapter;
     private void loadData() {
+        homeVp.setAdapter(null);
         regionIds = new ArrayList<>();
         List<String> regionBeans = CityListSaveUtil.getList(getContext(), CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY);
         if (regionBeans != null && regionBeans.size() > 0) {
+            Log.e("tcy", "关注城市列表：" + regionBeans.toString());
             for (String rb : regionBeans) {
                 regionIds.add(rb);
             }
@@ -230,15 +235,18 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
 //        regionIds.add(regionNetBean.getMessage().get(0).getRegionId());
         fragments = new ArrayList<>();
         for (int i = 0; i < regionIds.size(); i++) {
+            Log.e("tcy", "循环：" + i + ",id:" + regionIds.get(i));
             FirstPageTopFragment fragment = new FirstPageTopFragment();
             Bundle bundle = new Bundle();
             bundle.putString("regionId", regionIds.get(i));//这里的values就是我们要传的值
             fragment.setArguments(bundle);
             fragments.add(fragment);
+            fragmentMap.put(regionIds.get(i), fragment);
         }
 //        loadWeatherData(regionIds.get(0));
         initDots();
-        homeVp.setAdapter(new HomeFragmentAdapter(getChildFragmentManager(), fragments));
+        homeFragmentAdapter=new HomeFragmentAdapter(getChildFragmentManager(), fragments);
+        homeVp.setAdapter(homeFragmentAdapter);
         homeVp.setCurrentItem(0);
         // 设置ViewPager的监听
         homeVp.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -439,8 +447,13 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
     }
 
     private String switchTime(String time) {
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        return sdf.format(DateUtil.strToDateLong(time));
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            return sdf.format(DateUtil.strToDateLong(time));
+        } catch (Exception e) {
+            return time;
+        }
+
     }
 
     /**
@@ -480,7 +493,8 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
     @Override
     public void prograss(MessageBean messageBean) {
         int index = regionIds.indexOf(messageBean.getRegionList().getRegionId());
-        if(index>=0){
+        Log.e("tcy1", "回来的城市：" + messageBean.getRegionList().getRegionName() + ",id:" + messageBean.getRegionList().getRegionId());
+        if (index >= 0) {
             weatherDatamap.put(regionIds.get(index), messageBean);
             if (index == 0) {
                 initBaseInfo(messageBean);
@@ -489,6 +503,26 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
             }
         }
 
+    }
+
+    /**
+     * 获取信息失败
+     *
+     * @param regionId
+     */
+    @Override
+    public void error(String regionId) {
+        Log.e("tcy1", "移除：" + regionId);
+        int index = regionIds.indexOf(regionId);//// TODO: 2018/5/4
+        if (index > -1&&homeFragmentAdapter!=null) {
+            regionIds.remove(regionId);
+//            fragments.remove(index);
+            fragments.remove( fragmentMap.get(regionId));
+            initDots();
+//            homeVp.removeAllViews();
+            homeFragmentAdapter.notifyDataSetChanged();
+//            homeVp.setAdapter(new HomeFragmentAdapter(getChildFragmentManager(), fragments));
+        }
     }
 
     private void initBaseInfo(MessageBean messageBean) {
