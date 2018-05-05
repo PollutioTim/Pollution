@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.tim.pollution.R;
 import com.tim.pollution.activity.CityActivity;
 import com.tim.pollution.activity.MapActivity;
+import com.tim.pollution.bean.CityBean;
 import com.tim.pollution.bean.changetrend.RegionNetBean;
 import com.tim.pollution.callback.OnItemClickListener;
 import com.tim.pollution.utils.CityListSaveUtil;
@@ -28,10 +29,10 @@ import java.util.List;
 
 public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
     private Context context;
-    private List<RegionNetBean.RegionBean>data;
+    private List<CityBean>data;
     private int selectedPosition = -5; //默认一个参数
 
-    public CityAdapter(Context context, List<RegionNetBean.RegionBean> cityBeens){
+    public CityAdapter(Context context, List<CityBean> cityBeens){
         this.context = context;
         this.data = cityBeens;
     }

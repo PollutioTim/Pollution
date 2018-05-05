@@ -1,7 +1,6 @@
 package com.tim.pollution.fragment;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,7 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +21,8 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.location.BDLocation;
+import com.baidu.mapapi.SDKInitializer;
 import com.tim.pollution.MyApplication;
 import com.tim.pollution.R;
 import com.tim.pollution.activity.CityActivity;
@@ -40,6 +40,7 @@ import com.tim.pollution.general.MDataType;
 import com.tim.pollution.net.WeatherDal;
 import com.tim.pollution.utils.CityListSaveUtil;
 import com.tim.pollution.utils.DateUtil;
+import com.tim.pollution.utils.LocationUtil;
 import com.tim.pollution.view.WrapContentHeightViewPager;
 import com.tim.pollution.view.WrapContentListView;
 
@@ -93,7 +94,10 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
     private RegionNetBean regionNetBean;
     private ArrayList<String> regionIds;
     private AlertDialog dialogAgain;
-    private TextView homeWeatherInfoTime;
+    @BindView(R.id.home_weather_info_time)
+    TextView homeWeatherInfoTime;
+    private LocationUtil locationUtil;
+    private boolean isFirstLocate= true;
 //    private SwipeRefreshLayout swipeRefreshLayout;
 
 
@@ -197,7 +201,8 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
     Map<String, Fragment> fragmentMap = new HashMap<>();
 
     private void loadLocation() {
-
+        SDKInitializer.initialize(getActivity().getApplicationContext());
+        locationUtil = new LocationUtil(getActivity(), this);
         if (true) {
             Map<String, String> params = new HashMap<>();
             params.put("key", Constants.key);
@@ -341,6 +346,11 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
 //            regionNetBean = getTest();
             if (regionNetBean != null) {
                 loadData();
+            }
+        }else if (mData.getType().equals(MDataType.MAP)){
+            BDLocation location = (BDLocation) mData.getData();
+            if (isFirstLocate) {
+                weatherTitleLocation.setText(location.getDistrict());
             }
         }
 
@@ -527,7 +537,8 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
 
     private void initBaseInfo(MessageBean messageBean) {
         homeWeatherInfoTime.setText(messageBean.getRegionList().getTime());
-        weatherTitleLocation.setText(messageBean.getRegionList().getRegionName());
+        //只显示定位的数据不显示后台返回数据
+//        weatherTitleLocation.setText(messageBean.getRegionList().getRegionName());
         String info = messageBean.getRegionList().getPM25() + "\n" + messageBean.getRegionList().getPM10() + "\n" + messageBean.getRegionList().getSO2() + "\n" + messageBean.getRegionList().getNO2() + "\n" + messageBean.getRegionList().getO3() + "\n" + messageBean.getRegionList().getCO();
         homeWeatherInfoVa.setText(info);
         homeWeatherInfoCity.setText(messageBean.getRegionList().getRegionName());

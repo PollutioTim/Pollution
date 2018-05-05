@@ -34,6 +34,7 @@ import com.baidu.mapapi.http.HttpClient;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BaiduMap.OnMapClickListener;
 import com.baidu.mapapi.map.MapPoi;
+import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
@@ -90,7 +91,7 @@ import static android.R.attr.data;
 
 
 /**
- * Created by lenovo on 2018/4/20.
+ * Created by lili on 2018/4/20.
  */
 
 public class MapFragment extends Fragment implements ICallBack,
@@ -147,7 +148,7 @@ public class MapFragment extends Fragment implements ICallBack,
     private LocationUtil locationUtil;
     private boolean isFirstLocate = true;
     private Map<String, String> parms;
-    private List<CityBean> cityBeens = new LinkedList<>();
+    private List<CityBean> cityBeens = new ArrayList<>();
     private DistrictSearch mDistrictSearch;
     private DistrictSearchOption districtSearchOption;
     private LinearLayoutManager lm;
@@ -232,24 +233,25 @@ public class MapFragment extends Fragment implements ICallBack,
             getArea(cityBeens);
         } else if (data1.getType().equals(MDataType.MAP)) {
             BDLocation location = (BDLocation) data1.getData();
-            if (isFirstLocate) {
-                LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
-                MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(ll);
-                mBaiduMap.animateMapStatus(update);
-                update = MapStatusUpdateFactory.zoomTo(9f);
-                mBaiduMap.animateMapStatus(update);
-                /*判断baiduMap是已经移动到指定位置*/
-                if (mBaiduMap.getLocationData() != null)
-                    if (mBaiduMap.getLocationData().latitude == location.getLatitude()
-                            && mBaiduMap.getLocationData().longitude == location.getLongitude()) {
-                        isFirstLocate = false;
-                    }
-            }
+//            if (isFirstLocate) {
+            LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
+
             MyLocationData.Builder locationBuilder = new MyLocationData.Builder();
             locationBuilder.latitude(location.getLatitude());
             locationBuilder.longitude(location.getLongitude());
             MyLocationData locationData = locationBuilder.build();
             mBaiduMap.setMyLocationData(locationData);
+            //定义地图状态
+            MapStatus mMapStatus = new MapStatus.Builder()
+                    //要移动的点
+                    .target(ll)
+                    //放大地图到20倍
+                    .zoom(8)
+                    .build();
+            //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
+            MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
+            //改变地图状态
+            mBaiduMap.setMapStatus(mMapStatusUpdate);
             init();
         }
     }
