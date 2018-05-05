@@ -89,6 +89,7 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
         View view = inflater.inflate(R.layout.activity_weather, container, false);
         Bundle bundle = getArguments();
         regionId = bundle.getString("regionId");
+        Log.e("tcy","接受的城市id01:"+regionId);
         findView(view);
         setClick();
         SeekBar seekBar;
@@ -104,6 +105,7 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
         setRegionId(regionId);
 
     }
+
 
     /**
      *
@@ -124,13 +126,14 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
     }
 
 
-    String regionid = "140101";
+    String regionid ;
 
 
     /**
      * 获取数据
      */
     private void iniData() {
+        Log.e("tcy","接受的城市id:"+regionId);
         Map<String, String> params = new HashMap<>();
         params.put("key", Constants.key);
         params.put("regionid", regionid);//// TODO: 2018/4/25 暂时写死
@@ -289,7 +292,7 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
     }
 
     private String getTopPollutionPrograss(RegionWeather regionWeather, String top) {
-        if (top.contains("PM25")) {
+        if (top.contains("PM25")||top.contains("PM2.5")) {
             return regionWeather.getMessage().getRegionList().getPM25();
         } else if (top.contains("PM10")) {
             return regionWeather.getMessage().getRegionList().getPM10();
@@ -368,14 +371,20 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onProgress(Object data) {
+        Log.e("tcy","onProgress regionId:"+regionId);
         MData mData = (MData) data;
         if (MDataType.REGION_WEATHER.equals(mData.getType())) {
             regionWeather = (RegionWeather) mData.getData();
 //            regionWeather = getTest();
             if (regionWeather != null) {
+                Log.e("tcy","fragment 城市："+regionWeather.getMessage().getRegionList().getRegionName());
                 setData(regionWeather);
                 if (callBack != null) {
                     callBack.prograss(regionWeather.getMessage());
+                }
+            }else{
+                if (callBack != null) {
+                    callBack.error(regionId);
                 }
             }
 
@@ -387,6 +396,9 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
     @Override
     public void onError(String msg, String eCode) {
         Toast.makeText(getContext(),msg,Toast.LENGTH_LONG);
+        if (callBack != null) {
+            callBack.error(regionId);
+        }
 
     }
 

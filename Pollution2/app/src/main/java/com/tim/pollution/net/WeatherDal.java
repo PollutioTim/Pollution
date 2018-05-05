@@ -69,11 +69,12 @@ public class WeatherDal {
     }
 
     /**
-     * http:// 218.26.106.43:10009/AppInterface/HomeData?key=6DlLqAyx3mY=&regionid=140101
+     * http://218.26.106.43:10009/AppInterface/HomeData?key=6DlLqAyx3mY=&regionid=140201
      * @param params
      * @param callBack
      */
     public void getHomeData(Map<String ,String> params, final ICallBack callBack){
+
         PostFormBuilder postFormBuilder = OkHttpUtils.post().url(weatherUal).params(params);
         postFormBuilder.build().connTimeOut(20*1000)
                 .execute(new StringCallback() {

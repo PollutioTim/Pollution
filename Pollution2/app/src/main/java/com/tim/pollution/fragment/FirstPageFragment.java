@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,10 +102,18 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
         //引用创建好的xml布局
         View view = inflater.inflate(R.layout.activity_home, container, false);
         findView(view);
-        loadLocation();
+
         initClick();
+        Log.e("tcy", "onCreateView");
         return view;
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.e("tcy", "onStart");
+        loadLocation();
     }
 
     /**
@@ -112,7 +121,7 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
      */
     private void findView(View view) {
 //        swipeRefreshLayout=(SwipeRefreshLayout)view.findViewById(R.id.home_rrfresh);
-        homeWeatherInfoTime=(TextView)view.findViewById(R.id.home_weather_info_time);
+        homeWeatherInfoTime = (TextView) view.findViewById(R.id.home_weather_info_time);
         weatherTitleLocation = (TextView) view.findViewById(R.id.weather_title_location);
 
         textView = (TextView) view.findViewById(R.id.textView);
@@ -185,22 +194,27 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
 //        });
     }
 
+    Map<String, Fragment> fragmentMap = new HashMap<>();
+
     private void loadLocation() {
 
         if (true) {
             Map<String, String> params = new HashMap<>();
             params.put("key", Constants.key);
-            params.put("regiontype", "allregion");
+            params.put("regiontype", "region");
             WeatherDal.getInstance().getRegion(params, this);
         }
     }
 
+    private HomeFragmentAdapter homeFragmentAdapter;
     private void loadData() {
+        homeVp.setAdapter(null);
         regionIds = new ArrayList<>();
-        List<RegionNetBean.RegionBean> regionBeans = CityListSaveUtil.getList(getContext(), CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY);
+        List<String> regionBeans = CityListSaveUtil.getList(getContext(), CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY);
         if (regionBeans != null && regionBeans.size() > 0) {
-            for (RegionNetBean.RegionBean rb : regionBeans) {
-                regionIds.add(rb.getRegionId());
+            Log.e("tcy", "关注城市列表：" + regionBeans.toString());
+            for (String rb : regionBeans) {
+                regionIds.add(rb);
             }
         } else {
             if (regionNetBean == null || regionNetBean.getMessage() == null) {
@@ -221,15 +235,18 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
 //        regionIds.add(regionNetBean.getMessage().get(0).getRegionId());
         fragments = new ArrayList<>();
         for (int i = 0; i < regionIds.size(); i++) {
+            Log.e("tcy", "循环：" + i + ",id:" + regionIds.get(i));
             FirstPageTopFragment fragment = new FirstPageTopFragment();
             Bundle bundle = new Bundle();
             bundle.putString("regionId", regionIds.get(i));//这里的values就是我们要传的值
             fragment.setArguments(bundle);
             fragments.add(fragment);
+            fragmentMap.put(regionIds.get(i), fragment);
         }
 //        loadWeatherData(regionIds.get(0));
         initDots();
-        homeVp.setAdapter(new HomeFragmentAdapter(getChildFragmentManager(), fragments));
+        homeFragmentAdapter=new HomeFragmentAdapter(getChildFragmentManager(), fragments);
+        homeVp.setAdapter(homeFragmentAdapter);
         homeVp.setCurrentItem(0);
         // 设置ViewPager的监听
         homeVp.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -375,71 +392,6 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
     /**
      * 初始化表格
      */
-    private void initCharts(MessageBean msg) {
-        if (msg.getAQI_24h() != null && msg.getAQI_24h().size() > 0) {
-            List<AQI24hBean> list = msg.getAQI_24h();
-            //每个集合显示几条柱子
-            int numSubcolumns = 1;
-            //显示多少个集合
-            int numColumns = list.size();
-            //保存所有的柱子
-            List<Column> columns = new ArrayList<Column>();
-            //保存每个竹子的值
-            List<SubcolumnValue> values;
-            List<AxisValue> axisXValues = new ArrayList<AxisValue>();
-            List<AxisValue> axisYValues = new ArrayList<AxisValue>();
-            for (int i = 0; i <= 500; i += 50) {
-                axisYValues.add(new AxisValue(i).setValue(i).setLabel(i + ""));
-            }
-            //对每个集合的柱子进行遍历
-            for (int i = 0; i < numColumns; ++i) {
-
-                values = new ArrayList<SubcolumnValue>();
-                //循环所有柱子（list）
-                for (int j = 0; j < numSubcolumns; ++j) {
-                    //创建一个柱子，然后设置值和颜色，并添加到list中
-                    values.add(new SubcolumnValue(Float.valueOf(list.get(i).getAQI()), Color.parseColor(list.get(i).getAQIcolor())));
-                    //设置X轴的柱子所对应的属性名称
-                    axisXValues.add(new AxisValue(i).setLabel(switchTime(list.get(i).getTime())));
-                }
-                //将每个属性的拥有的柱子，添加到Column中
-                Column column = new Column(values);
-                //是否显示每个柱子的Lable
-                column.setHasLabels(false);
-                //设置每个柱子的Lable是否选中，为false，表示不用选中，一直显示在柱子上
-                column.setHasLabelsOnlyForSelected(false);
-                //将每个属性得列全部添加到List中
-                columns.add(column);
-            }
-            //设置Columns添加到Data中
-            ColumnChartData data = new ColumnChartData(columns);
-            //设置X轴显示在底部，并且显示每个属性的Lable，字体颜色为黑色，X轴的名字为“学历”，每个柱子的Lable斜着显示，距离X轴的距离为8
-            data.setAxisXBottom(new Axis(axisXValues).setHasLines(true).setTextColor(Color.WHITE).setName("").setHasTiltedLabels(false).setMaxLabelChars(5));
-            Axis axisY = new Axis().setHasLines(true);
-            axisY.setMaxLabelChars(6);//max label length, for example 60
-            List<AxisValue> valuesY = new ArrayList<>();
-            for (int i = 0; i < 100; i += 10) {
-                AxisValue value = new AxisValue(i);
-                String label = "";
-                value.setLabel(label);
-                valuesY.add(value);
-            }
-            axisY.setValues(valuesY);
-            //属性值含义同X轴
-//            data.setAxisYLeft(new Axis().setHasLines(true).setName("").setTextColor(Color.WHITE).setMaxLabelChars(1));
-            data.setAxisYLeft(axisY);
-            //最后将所有值显示在View中
-            homeChart.setColumnChartData(data);
-            homeChart.setZoomEnabled(true);
-            Viewport v = new Viewport(homeChart.getMaximumViewport());
-//            v.top=5000;
-            homeChart.setCurrentViewport(v);
-        } else {
-            homeChart.setColumnChartData(null);
-//            homeChart.setVisibility(View.GONE);
-        }
-    }
-
     private void initCharts2(MessageBean msg) {
         if (msg.getAQI_24h() != null && msg.getAQI_24h().size() > 0) {
             List<AQI24hBean> list = msg.getAQI_24h();
@@ -495,8 +447,13 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
     }
 
     private String switchTime(String time) {
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        return sdf.format(DateUtil.strToDateLong(time));
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            return sdf.format(DateUtil.strToDateLong(time));
+        } catch (Exception e) {
+            return time;
+        }
+
     }
 
     /**
@@ -536,11 +493,35 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
     @Override
     public void prograss(MessageBean messageBean) {
         int index = regionIds.indexOf(messageBean.getRegionList().getRegionId());
-        weatherDatamap.put(regionIds.get(index), messageBean);
-        if (index == 0) {
-            initBaseInfo(messageBean);
-            initCharts2(messageBean);
-            initList(messageBean);
+        Log.e("tcy1", "回来的城市：" + messageBean.getRegionList().getRegionName() + ",id:" + messageBean.getRegionList().getRegionId());
+        if (index >= 0) {
+            weatherDatamap.put(regionIds.get(index), messageBean);
+            if (index == 0) {
+                initBaseInfo(messageBean);
+                initCharts2(messageBean);
+                initList(messageBean);
+            }
+        }
+
+    }
+
+    /**
+     * 获取信息失败
+     *
+     * @param regionId
+     */
+    @Override
+    public void error(String regionId) {
+        Log.e("tcy1", "移除：" + regionId);
+        int index = regionIds.indexOf(regionId);//// TODO: 2018/5/4
+        if (index > -1&&homeFragmentAdapter!=null) {
+            regionIds.remove(regionId);
+//            fragments.remove(index);
+            fragments.remove( fragmentMap.get(regionId));
+            initDots();
+//            homeVp.removeAllViews();
+            homeFragmentAdapter.notifyDataSetChanged();
+//            homeVp.setAdapter(new HomeFragmentAdapter(getChildFragmentManager(), fragments));
         }
     }
 

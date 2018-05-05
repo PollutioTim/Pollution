@@ -16,7 +16,10 @@ import com.tim.pollution.activity.CityActivity;
 import com.tim.pollution.activity.MapActivity;
 import com.tim.pollution.bean.changetrend.RegionNetBean;
 import com.tim.pollution.callback.OnItemClickListener;
+import com.tim.pollution.utils.CityListSaveUtil;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -44,6 +47,14 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
         holder.llCity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                List<String> regionBeans=CityListSaveUtil.getList(context,CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY);
+                if(regionBeans==null){
+                    regionBeans=new ArrayList<String>();
+                }
+                regionBeans.add(data.get(position).getRegionId());
+                List newList = new ArrayList(new HashSet(regionBeans));
+                CityListSaveUtil.putList(context,CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY,newList);
+                //
                 holder.ivSelect.setVisibility(View.VISIBLE);
                 Intent intent =  new Intent(context, MapActivity.class);
                 intent.putExtra("id",data.get(position).getRegionId());
