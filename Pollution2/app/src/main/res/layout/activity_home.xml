@@ -35,20 +35,27 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:padding="@dimen/padding">
-
-                    <TextView
-                        android:id="@+id/weather_title_location"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_marginRight="3dp"
-                        android:drawableLeft="@mipmap/location"
-                        android:drawablePadding="7dp"
-                        android:gravity="center_vertical"
-                        android:text="小店区"
-                        android:textColor="@color/color_white"
-                        android:textSize="13sp" />
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="12dp"
+                            android:layout_height="13dp"
+                            android:src="@mipmap/location"
+                            android:layout_gravity="center"/>
+                        <TextView
+                            android:id="@+id/weather_title_location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_marginRight="3dp"
+                            android:gravity="center_vertical"
+                            android:text="小店区"
+                            android:textColor="@color/color_white"
+                            android:textSize="13sp" />
 
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/textView"

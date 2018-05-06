@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <!--头部-->
     <RelativeLayout
+        android:id="@+id/sellers_rl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/gree_blue">
@@ -207,6 +207,7 @@
                 android:gravity="center"
                 android:layout_height="match_parent" />
             <LinearLayout
+                android:id="@+id/sellers_sort_ll"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:gravity="center"

@@ -1,17 +1,27 @@
 package com.tim.pollution.fragment;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.tim.pollution.MainActivity;
 import com.tim.pollution.R;
 import com.tim.pollution.adapter.RankAdapter;
 import com.tim.pollution.adapter.RankLastAdapter;
@@ -22,9 +32,11 @@ import com.tim.pollution.callback.ICallBack;
 import com.tim.pollution.general.MData;
 import com.tim.pollution.general.MDataType;
 import com.tim.pollution.net.RankDAL;
+import com.woodnaonly.arcprogress.Utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,6 +45,10 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static android.support.v4.widget.DrawerLayout.STATE_DRAGGING;
+import static android.support.v4.widget.DrawerLayout.STATE_IDLE;
+import static android.support.v4.widget.DrawerLayout.STATE_SETTLING;
 
 /**
  * Created by lenovo on 2018/4/23.
@@ -113,6 +129,17 @@ public class SellersFragment extends Fragment implements ICallBack {
     RecyclerView recyclerView;
     @BindView(R.id.sellers_month_recyview)
     RecyclerView recviewMonth;
+    @BindView(R.id.sellers_rl)
+    RelativeLayout rl;
+
+//    @BindView(R.id.city_tv)
+    TextView tvCity;
+//    @BindView(R.id.region_tv)
+    TextView tvRegion;
+//    @BindView(R.id.point_tv)
+    TextView tvPoint;
+    @BindView(R.id.sellers_sort_ll)
+    LinearLayout llSort;
     private Map<String, String> parms;
     private List<RankMainBean.Message> datas;
     private List<RankLastBean.Message> rankLasts;
@@ -123,6 +150,9 @@ public class SellersFragment extends Fragment implements ICallBack {
     private String ranktype = "AQI";//初始为aqi
     private LinearLayoutManager lm;
     private LinearLayoutManager lms;
+    private String regiontype = "city";
+    private boolean flag = true;
+    int height ;
 
 
     @Nullable
@@ -139,7 +169,6 @@ public class SellersFragment extends Fragment implements ICallBack {
         tvIndex.setTextColor(getResources().getColor(R.color.color_white));
         tvIndex.setText("AQI");
         tvTitleType.setText("AQI");
-
         initMain();
         initLast();
         getData();
@@ -153,6 +182,24 @@ public class SellersFragment extends Fragment implements ICallBack {
         datas = new ArrayList<>();
         adapter = new RankAdapter(getActivity(), datas);
         recyclerView.setAdapter(adapter);
+
+        ViewTreeObserver vto = rl.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                rl.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                height =rl.getHeight();
+                Log.e("lili","height="+height);
+                int statusBarHeight1 = -1;
+//获取status_bar_height资源的ID
+                int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+                if (resourceId > 0) {
+                    //根据资源ID获取响应的尺寸值
+                    statusBarHeight1 = getResources().getDimensionPixelSize(resourceId);
+                }
+                height = height+statusBarHeight1;
+            }
+        });
     }
 
     private void initLast() {
@@ -170,7 +217,7 @@ public class SellersFragment extends Fragment implements ICallBack {
             parms = new HashMap<>();
         }
         parms.put("key", "6DlLqAyx3mY=");
-        parms.put("regiontype", "city");
+        parms.put("regiontype", regiontype);
         parms.put("datatype", datatype);
         parms.put("ranktype", ranktype);
         parms.put("pointtype", pointtype);
@@ -183,14 +230,66 @@ public class SellersFragment extends Fragment implements ICallBack {
 
     @OnClick({R.id.now_ll, R.id.last_ll, R.id.yesterday_ll, R.id.all_ll, R.id.sellers_swicth_tv
             , R.id.sellers_o_3, R.id.index_all_tv, R.id.sellers_pm_25, R.id.sellers_pm_10, R.id.sellers_so_2,
-            R.id.sellers_co_tv, R.id.sellers_no_2})
+            R.id.sellers_co_tv, R.id.sellers_no_2,R.id.sellers_station_tv, R.id.sellers_sort_ll})
     public void OnClick(View view) {
         switch (view.getId()) {
+            case R.id.sellers_sort_ll:
+                if(flag){
+                    Collections.reverse(datas);
+                    adapter.notifyDataSetChanged();
+                }else{
+                    Collections.reverse(rankLasts);
+                    lastAdapter.notifyDataSetChanged();
+                }
+                break;
+            case R.id.sellers_station_tv:
+                //弹出站点的选择框
+                View popupView = getActivity().getLayoutInflater().inflate(R.layout.popuwindow_layout, null);
+                tvPoint = (TextView) popupView.findViewById(R.id.point_tv);
+                tvCity = (TextView) popupView.findViewById(R.id.city_tv);
+                tvRegion = (TextView) popupView.findViewById(R.id.region_tv);
+                final PopupWindow window = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT,true);
+                window.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F8F8F8")));
+                window.setFocusable(true);
+                window.setOutsideTouchable(true);
+                window.update();
+                window.showAsDropDown(popupView, 10, height);
+                tvPoint.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        regiontype = "point";
+                        if("".equals(pointtype)){
+                            Toast.makeText(getActivity(),"请选择站点类型",Toast.LENGTH_LONG).show();
+                        }else{
+                            getData();
+                        }
+                        window.dismiss();
+                    }
+                });
+                tvCity.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        regiontype = "city";
+                        getData();
+                        window.dismiss();
+                    }
+                });
+                tvRegion.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        regiontype = "region";
+                        getData();
+                        window.dismiss();
+                    }
+                });
+                break;
             case R.id.now_ll://实时
                 setClear();
                 datatype = "real";
                 llNow.setSelected(true);
                 if (llNow.isSelected()) {
+                    flag = true;
                     tvNow.setTextColor(getResources().getColor(R.color.color_white));
                     vNow.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.VISIBLE);
@@ -210,13 +309,13 @@ public class SellersFragment extends Fragment implements ICallBack {
                 datatype = "month";
                 llLast.setSelected(true);
                 if (llLast.isSelected()) {
+                    flag = false;
                     tvLast.setTextColor(getResources().getColor(R.color.color_white));
                     vLast.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
                     recviewMonth.setVisibility(View.VISIBLE);
                     tvIndex.setText("ZH");
                     tvO3.setText("O3_8H");
-                    Log.e("lili","rankType="+ranktype+"dataType="+datatype+"pointtype="+pointtype);
                     getData();
                 }
                 break;
@@ -225,13 +324,13 @@ public class SellersFragment extends Fragment implements ICallBack {
                 datatype = "day";
                 llYestday.setSelected(true);
                 if (llYestday.isSelected()) {
+                    flag = true;
                     tvYesterday.setTextColor(getResources().getColor(R.color.color_white));
                     vYesterday.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.VISIBLE);
                     recviewMonth.setVisibility(View.GONE);
                     tvIndex.setText("AQI");
                     tvO3.setText("O3_8H");
-                    Log.e("lili","rankType="+ranktype+"dataType="+datatype+"pointtype="+pointtype);
                     getData();
                 }
                 break;
@@ -240,13 +339,13 @@ public class SellersFragment extends Fragment implements ICallBack {
                 datatype = "realsum";
                 llAll.setSelected(true);
                 if (llAll.isSelected()) {
+                    flag = true;
                     tvAll.setTextColor(getResources().getColor(R.color.color_white));
                     vAll.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.VISIBLE);
                     recviewMonth.setVisibility(View.GONE);
                     tvIndex.setText("AQI");
                     tvO3.setText("O3_8H");
-                    Log.e("lili","rankType="+ranktype+"dataType="+datatype+"pointtype="+pointtype);
                     getData();
                 }
                 break;
@@ -281,7 +380,6 @@ public class SellersFragment extends Fragment implements ICallBack {
                     ranktype = "ZH";
                     tvTitleType.setText("ZH");
                 }
-                Log.e("lili","rankType="+ranktype+"dataType="+datatype+"pointtype="+pointtype);
                 getData();
                 break;
             case R.id.sellers_pm_25:
@@ -299,7 +397,6 @@ public class SellersFragment extends Fragment implements ICallBack {
                 tvPM10.setTextColor(getResources().getColor(R.color.color_white));
                 ranktype = "PM10";
                 tvTitleType.setText("PM10");
-                Log.e("lili","rankType="+ranktype+"dataType="+datatype+"pointtype="+pointtype);
                 getData();
                 break;
             case R.id.sellers_so_2:
@@ -308,7 +405,6 @@ public class SellersFragment extends Fragment implements ICallBack {
                 tvSO2.setTextColor(getResources().getColor(R.color.color_white));
                 ranktype = "SO2";
                 tvTitleType.setText("SO2");
-                Log.e("lili","rankType="+ranktype+"dataType="+datatype+"pointtype="+pointtype);
                 getData();
                 break;
             case R.id.sellers_co_tv:
@@ -316,7 +412,6 @@ public class SellersFragment extends Fragment implements ICallBack {
                 tvCO.setTextColor(getResources().getColor(R.color.color_white));
                 ranktype = "CO";
                 tvTitleType.setText("CO");
-                Log.e("lili","rankType="+ranktype+"dataType="+datatype+"pointtype="+pointtype);
                 getData();
                 break;
             case R.id.sellers_no_2:
@@ -325,7 +420,6 @@ public class SellersFragment extends Fragment implements ICallBack {
                 tv2.setTextColor(getResources().getColor(R.color.color_white));
                 ranktype = "NO2";
                 tvTitleType.setText("NO2");
-                Log.e("lili","rankType="+ranktype+"dataType="+datatype+"pointtype="+pointtype);
                 getData();
                 break;
         }

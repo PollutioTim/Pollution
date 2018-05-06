@@ -13,7 +13,9 @@ import com.baidu.mapapi.model.LatLng;
 import com.tim.pollution.MyApplication;
 import com.tim.pollution.R;
 import com.tim.pollution.adapter.CityAdapter;
+import com.tim.pollution.bean.CityBean;
 import com.tim.pollution.bean.LevePollutionBean;
+import com.tim.pollution.bean.MapBean;
 import com.tim.pollution.bean.MyData;
 import com.tim.pollution.bean.changetrend.RegionNetBean;
 import com.tim.pollution.callback.ICallBack;
@@ -24,11 +26,8 @@ import com.tim.pollution.general.LocationData;
 import com.tim.pollution.general.MData;
 import com.tim.pollution.general.MDataType;
 import com.tim.pollution.general.MessageEvent;
+import com.tim.pollution.net.MapDAL;
 import com.tim.pollution.net.WeatherDal;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,7 +37,6 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-import static android.R.attr.data;
 
 /**
  * Created by lenovo on 2018/4/27.
@@ -50,11 +48,12 @@ public class CityActivity extends BaseActivity implements ICallBack {
     RecyclerView recyclerView;
     @BindView(R.id.city_back_iv)
     ImageView ivBack;
-    private List<RegionNetBean.RegionBean>cityBeens;
+    private List<CityBean>cityBeens;
 
     private CityAdapter adapter;
     private GridLayoutManager lm;
     private RegionNetBean regionNetBean;
+    private Map<String,String> parms;
 
     @Override
     public int intiLayout() {
@@ -75,10 +74,12 @@ public class CityActivity extends BaseActivity implements ICallBack {
      * 加载县区列表
      */
     private void loadRegionData() {
-        Map<String, String> params = new HashMap<>();
-        params.put("key", Constants.key);
-        params.put("regiontype", "city");
-        WeatherDal.getInstance().getRegion(params, this);
+        if (parms == null) {
+            parms = new HashMap<>();
+        }
+        parms.put("key", Constants.key);
+        parms.put("regiontype", "area");
+        MapDAL.getInstance().getCityData(parms, this);
     }
     @Override
     public void initData() {
@@ -97,16 +98,13 @@ public class CityActivity extends BaseActivity implements ICallBack {
     @Override
     public void onProgress(Object data) {
         MData mData = (MData) data;
-        if (MDataType.REGIONNET_BEAN.equals(mData.getType())) {
-            regionNetBean = (RegionNetBean) mData.getData();
-            if (regionNetBean != null) {
-                if(cityBeens.size()>0){
-                    cityBeens.clear();
-                }
-
-                cityBeens .addAll(regionNetBean.getMessage());
-                adapter.notifyDataSetChanged();
+        if (mData.getType().equals(MDataType.MAP_DATA)) {//获得城市名
+            MapBean mapBean = (MapBean) mData.getData();
+            if (cityBeens.size() > 0) {
+                cityBeens.clear();
             }
+            cityBeens.addAll(mapBean.getMessage().getCityBeens());
+            adapter.notifyDataSetChanged();
         }
     }
 

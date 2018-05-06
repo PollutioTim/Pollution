@@ -17,7 +17,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
             android:orientation="vertical">
 
             <TextView
@@ -27,53 +26,87 @@
                 android:padding="10dp"
                 android:text="城市对比"
                 android:textColor="@color/color_white"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:weightSum="3"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp">
 
-                <TextView
-                    android:id="@+id/city_contrast_sp1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="42dp"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:background="@drawable/text_selecter01"
-                    android:drawablePadding="-30dp"
-                    android:drawableRight="@mipmap/spinner_icon"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:gravity="center"
-                    android:padding="10dp"
-                    android:text="太原"
-                    android:textColor="@color/color_white" />
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/city_contrast_sp1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="42dp"
+                        android:drawableRight="@mipmap/spinner_icon"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:textSize="12sp"
+                        android:textColor="@color/color_white" />
+                    <View
+                        android:layout_width="50dp"
+                        android:layout_height="4dp"
+                        android:background="@color/color1"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/city_contrast_sp2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="42dp"
+                        android:layout_weight="1"
+                        android:drawableRight="@mipmap/spinner_icon"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:textSize="12sp"
+                        android:textColor="@color/color_white" />
+                    <View
+                        android:layout_width="50dp"
+                        android:layout_height="4dp"
+                        android:background="@color/color2"/>
 
-                <TextView
-                    android:id="@+id/city_contrast_sp2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="42dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/text_selecter02"
-                    android:drawablePadding="-30dp"
-                    android:drawableRight="@mipmap/spinner_icon"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:text="太原"
-                    android:textColor="@color/color_white" />
+                </LinearLayout>
 
-                <TextView
-                    android:id="@+id/city_contrast_sp3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="42dp"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:background="@drawable/text_selecter03"
-                    android:drawablePadding="-30dp"
-                    android:drawableRight="@mipmap/spinner_icon"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:gravity="center"
-                    android:padding="10dp"
-                    android:text="太原"
-                    android:textColor="@color/color_white" />
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/city_contrast_sp3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="42dp"
+                        android:layout_weight="1"
+                        android:drawableRight="@mipmap/spinner_icon"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:textSize="12sp"
+                        android:textColor="@color/color_white" />
+                    <View
+                        android:layout_width="50dp"
+                        android:layout_height="4dp"
+                        android:background="@color/color3"/>
+
+                </LinearLayout>
+
+
+
 
             </LinearLayout>
 
@@ -86,21 +119,22 @@
 
                 <lecho.lib.hellocharts.view.LineChartView
                     android:id="@+id/city_contrast_chart"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="300dp"
                     android:layout_margin="10dp"
                     android:layout_marginTop="30dp"
-                    android:layout_weight="1" />
+                    android:layout_weight="3" />
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/city_contrast_time_switch"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#FF9DD4D6"
                         android:drawableRight="@mipmap/bbd"
@@ -108,7 +142,7 @@
                         android:paddingRight="10dp"
                         android:text="12H"
                         android:textColor="@color/color_white"
-                        android:textSize="20sp" />
+                        android:textSize="17sp" />
 
                     <TextView
                         android:id="@+id/city_contrast_info"
@@ -118,9 +152,8 @@
                         android:background="#FF9DD4D6"
                         android:gravity="center"
                         android:padding="5dp"
-                        android:text="AQI 14:00\n太原 255\n大同 100\n临汾 150"
                         android:textColor="@color/color_white"
-                        android:textSize="10sp" />
+                        android:textSize="12sp" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -219,12 +252,13 @@
                 android:paddingRight="20dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:text="        时间      "
+                    android:text="时间"
                     android:textColor="@color/color_white"
                     android:textSize="12sp" />
 
@@ -241,7 +275,6 @@
                     android:layout_margin="5dp"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:text="太原"
                     android:textColor="@color/color_white"
                     android:textSize="12sp" />
 
@@ -258,7 +291,6 @@
                     android:layout_margin="5dp"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:text="大同"
                     android:textColor="@color/color_white"
                     android:textSize="12sp" />
 
@@ -275,7 +307,6 @@
                     android:layout_margin="5dp"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:text="临汾"
                     android:textColor="@color/color_white"
                     android:textSize="12sp" />
             </LinearLayout>

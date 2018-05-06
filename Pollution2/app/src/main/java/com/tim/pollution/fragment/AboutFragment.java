@@ -51,7 +51,6 @@ public class AboutFragment extends Fragment {
     public void OnClick(View view) {
         switch (view.getId()) {
             case R.id.explain_quality_tv:
-                Toast.makeText(getActivity(),"lili",Toast.LENGTH_LONG).show();
                 startActivity(new Intent(getActivity(),QualityReleaseActivity.class));
                 break;
             case R.id.explain_release_tv:

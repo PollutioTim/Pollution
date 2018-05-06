@@ -349,7 +349,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         LineChartData data = new LineChartData(lines);
 
         if (true) {
-            data.setAxisXBottom(new Axis(axisXValues).setHasLines(false).setTextColor(Color.WHITE).setName("").setHasTiltedLabels(false).setMaxLabelChars(7));
+            data.setAxisXBottom(new Axis(axisXValues).setHasLines(false).setTextColor(Color.WHITE).setName("").setHasTiltedLabels(false).setMaxLabelChars(8));
             data.setAxisYLeft(new Axis().setHasLines(false).setName("").setTextColor(Color.WHITE).setMaxLabelChars(4));
         } else {
             data.setAxisXBottom(null);
@@ -422,7 +422,11 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         }
         List<PointValue> pointValues = new ArrayList<PointValue>();// 节点数据结合
         for (int i = 0; i < data.size(); i++) {
-            pointValues.add(new PointValue(i, Float.parseFloat(data.get(i).getValue())));
+            try{
+                pointValues.add(new PointValue(i, Float.parseFloat(data.get(i).getValue())));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
         Line line = new Line(pointValues);//将值设置给折线
         line.setColor(Color.parseColor(color));// 设置折线颜色
