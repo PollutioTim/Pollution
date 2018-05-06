@@ -339,7 +339,7 @@ public class SiteWeatherDetailActivity extends AppCompatActivity implements ICal
             //最后将所有值显示在View中
             weatherMainChart.setColumnChartData(data);
             Viewport v = new Viewport(weatherMainChart.getMaximumViewport());
-            v.right=10;
+            v.right=30;
             v.top= 500;
             weatherMainChart.setCurrentViewport(v);
         }

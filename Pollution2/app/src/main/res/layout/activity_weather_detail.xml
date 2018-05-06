@@ -33,40 +33,53 @@
             android:checkedButton="@+id/weather_detail_rb12_time"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
             <RadioButton
                 android:id="@+id/weather_detail_rb12_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:gravity="center"
                 android:padding="10dp"
                 android:background="@drawable/radiobutton_selecter"
                 android:button="@null"
                 android:textColor="@color/color_white"
                 android:text="12小时"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
             <RadioButton
                 android:id="@+id/weather_detail_rb24_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:gravity="center"
                 android:padding="10dp"
                 android:textColor="@color/color_white"
                 android:background="@drawable/radiobutton_selecter"
                 android:button="@null"
-                android:text="24小时"
+                android:text="24小时"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
                 />
             <RadioButton
                 android:id="@+id/weather_detail_rb30_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:gravity="center"
                 android:padding="10dp"
                 android:textColor="@color/color_white"
                 android:button="@null"
                 android:background="@drawable/radiobutton_selecter"
                 android:text="30日"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
         </RadioGroup>
         <lecho.lib.hellocharts.view.ColumnChartView
              android:id="@+id/weather_detail_chart"
