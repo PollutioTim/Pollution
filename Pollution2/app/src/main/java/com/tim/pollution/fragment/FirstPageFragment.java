@@ -103,6 +103,7 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //重新提交
         //引用创建好的xml布局
         View view = inflater.inflate(R.layout.activity_home, container, false);
         findView(view);

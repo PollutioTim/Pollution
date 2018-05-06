@@ -48,6 +48,8 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
         holder.llCity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //tcy  tijiao 
                 List<String> regionBeans=CityListSaveUtil.getList(context,CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY);
                 if(regionBeans==null){
                     regionBeans=new ArrayList<String>();
