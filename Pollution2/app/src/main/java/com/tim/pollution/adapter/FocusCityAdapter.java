@@ -50,6 +50,8 @@ public class FocusCityAdapter extends RecyclerView.Adapter<FocusCityAdapter.View
         }
         if(regionBeans.contains(data.get(position).getRegionId())){
             holder.ivSelect.setVisibility(View.VISIBLE);
+        }else{
+            holder.ivSelect.setVisibility(View.INVISIBLE);
         }
         holder.llCity.setOnClickListener(new View.OnClickListener() {
             @Override
