@@ -149,6 +149,7 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
                 weatherArcProgress.setProgressTextTop(regionWeather.getMessage().getRegionList().getPollutionLevel());
                 weatherArcProgress.setProgressTextBottom("首要污染物 " + regionWeather.getMessage().getRegionList().getTopPollution());
                 weatherArcProgress.setProgress(Double.valueOf(getTopPollutionPrograss(regionWeather, regionWeather.getMessage().getRegionList().getTopPollution())));
+                weatherArcProgress.setFinishedStrokeColor(getTopPollutionPrograssColor(regionWeather, regionWeather.getMessage().getRegionList().getTopPollution()));
                 String name = "w" + regionWeather.getMessage().getRegionList().getWeathercode();
                 weatherInfoImg.setImageResource(getImageResourceId(name));
                 weatherTemperature.setText(regionWeather.getMessage().getRegionList().getTemperature() + " °C");
@@ -292,20 +293,36 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
     }
 
     private String getTopPollutionPrograss(RegionWeather regionWeather, String top) {
-        if (top.contains("PM25")||top.contains("PM2.5")) {
-            return regionWeather.getMessage().getRegionList().getPM25();
-        } else if (top.contains("PM10")) {
-            return regionWeather.getMessage().getRegionList().getPM10();
-        } else if (top.contains("SO2")) {
-            return regionWeather.getMessage().getRegionList().getSO2();
-        } else if (top.contains("NO2")) {
-            return regionWeather.getMessage().getRegionList().getNO2();
-        } else if (top.contains("O3")) {
-            return regionWeather.getMessage().getRegionList().getO3();
-        } else if (top.contains("CO")) {
-            return regionWeather.getMessage().getRegionList().getCO();
-        }
-        return "0";
+//        if (top.contains("PM25")||top.contains("PM2.5")) {
+//            return regionWeather.getMessage().getRegionList().getPM25();
+//        } else if (top.contains("PM10")) {
+//            return regionWeather.getMessage().getRegionList().getPM10();
+//        } else if (top.contains("SO2")) {
+//            return regionWeather.getMessage().getRegionList().getSO2();
+//        } else if (top.contains("NO2")) {
+//            return regionWeather.getMessage().getRegionList().getNO2();
+//        } else if (top.contains("O3")) {
+//            return regionWeather.getMessage().getRegionList().getO3();
+//        } else if (top.contains("CO")) {
+//            return regionWeather.getMessage().getRegionList().getCO();
+//        }
+        return regionWeather.getMessage().getRegionList().getAQI();
+    }
+    private int getTopPollutionPrograssColor(RegionWeather regionWeather, String top) {
+//        if (top.contains("PM25")||top.contains("PM2.5")) {
+//            return Color.parseColor(regionWeather.getMessage().getRegionList().getPM25color());
+//        } else if (top.contains("PM10")) {
+//            return Color.parseColor( regionWeather.getMessage().getRegionList().getPM10color());
+//        } else if (top.contains("SO2")) {
+//            return Color.parseColor( regionWeather.getMessage().getRegionList().getSO2color());
+//        } else if (top.contains("NO2")) {
+//            return Color.parseColor( regionWeather.getMessage().getRegionList().getNO2color());
+//        } else if (top.contains("O3")) {
+//            return Color.parseColor( regionWeather.getMessage().getRegionList().getO3color());
+//        } else if (top.contains("CO")) {
+//            return Color.parseColor( regionWeather.getMessage().getRegionList().getCOcolor());
+//        }
+        return  Color.parseColor( regionWeather.getMessage().getRegionList().getAQIcolor());
     }
 
     public int getImageResourceId(String name) {
