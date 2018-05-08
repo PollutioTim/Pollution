@@ -165,6 +165,7 @@ public class SiteWeatherDetailActivity extends AppCompatActivity implements ICal
         weatherMainArcProgress.setProgressTextTop(pointInfoNetBean.getMessage().getPointListBean().getPollutionLevel());
         weatherMainArcProgress.setProgressTextBottom("首要污染物 " + pointInfoNetBean.getMessage().getPointListBean().getTopPollution());
         weatherMainArcProgress.setProgress(Double.valueOf(getTopPollutionPrograss(pointInfoNetBean, pointInfoNetBean.getMessage().getPointListBean().getTopPollution())));
+        weatherMainArcProgress.setFinishedStrokeColor(getTopPollutionPrograssColor(pointInfoNetBean, pointInfoNetBean.getMessage().getPointListBean().getTopPollution()));
         String name = "w" + pointInfoNetBean.getMessage().getPointListBean().getWeathercode();
         weatherMainInfoImg.setImageResource(getImageResourceId(name));
         weatherMainTemperature.setText(pointInfoNetBean.getMessage().getPointListBean().getTemperature() + " °C");
@@ -369,22 +370,37 @@ public class SiteWeatherDetailActivity extends AppCompatActivity implements ICal
     }
 
     private String getTopPollutionPrograss(PointInfoNetBean pointInfoNetBean, String top) {
-        if (top.contains("PM25")) {
-            return pointInfoNetBean.getMessage().getPointListBean().getPM25();
-        } else if (top.contains("PM10")) {
-            return pointInfoNetBean.getMessage().getPointListBean().getPM10();
-        } else if (top.contains("SO2")) {
-            return pointInfoNetBean.getMessage().getPointListBean().getSO2();
-        } else if (top.contains("NO2")) {
-            return pointInfoNetBean.getMessage().getPointListBean().getNO2();
-        } else if (top.contains("O3")) {
-            return pointInfoNetBean.getMessage().getPointListBean().getO3();
-        } else if (top.contains("CO")) {
-            return pointInfoNetBean.getMessage().getPointListBean().getCO();
-        }
-        return "0";
+//        if (top.contains("PM25")) {
+//            return pointInfoNetBean.getMessage().getPointListBean().getPM25();
+//        } else if (top.contains("PM10")) {
+//            return pointInfoNetBean.getMessage().getPointListBean().getPM10();
+//        } else if (top.contains("SO2")) {
+//            return pointInfoNetBean.getMessage().getPointListBean().getSO2();
+//        } else if (top.contains("NO2")) {
+//            return pointInfoNetBean.getMessage().getPointListBean().getNO2();
+//        } else if (top.contains("O3")) {
+//            return pointInfoNetBean.getMessage().getPointListBean().getO3();
+//        } else if (top.contains("CO")) {
+//            return pointInfoNetBean.getMessage().getPointListBean().getCO();
+//        }
+        return pointInfoNetBean.getMessage().getPointListBean().getAQI();
     }
-
+    private int getTopPollutionPrograssColor(PointInfoNetBean pointInfoNetBean, String top) {
+//        if (top.contains("PM25")) {
+//            return pointInfoNetBean.getMessage().getPointListBean().getPM25();
+//        } else if (top.contains("PM10")) {
+//            return pointInfoNetBean.getMessage().getPointListBean().getPM10();
+//        } else if (top.contains("SO2")) {
+//            return pointInfoNetBean.getMessage().getPointListBean().getSO2();
+//        } else if (top.contains("NO2")) {
+//            return pointInfoNetBean.getMessage().getPointListBean().getNO2();
+//        } else if (top.contains("O3")) {
+//            return pointInfoNetBean.getMessage().getPointListBean().getO3();
+//        } else if (top.contains("CO")) {
+//            return pointInfoNetBean.getMessage().getPointListBean().getCO();
+//        }
+        return Color.parseColor(pointInfoNetBean.getMessage().getPointListBean().getAQIcolor());
+    }
     @Override
     public void onError(String msg, String eCode) {
         Toast.makeText(this,msg,Toast.LENGTH_LONG);
