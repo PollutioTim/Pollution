@@ -419,6 +419,7 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
 
     }
 
+
     private RegionWeather getTest() {
 
         InputStreamReader inputStreamReader = null;
