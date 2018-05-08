@@ -26,6 +26,7 @@ import com.baidu.mapapi.SDKInitializer;
 import com.tim.pollution.MyApplication;
 import com.tim.pollution.R;
 import com.tim.pollution.activity.CityActivity;
+import com.tim.pollution.activity.FocusCityActivity;
 import com.tim.pollution.activity.SiteWeatherDetailActivity;
 import com.tim.pollution.activity.WeatherVariationTrendActivity;
 import com.tim.pollution.adapter.HomeFragmentAdapter;
@@ -183,7 +184,7 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
         weatherTitleLocationSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), CityActivity.class);
+                Intent intent = new Intent(getContext(), FocusCityActivity.class);
                 startActivity(intent);
             }
         });
@@ -349,10 +350,16 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
                 loadData();
             }
         }else if (mData.getType().equals(MDataType.MAP)){
-            BDLocation location = (BDLocation) mData.getData();
-            if (isFirstLocate) {
-                weatherTitleLocation.setText(location.getDistrict());
+            try{
+                BDLocation location = (BDLocation) mData.getData();
+                if (isFirstLocate) {
+                    weatherTitleLocation.setText(location.getDistrict());
+                }
+
+            }catch (Exception e){
+
             }
+
         }
 
     }
@@ -541,6 +548,7 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
         homeWeatherInfoTime.setText(messageBean.getRegionList().getTime());
         //只显示定位的数据不显示后台返回数据
 //        weatherTitleLocation.setText(messageBean.getRegionList().getRegionName());
+        weatherTitleLocationSelect.setText(messageBean.getRegionList().getRegionName());
         String info = messageBean.getRegionList().getPM25() + "\n" + messageBean.getRegionList().getPM10() + "\n" + messageBean.getRegionList().getSO2() + "\n" + messageBean.getRegionList().getNO2() + "\n" + messageBean.getRegionList().getO3() + "\n" + messageBean.getRegionList().getCO();
         homeWeatherInfoVa.setText(info);
         homeWeatherInfoCity.setText(messageBean.getRegionList().getRegionName());

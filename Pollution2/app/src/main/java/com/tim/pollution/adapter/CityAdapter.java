@@ -50,13 +50,13 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
             public void onClick(View v) {
 
                 //tcy  tijiao 
-                List<String> regionBeans=CityListSaveUtil.getList(context,CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY);
-                if(regionBeans==null){
-                    regionBeans=new ArrayList<String>();
-                }
-                regionBeans.add(data.get(position).getRegionId());
-                List newList = new ArrayList(new HashSet(regionBeans));
-                CityListSaveUtil.putList(context,CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY,newList);
+//                List<String> regionBeans=CityListSaveUtil.getList(context,CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY);
+//                if(regionBeans==null){
+//                    regionBeans=new ArrayList<String>();
+//                }
+//                regionBeans.add(data.get(position).getRegionId());
+//                List newList = new ArrayList(new HashSet(regionBeans));
+//                CityListSaveUtil.putList(context,CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY,newList);
                 //
                 holder.ivSelect.setVisibility(View.VISIBLE);
                 Intent intent =  new Intent(context, MapActivity.class);
