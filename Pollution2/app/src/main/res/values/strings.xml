@@ -4,7 +4,7 @@
     <string name="quity_release_title">空气质量</string>
     <string name="about_us">关于我们</string>
 
-    <string name="air_quality">空气质量</string>
+    <string name="air_quality">山西省空气质量发布</string>
     
     <string name="air_indicators">PM25\nPM10\nSO₂\nNO₂ \nO₃\nCO</string>
     <string name="PM2.5">PM2.5</string>

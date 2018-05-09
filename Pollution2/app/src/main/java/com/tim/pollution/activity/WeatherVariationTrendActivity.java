@@ -6,6 +6,7 @@ import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -33,6 +34,7 @@ import lecho.lib.hellocharts.model.AxisValue;
 import lecho.lib.hellocharts.model.Column;
 import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.SubcolumnValue;
+import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.ColumnChartView;
 
 /**
@@ -72,6 +74,8 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
     RadioButton weatherDetailRb30Time;
     @BindView(R.id.weather_detail_rbaqi_type)
     RadioButton weatherDetailRbaqiType;
+    @BindView(R.id.weather_detail_back)
+    ImageView ivBack;
     private ChangeTrend changeTrend;
 
 
@@ -88,6 +92,12 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
     private void setClick() {
         weatherDetailRgTime.setOnCheckedChangeListener(this);
         weatherDetailRgType.setOnCheckedChangeListener(this);
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WeatherVariationTrendActivity.this.finish();
+            }
+        });
     }
 
     @Override
@@ -258,6 +268,18 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
             data.setAxisYLeft(new Axis().setHasLines(false).setTextColor(Color.WHITE).setMaxLabelChars(5));
             //最后将所有值显示在View中
             weatherDetailChart.setColumnChartData(data);
+            Viewport v = new Viewport(weatherDetailChart.getMaximumViewport());
+            v.bottom = 0f;
+            v.top += 30f;
+
+            //固定Y轴的范围,如果没有这个,Y轴的范围会根据数据的最大值和最小值决定,这不是我想要的
+            weatherDetailChart.setMaximumViewport(v);
+
+            //这2个属性的设置一定要在lineChart.setMaximumViewport(v);这个方法之后,不然显示的坐标数据是不能左右滑动查看更多数据的
+           /* v.left = totalDays - 7;
+            v.right = totalDays - 1;*/
+            v.right =30;
+            weatherDetailChart.setCurrentViewport(v);
         }
     }
 

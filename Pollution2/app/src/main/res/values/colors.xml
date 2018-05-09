@@ -26,5 +26,7 @@
     <color name="transparent">#00000000</color>
 
     <color name="title">#FF268BA1</color>
+
+    <color name="color_text">#fff</color>
 </resources>
 

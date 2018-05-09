@@ -169,7 +169,7 @@ public class SiteWeatherDetailActivity extends AppCompatActivity implements ICal
         String name = "w" + pointInfoNetBean.getMessage().getPointListBean().getWeathercode();
         weatherMainInfoImg.setImageResource(getImageResourceId(name));
         weatherMainTemperature.setText(pointInfoNetBean.getMessage().getPointListBean().getTemperature() + " °C");
-        weatherMainWind.setText(pointInfoNetBean.getMessage().getPointListBean().getWind() + "\n" + "湿度" + pointInfoNetBean.getMessage().getPointListBean().getHumidity() + "%");
+        weatherMainWind.setText(pointInfoNetBean.getMessage().getPointListBean().getWind()+" "+pointInfoNetBean.getMessage().getPointListBean().getWeather() + "\n" + "湿度" + pointInfoNetBean.getMessage().getPointListBean().getHumidity() + "%");
         weatherMainPm25Va.setText(pointInfoNetBean.getMessage().getPointListBean().getPM25());
         weatherMainPm25Pro.setMaxCount(500);
         weatherMainPm25Pro.setCurrentCount(getIntFromString(pointInfoNetBean.getMessage().getPointListBean().getPM25()));
@@ -199,80 +199,7 @@ public class SiteWeatherDetailActivity extends AppCompatActivity implements ICal
 
     }
 
-    private void initChars() {
-        if (pointInfoNetBean.getMessage() == null) {
-            return;
-        }
-        List<DataInfoBean> datas = new ArrayList<>();
-        int id = weatherMainDetailRgType.getCheckedRadioButtonId();
-        if (id == R.id.weather_main_detail_rbpm25_type) {
-            datas = pointInfoNetBean.getMessage().getPM25_24h();
-        } else if (id == R.id.weather_main_detail_rbpm10_type) {
-            datas = pointInfoNetBean.getMessage().getPM10_24h();
-        } else if (id == R.id.weather_main_detail_rbso2_type) {
-            datas = pointInfoNetBean.getMessage().getSO2_24h();
-        } else if (id == R.id.weather_main_detail_rbno2_type) {
-            datas = pointInfoNetBean.getMessage().getNO2_24h();
-        } else if (id == R.id.weather_main_detail_rbo3_type) {
-            datas = pointInfoNetBean.getMessage().getO3_24h();
-        } else if (id == R.id.weather_main_detail_rbco_type) {
-            datas = pointInfoNetBean.getMessage().getCO_24h();
-        }
-        if (datas != null) {
-            List<DataInfoBean> list = datas;
-            //每个集合显示几条柱子
-            int numSubcolumns = 1;
-            //显示多少个集合
-            int numColumns = list.size();
-            //保存所有的柱子
-            List<Column> columns = new ArrayList<Column>();
-            //保存每个竹子的值
-            List<SubcolumnValue> values;
-            List<AxisValue> axisXValues = new ArrayList<AxisValue>();
-            List<AxisValue> axY = new ArrayList<AxisValue>();
-            for (int i=0;i<=5;i++){
-                axY.add(new AxisValue(i).setValue(i).setLabel(i*10+""));
-            }
-            //对每个集合的柱子进行遍历
-            for (int i = 0; i < numColumns; ++i) {
 
-                values = new ArrayList<SubcolumnValue>();
-                //循环所有柱子（list）
-
-                for (int j = 0; j < numSubcolumns; ++j) {
-                    //创建一个柱子，然后设置值和颜色，并添加到list中
-                    if (list.get(i).getValue() != null) {
-                        float value = Float.valueOf(list.get(i).getValue());
-                        Log.e("tcy","value:"+value);
-//                        values.add(new SubcolumnValue(Float.valueOf(list.get(i).getValue())/10, Color.parseColor(list.get(i).getValuecolor())));
-                        values.add(new SubcolumnValue(Float.valueOf(list.get(i).getValue()), Color.parseColor(list.get(i).getValuecolor())));
-                    }
-                    //设置X轴的柱子所对应的属性名称
-                    axisXValues.add(new AxisValue(i).setLabel(switchTime(list.get(i).getTime())));
-
-
-                }
-                //将每个属性的拥有的柱子，添加到Column中
-                Column column = new Column(values);
-                //是否显示每个柱子的Lable
-                column.setHasLabels(false);
-                //设置每个柱子的Lable是否选中，为false，表示不用选中，一直显示在柱子上
-                column.setHasLabelsOnlyForSelected(false);
-
-                //将每个属性得列全部添加到List中
-                columns.add(column);
-            }
-            //设置Columns添加到Data中
-            ColumnChartData data = new ColumnChartData(columns);
-            //设置X轴显示在底部，并且显示每个属性的Lable，字体颜色为黑色，X轴的名字为“学历”，每个柱子的Lable斜着显示，距离X轴的距离为8
-            data.setAxisXBottom(new Axis(axisXValues).setHasLines(false).setTextColor(Color.WHITE).setHasTiltedLabels(false).setMaxLabelChars(3));
-            //属性值含义同X轴
-            data.setAxisYLeft(new Axis(axY).setHasLines(false).setTextColor(Color.WHITE).setMaxLabelChars(5));
-            //最后将所有值显示在View中
-            weatherMainChart.setColumnChartData(data);
-            weatherMainChart.setZoomEnabled(true);
-        }
-    }
 
     private  void initChars2(){
         if (pointInfoNetBean.getMessage() == null) {
@@ -340,8 +267,16 @@ public class SiteWeatherDetailActivity extends AppCompatActivity implements ICal
             //最后将所有值显示在View中
             weatherMainChart.setColumnChartData(data);
             Viewport v = new Viewport(weatherMainChart.getMaximumViewport());
-            v.right=30;
-            v.top= 500;
+            v.bottom = 0f;
+            v.top += 30f;
+
+            //固定Y轴的范围,如果没有这个,Y轴的范围会根据数据的最大值和最小值决定,这不是我想要的
+            weatherMainChart.setMaximumViewport(v);
+
+            //这2个属性的设置一定要在lineChart.setMaximumViewport(v);这个方法之后,不然显示的坐标数据是不能左右滑动查看更多数据的
+           /* v.left = totalDays - 7;
+            v.right = totalDays - 1;*/
+            v.right =30;
             weatherMainChart.setCurrentViewport(v);
         }
     }

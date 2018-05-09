@@ -35,7 +35,7 @@
         android:layout_marginLeft="20dp"
         android:layout_gravity="center"
         android:textSize="12sp"
-        android:textColor="@color/color_white"
+        android:textColor="@color/color_text"
         android:background="@color/colorPrimary"
         android:text="小店"/>
 </LinearLayout>

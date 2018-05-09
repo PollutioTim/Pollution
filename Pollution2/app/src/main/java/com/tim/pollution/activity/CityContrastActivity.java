@@ -76,7 +76,7 @@ public class CityContrastActivity extends AppCompatActivity implements ICallBack
     TextView cityContrastSp3;
     @BindView(R.id.city_contrast_chart)
     LineChartView cityContrastChart;
-    @BindView(R.id.city_contrast_info)
+//    @BindView(R.id.city_contrast_info)
     TextView cityContrastInfo;
     @BindView(R.id.city_contrast_rbpm25_type)
     RadioButton cityContrastRbpm25Type;

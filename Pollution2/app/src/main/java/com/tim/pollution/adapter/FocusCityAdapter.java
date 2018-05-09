@@ -31,9 +31,18 @@ public class FocusCityAdapter extends RecyclerView.Adapter<FocusCityAdapter.View
     private List<RegionNetBean.RegionBean>data;
     private int selectedPosition = -5; //默认一个参数
 
+//    private List<String> focusCity=new ArrayList<>();
+    private List<String> regionBeans;
     public FocusCityAdapter(Context context, List<RegionNetBean.RegionBean> cityBeens){
         this.context = context;
         this.data = cityBeens;
+        regionBeans=CityListSaveUtil.getList(context,CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY);
+//        focusCity.addAll(regionBeans);
+
+    }
+
+    public List<String> getFocusCity(){
+        return regionBeans;
     }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -44,7 +53,7 @@ public class FocusCityAdapter extends RecyclerView.Adapter<FocusCityAdapter.View
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.tvName.setText(data.get(position).getRegionName());
-        List<String> regionBeans=CityListSaveUtil.getList(context,CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY);
+        regionBeans=CityListSaveUtil.getList(context,CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY);
         if(regionBeans==null){
             regionBeans=new ArrayList<String>();
         }
@@ -58,7 +67,7 @@ public class FocusCityAdapter extends RecyclerView.Adapter<FocusCityAdapter.View
             public void onClick(View v) {
 
                 //tcy  tijiao 
-                List<String> regionBeans=CityListSaveUtil.getList(context,CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY);
+
                 if(regionBeans==null){
                     regionBeans=new ArrayList<String>();
                 }
@@ -67,12 +76,12 @@ public class FocusCityAdapter extends RecyclerView.Adapter<FocusCityAdapter.View
                 if(regionBeans.contains(data.get(position).getRegionId())){
                     holder.ivSelect.setVisibility(View.INVISIBLE);
                     regionBeans.remove(data.get(position).getRegionId());
-                    CityListSaveUtil.putList(context,CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY,regionBeans);
+//                    CityListSaveUtil.putList(context,CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY,regionBeans);
                 }else{
                     holder.ivSelect.setVisibility(View.VISIBLE);
                     regionBeans.add(data.get(position).getRegionId());
                     List newList = new ArrayList(new HashSet(regionBeans));
-                    CityListSaveUtil.putList(context,CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY,newList);
+//                    CityListSaveUtil.putList(context,CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY,newList);
                 }
 
 //                Intent intent =  new Intent(context, MapActivity.class);

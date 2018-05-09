@@ -102,6 +102,7 @@
                     android:layout_height="wrap_content"
 
                     android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="10dp"
                     android:text="太原 18.03.27 15：00"
 
                     android:textColor="@color/color_white"
@@ -727,7 +728,7 @@
 
                 android:layout_width="match_parent"
 
-                android:layout_height="300dp"
+                android:layout_height="150dp"
 
                 android:layout_margin="10dp"
 

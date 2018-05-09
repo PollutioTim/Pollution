@@ -6,6 +6,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tim.pollution.R;
@@ -21,6 +22,7 @@ import com.tim.pollution.general.MData;
 import com.tim.pollution.general.MDataType;
 import com.tim.pollution.net.MapDAL;
 import com.tim.pollution.net.WeatherDal;
+import com.tim.pollution.utils.CityListSaveUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +43,8 @@ public class FocusCityActivity extends BaseActivity implements ICallBack {
     RecyclerView recyclerView;
     @BindView(R.id.city_back_iv)
     ImageView ivBack;
+    @BindView(R.id.city_focus)
+    TextView tvFocus;
     private List<RegionNetBean.RegionBean>cityBeens;
 
     private FocusCityAdapter adapter;
@@ -57,12 +61,24 @@ public class FocusCityActivity extends BaseActivity implements ICallBack {
     @Override
     public void initView() {
         cityBeens = new ArrayList<>();
-
+        tvFocus.setVisibility(View.VISIBLE);
         adapter = new FocusCityAdapter(this,cityBeens);
         lm = new GridLayoutManager(this,4);
         recyclerView.setLayoutManager(lm);
         recyclerView.setAdapter(adapter);
         loadRegionData();
+        tvFocus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                adapter.getFocusCity();
+                try{
+                    CityListSaveUtil.putList(FocusCityActivity.this,CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY,adapter.getFocusCity());
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                FocusCityActivity.this.finish();
+            }
+        });
     }
     /**
      * 加载县区列表

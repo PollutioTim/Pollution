@@ -153,7 +153,7 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
                 String name = "w" + regionWeather.getMessage().getRegionList().getWeathercode();
                 weatherInfoImg.setImageResource(getImageResourceId(name));
                 weatherTemperature.setText(regionWeather.getMessage().getRegionList().getTemperature() + " °C");
-                weatherWind.setText(regionWeather.getMessage().getRegionList().getWind() + "\n" + "湿度" + regionWeather.getMessage().getRegionList().getHumidity() + "%");
+                weatherWind.setText(regionWeather.getMessage().getRegionList().getWind() +" "+regionWeather.getMessage().getRegionList().getWeather() +"\n" + "湿度" + regionWeather.getMessage().getRegionList().getHumidity() + "%");
                 weatherPm25.setText(regionWeather.getMessage().getRegionList().getPM25());
                 weatherPm25Pro.setMaxCount(500);
                 weatherPm25Pro.setCurrentCount(getIntFromString(regionWeather.getMessage().getRegionList().getPM25()));
@@ -327,7 +327,13 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
 
     public int getImageResourceId(String name) {
         Context ctx = getContext();
-        int resId = getResources().getIdentifier(name, "mipmap", ctx.getPackageName());
+        int resId=0;
+        try{
+            resId = getResources().getIdentifier(name, "mipmap", ctx.getPackageName());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         //如果没有在"mipmap"下找到imageName,将会返回0
         return resId;
     }

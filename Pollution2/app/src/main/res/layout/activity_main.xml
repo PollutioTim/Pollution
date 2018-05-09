@@ -16,28 +16,30 @@
     <RadioGroup
         android:id="@+id/home_rg"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/black"
         android:gravity="center"
         android:orientation="horizontal"
+        android:checkedButton="@+id/home_main"
         android:weightSum="5">
 
         <RadioButton
             android:id="@+id/home_main"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginBottom="10px"
-            android:layout_marginTop="10px"
             android:layout_weight="1"
             android:button="@null"
-            android:textSize="24px"
             android:drawablePadding="4dp"
+            android:drawableTop="@drawable/home_selecter"
             android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
             android:singleLine="true"
-            android:textColor="@color/color_white"
             android:tag="{0,10,0,10}(24)"
-            android:text="首页" />
+            android:text="首页"
+            android:textColor="@color/color_white"
+            android:textSize="24px" />
 
         <RadioButton
             android:id="@+id/home_map"
@@ -47,11 +49,14 @@
             android:button="@null"
             android:drawablePadding="4dp"
             android:gravity="center"
-            android:textSize="24px"
-            android:tag="{0,10,0,10}(24)"
-            android:textColor="@color/color_white"
             android:singleLine="true"
-            android:text="地图" />
+            android:tag="{0,10,0,10}(24)"
+            android:text="地图"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:drawableTop="@drawable/map_selecter"
+            android:textColor="@color/color_white"
+            android:textSize="24px" />
 
         <RadioButton
             android:id="@+id/home_sellers"
@@ -60,25 +65,32 @@
             android:layout_weight="1"
             android:button="@null"
             android:drawablePadding="4dp"
-            android:textColor="@color/color_white"
+            android:drawableTop="@drawable/sort_selecter"
             android:gravity="center"
-            android:textSize="24px"
-            android:tag="{0,10,0,10}(24)"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
             android:singleLine="true"
-            android:text="排行" />
+            android:tag="{0,10,0,10}(24)"
+            android:text="排行"
+            android:textColor="@color/color_white"
+            android:textSize="24px" />
+
         <RadioButton
             android:id="@+id/home_pk"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:textColor="@color/color_white"
             android:button="@null"
             android:drawablePadding="4dp"
+            android:drawableTop="@drawable/pk_selecter"
             android:gravity="center"
-            android:textSize="24px"
-            android:tag="{0,10,0,10}(24)"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
             android:singleLine="true"
-            android:text="对比" />
+            android:tag="{0,10,0,10}(24)"
+            android:text="对比"
+            android:textColor="@color/color_white"
+            android:textSize="24px" />
 
         <RadioButton
             android:id="@+id/home_about"
@@ -88,6 +100,9 @@
             android:button="@null"
             android:drawablePadding="4dp"
             android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:drawableTop="@drawable/about_selecter"
             android:textColor="@color/color_white"
             android:textSize="24px"
             android:tag="{0,10,0,10}(24)"
