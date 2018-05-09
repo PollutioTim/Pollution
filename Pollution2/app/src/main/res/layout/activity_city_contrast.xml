@@ -128,7 +128,7 @@
                 <lecho.lib.hellocharts.view.LineChartView
                     android:id="@+id/city_contrast_chart"
                     android:layout_width="wrap_content"
-                    android:layout_height="200dp"
+                    android:layout_height="150dp"
                     android:layout_margin="10dp"
                     android:layout_marginTop="30dp"
                     android:layout_weight="1" />
@@ -157,8 +157,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:background="#FF9DD4D6"
-                        android:paddingLeft="3dp"
-                        android:paddingRight="3dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:paddingTop="5dp"
                         android:orientation="horizontal">
 
                         <TextView
@@ -167,7 +168,8 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:background="#FF9DD4D6"
-                            android:gravity="center"
+                            android:gravity="left"
+                            android:text="AQI"
                             android:textColor="@color/color_white"
                             android:textSize="12sp" />
 
@@ -179,6 +181,7 @@
                             android:background="#FF9DD4D6"
                             android:gravity="right"
                             android:paddingLeft="3dp"
+                            android:text="2018-04-30"
                             android:textColor="@color/color_white"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -186,8 +189,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#FF9DD4D6"
-                        android:paddingLeft="3dp"
-                        android:paddingRight="3dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
                         android:orientation="horizontal">
 
                         <TextView
@@ -196,7 +199,7 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:background="#FF9DD4D6"
-                            android:gravity="center"
+                            android:gravity="left"
                             android:textColor="@color/color_white"
                             android:textSize="12sp" />
 
@@ -216,8 +219,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#FF9DD4D6"
-                        android:paddingLeft="3dp"
-                        android:paddingRight="3dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
                         android:orientation="horizontal">
 
                         <TextView
@@ -226,7 +229,7 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:background="#FF9DD4D6"
-                            android:gravity="center"
+                            android:gravity="left"
                             android:textColor="@color/color_white"
                             android:textSize="12sp" />
 
@@ -246,8 +249,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#FF9DD4D6"
-                        android:paddingLeft="3dp"
-                        android:paddingRight="3dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:paddingBottom="5dp"
                         android:orientation="horizontal">
 
                         <TextView
@@ -256,7 +260,7 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:background="#FF9DD4D6"
-                            android:gravity="center"
+                            android:gravity="left"
                             android:textColor="@color/color_white"
                             android:textSize="12sp" />
 
