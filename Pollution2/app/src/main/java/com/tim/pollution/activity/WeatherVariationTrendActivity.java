@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -65,7 +66,7 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
     @BindView(R.id.weather_detail_rg_type)
     RadioGroup weatherDetailRgType;
     @BindView(R.id.weather_detail_list)
-    WrapContentListView weatherDetailList;
+    ListView weatherDetailList;
     @BindView(R.id.weather_detail_rb12_time)
     RadioButton weatherDetailRb12Time;
     @BindView(R.id.weather_detail_rb24_time)

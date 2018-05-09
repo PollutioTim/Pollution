@@ -7,10 +7,10 @@
     android:background="@mipmap/weather_background"
     android:orientation="vertical">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="none">
+    <!--<ScrollView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:scrollbars="none">-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -54,7 +54,7 @@
 
                 <View
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_weight="1" />
 
                 <RadioButton
@@ -70,7 +70,7 @@
 
                 <View
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_weight="1" />
 
                 <RadioButton
@@ -86,7 +86,7 @@
 
                 <View
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_weight="1" />
                 />
 
@@ -103,7 +103,7 @@
 
                 <View
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_weight="1" />
             </RadioGroup>
 
@@ -222,11 +222,11 @@
                     android:textColor="@color/color_white" />
             </LinearLayout>
 
-            <com.tim.pollution.view.WrapContentListView
+            <ListView
                 android:id="@+id/weather_detail_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scrollbars="none"></com.tim.pollution.view.WrapContentListView>
+                android:scrollbars="none"></ListView>
         </LinearLayout>
-    </ScrollView>
+    <!--</ScrollView>-->
 </LinearLayout>

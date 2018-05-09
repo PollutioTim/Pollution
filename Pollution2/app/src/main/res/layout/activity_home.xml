@@ -8,12 +8,12 @@
     android:orientation="vertical"
     tools:context="com.tim.pollution.fragment.FirstPageFragment">
 
-   <!-- <ScrollView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:scrollbars="none">-->
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -99,12 +99,12 @@
                 android:orientation="horizontal"
                 android:padding="10dp" />
 
-            <ScrollView
+           <!-- <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:scrollbars="none">
+                android:scrollbars="none">-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -278,9 +278,9 @@
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-            </ScrollView>
+ <!--           </ScrollView>-->
         </LinearLayout>
-  <!--  </ScrollView>-->
+    </ScrollView>
     <!--</LinearLayout>-->
     <!--</android.support.v4.widget.SwipeRefreshLayout>-->
 </LinearLayout>
