@@ -32,12 +32,14 @@ import com.tim.pollution.general.Constants;
 import com.tim.pollution.general.MData;
 import com.tim.pollution.general.MDataType;
 import com.tim.pollution.net.WeatherDal;
+import com.tim.pollution.utils.DateUtil;
 import com.tim.pollution.view.ProgressView;
 import com.woodnaonly.arcprogress.ArcProgress;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -145,7 +147,7 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
         if (regionWeather != null) {
             if (regionWeather.getMessage().getRegionList() != null) {
 //                weatherTitleLocation.setText(regionWeather.getMessage().getRegionList().getRegionName());
-                weatherLocationTime.setText(regionWeather.getMessage().getRegionList().getRegionName()+" " + regionWeather.getMessage().getRegionList().getTime());
+                weatherLocationTime.setText(regionWeather.getMessage().getRegionList().getRegionName()+" " + switchTime(regionWeather.getMessage().getRegionList().getTime()));
                 weatherArcProgress.setProgressTextTop(regionWeather.getMessage().getRegionList().getPollutionLevel());
                 weatherArcProgress.setProgressTextBottom("首要污染物 " + regionWeather.getMessage().getRegionList().getTopPollution());
                 weatherArcProgress.setProgress(Double.valueOf(getTopPollutionPrograss(regionWeather, regionWeather.getMessage().getRegionList().getTopPollution())));
@@ -185,7 +187,15 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
 
 
     }
+    private String switchTime(String time) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            return sdf.format(DateUtil.strToDateLong(time));
+        } catch (Exception e) {
+            return time;
+        }
 
+    }
     private Activity activity;
 
     public Context getContext() {
