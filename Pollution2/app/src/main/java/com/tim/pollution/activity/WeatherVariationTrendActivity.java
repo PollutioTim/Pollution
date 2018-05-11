@@ -171,26 +171,34 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
         }
         int id = weatherDetailRgType.getCheckedRadioButtonId();
         List<DataInfoBean> initData = new ArrayList<>();
+        String type="";
         if (id == R.id.weather_detail_rbpm25_type) {
             initData = changeTrend.getMessage().getPM25_data();
+            type="PM2.5";
         } else if (id == R.id.weather_detail_rbpm10_type) {
             initData = changeTrend.getMessage().getPM10_data();
+            type="PM10";
         } else if (id == R.id.weather_detail_rbso2_type) {
             initData = changeTrend.getMessage().getSO2_data();
+            type="SO₂";
         } else if (id == R.id.weather_detail_rbno2_type) {
             initData = changeTrend.getMessage().getNO2_data();
+            type="NO₂";
         } else if (id == R.id.weather_detail_rbo3_type) {
             initData = changeTrend.getMessage().getO3_data();
+            type="O₃";
         } else if (id == R.id.weather_detail_rbco_type) {
             initData = changeTrend.getMessage().getCO_data();
+            type="CO";
         }else if(id==R.id.weather_detail_rbaqi_type){
             initData = changeTrend.getMessage().getAQI_data();
+            type="AQI";
         }
         if(initData==null){
             return;
         }
         weatherDetailList.setAdapter(new ChangeTrendAdapter(this, initData));
-        initChart(initData);
+        initChart(initData,type);
 
     }
 
@@ -199,7 +207,7 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
     /**
      * 初始化图标
      */
-    private void initChart(List<DataInfoBean> initData) {
+    private void initChart(List<DataInfoBean> initData,String type) {
 //        weatherDetailChart
 
         if (initData != null) {
@@ -224,7 +232,9 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
                 for (int j = 0; j < numSubcolumns; ++j) {
                     //创建一个柱子，然后设置值和颜色，并添加到list中
                     if(list.get(i).getValue()!=null){
-                        values.add(new SubcolumnValue(Float.valueOf(list.get(i).getValue()), Color.parseColor(list.get(i).getValuecolor())));
+                        SubcolumnValue sub = new SubcolumnValue(Float.valueOf(list.get(i).getValue()), Color.parseColor(list.get(i).getValuecolor()));
+                        sub.setLabel(type+" "+Float.valueOf(list.get(i).getValue()));
+                        values.add(sub);
                     }
                     //设置X轴的柱子所对应的属性名称
                     String time = list.get(i).getTime();
@@ -256,7 +266,7 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
                     column.setHasLabels(false);
                 }
                 //设置每个柱子的Lable是否选中，为false，表示不用选中，一直显示在柱子上
-                column.setHasLabelsOnlyForSelected(false);
+                column.setHasLabelsOnlyForSelected(true);
                 //将每个属性得列全部添加到List中
                 columns.add(column);
             }
@@ -269,9 +279,10 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
             data.setAxisYLeft(new Axis().setHasLines(false).setTextColor(Color.WHITE).setMaxLabelChars(5));
             //最后将所有值显示在View中
             weatherDetailChart.setColumnChartData(data);
+            weatherDetailChart.setZoomEnabled(false);
             Viewport v = new Viewport(weatherDetailChart.getMaximumViewport());
             v.bottom = 0f;
-            v.top += 30f;
+            v.top += v.top*0.2;
 
             //固定Y轴的范围,如果没有这个,Y轴的范围会根据数据的最大值和最小值决定,这不是我想要的
             weatherDetailChart.setMaximumViewport(v);
