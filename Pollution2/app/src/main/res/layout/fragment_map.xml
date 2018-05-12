@@ -10,30 +10,18 @@
         android:background="@color/gree_blue">
 
         <TextView
-            android:id="@+id/map_time_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="46dp"
-            android:textColor="@color/color_white"
-            android:textSize="14sp"
-            android:gravity="center"
-            android:layout_marginLeft="12dp"
-            android:text="08.04.03  15:00"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            />
-
-        <TextView
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="46dp"
             android:textColor="@color/color_white"
             android:textSize="18sp"
-            android:text="地图"
+            android:text="污染地图"
             android:gravity="center"
             />
 
         <TextView
             android:id="@+id/map_swicth_tv"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="46dp"
             android:textColor="@color/color_white"
@@ -55,10 +43,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </com.baidu.mapapi.map.MapView>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:background="#7e7a7a7a"
+            android:background="#90000000"
             android:weightSum="7"
             android:orientation="horizontal">
             <TextView
@@ -226,13 +215,30 @@
                 />
 
         </LinearLayout>
+        <TextView
+            android:id="@+id/map_time_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="46dp"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:layout_gravity="top|center"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="12dp"
+            android:text="08.04.03  15:00"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/map_recyview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#7e7a7a7a"
-            android:layout_gravity="center|left"/>
+            android:background="@drawable/shape_map_color_bg"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:padding="5dp"
+            android:layout_gravity="bottom|right"/>
         
 
     </FrameLayout>

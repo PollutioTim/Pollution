@@ -69,7 +69,7 @@
                         android:id="@+id/phone_number_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1234-5566"
+                        android:text="0351-6269800"
                         android:textColor="@color/black"
                         android:textSize="12sp"
                         android:layout_marginTop="10dp"
@@ -86,7 +86,7 @@
                         android:id="@+id/location_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="山西省太原市双喜城"
+                        android:text="山西省太原市兴华街11号"
                         android:textColor="@color/black"
                         android:textSize="12sp"
                         android:layout_marginTop="10dp"
@@ -103,7 +103,7 @@
                         android:id="@+id/emial_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2345678@qq.com"
+                        android:text=""
                         android:textColor="@color/black"
                         android:textSize="12sp"
                         android:layout_marginTop="10dp"
@@ -115,7 +115,7 @@
                         android:layout_marginTop="28dp"
                         android:src="@mipmap/ic_hidden_line"/>
 
-                    <TextView
+                    <ImageView
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:layout_gravity="center"
@@ -123,7 +123,7 @@
                         android:text="LOGO"
                         android:gravity="center"
                         android:textColor="@color/color_white"
-                        android:background="@drawable/shape_circle_blue"/>
+                        android:src="@drawable/ic_conn"/>
 
 
                     <TextView

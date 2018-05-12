@@ -2,15 +2,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="wrap_content"
     android:layout_height="wrap_content">
-    <TextView
-        android:id="@+id/maker_tv"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:text="B"
-        android:textColor="@color/color_white"
-        android:textSize="12sp"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:background="@drawable/shape_circle_blue"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/maker_border_tv"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:text="B"
+            android:textSize="12sp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@drawable/shape_circle_blue"/>
+        <TextView
+            android:id="@+id/maker_tv"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:text="B"
+            android:textColor="@color/color_white"
+            android:textSize="12sp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@drawable/shape_circle_blue"/>
+
+    </FrameLayout>
 
 </LinearLayout>

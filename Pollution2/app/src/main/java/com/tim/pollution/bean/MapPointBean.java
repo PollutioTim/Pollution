@@ -42,6 +42,7 @@ public class MapPointBean extends StateCode implements Serializable {
 //                "Qiya":"855",
 //                "QiWen":"22",
 //                "ShiDu":"18"
+        //Q_AQIcolor
         @SerializedName("PointCode")
         private String pointCode;
         @SerializedName("PointName")
@@ -58,6 +59,8 @@ public class MapPointBean extends StateCode implements Serializable {
         private String AQI;
         @SerializedName("AQIcolor")
         private String AQIColor;
+        @SerializedName("Q_AQIcolor")
+        private String QAqiColor;
         @SerializedName("SO2")
         private String So2;
         @SerializedName("NO2")
@@ -231,6 +234,14 @@ public class MapPointBean extends StateCode implements Serializable {
 
         public void setShiDu(String shiDu) {
             ShiDu = shiDu;
+        }
+
+        public String getQAqiColor() {
+            return QAqiColor;
+        }
+
+        public void setQAqiColor(String QAqiColor) {
+            this.QAqiColor = QAqiColor;
         }
     }
 }

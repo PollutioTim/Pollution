@@ -6,6 +6,7 @@ import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -13,13 +14,11 @@ import com.tim.pollution.R;
 import com.tim.pollution.adapter.ChangeTrendAdapter;
 import com.tim.pollution.bean.changetrend.ChangeTrend;
 import com.tim.pollution.bean.changetrend.DataInfoBean;
-import com.tim.pollution.bean.weather.AQI24hBean;
 import com.tim.pollution.callback.ICallBack;
 import com.tim.pollution.general.Constants;
 import com.tim.pollution.general.MData;
 import com.tim.pollution.general.MDataType;
 import com.tim.pollution.net.WeatherDal;
-import com.tim.pollution.view.WrapContentListView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,6 +33,7 @@ import lecho.lib.hellocharts.model.Column;
 import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.SubcolumnValue;
 import lecho.lib.hellocharts.view.ColumnChartView;
+
 
 public class WeatherDetailActivity extends AppCompatActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener, ICallBack {
 
@@ -58,7 +58,7 @@ public class WeatherDetailActivity extends AppCompatActivity implements View.OnC
     @BindView(R.id.weather_detail_rg_type)
     RadioGroup weatherDetailRgType;
     @BindView(R.id.weather_detail_list)
-    WrapContentListView weatherDetailList;
+    ListView weatherDetailList;
     @BindView(R.id.weather_detail_rb12_time)
     RadioButton weatherDetailRb12Time;
     @BindView(R.id.weather_detail_rb24_time)

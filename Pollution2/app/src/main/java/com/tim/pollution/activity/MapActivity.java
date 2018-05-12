@@ -111,7 +111,6 @@ public class MapActivity extends BaseActivity implements ICallBack,
         isFirst = true;
         regionid =intent .getStringExtra("id");
         regiontype = "region";
-        Log.e("lili","regionid============="+regionid);
         init();
     }
 
@@ -126,6 +125,7 @@ public class MapActivity extends BaseActivity implements ICallBack,
         SDKInitializer.initialize(this.getApplicationContext());
         mCurrentMode = MyLocationConfiguration.LocationMode.NORMAL;
         mBaiduMap = mapView.getMap();
+        mapView.showZoomControls(false);
         mBaiduMap.setMyLocationConfigeration(new MyLocationConfiguration(mCurrentMode,
                 true, null));
         lm = new LinearLayoutManager(this);
@@ -255,7 +255,6 @@ public class MapActivity extends BaseActivity implements ICallBack,
         parms.put("regionid", regionid);
         MapDAL.getInstance().getPointClickData(parms, this);
     }
-
     /**
      * 数据请求
      *
@@ -281,7 +280,7 @@ public class MapActivity extends BaseActivity implements ICallBack,
             initPoint();
         } else if (data1.getType().equals(MDataType.MAP_POINT_DATA)) {//获得站点详情
             MapPointBean bean = (MapPointBean) data1.getData();
-            if(points.size()>0 && !llAll.isSelected()){
+            if(points.size()>0 && llAll.isSelected()){
                 points.clear();
             }
             points.addAll(bean.getMessages());
@@ -293,6 +292,7 @@ public class MapActivity extends BaseActivity implements ICallBack,
             }
         } else if (data1.getType().equals(MDataType.MAP_POINT_CLICK_DATA)) {//轮播
             ClickPointBean bean = (ClickPointBean) data1.getData();
+
         }
     }
 
@@ -300,7 +300,6 @@ public class MapActivity extends BaseActivity implements ICallBack,
         if(llAll.isSelected()){
             for(ClickMapBean city:clickMapBeens){
                 regionid = city.getRegionId();
-                Log.e("lili","regionid=llAll="+regionid);
                 initPoint();
             }
         }else {
@@ -315,7 +314,7 @@ public class MapActivity extends BaseActivity implements ICallBack,
             LatLng ll = new LatLng(latitude,longtitude);
             MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(ll);
             mBaiduMap.animateMapStatus(update);
-            update = MapStatusUpdateFactory.zoomTo(12f);
+            update = MapStatusUpdateFactory.zoomTo(16f);
             mBaiduMap.animateMapStatus(update);
 
             MyLocationData.Builder locationBuilder = new MyLocationData.Builder();
@@ -331,10 +330,17 @@ public class MapActivity extends BaseActivity implements ICallBack,
 
     private void setMarker(MapPointBean.PointBean clickMapBean, LatLng latLng) {
         View markView = View.inflate(getApplicationContext(), R.layout.icon_maker, null);
+        TextView tvBorder = (TextView) markView.findViewById(R.id.maker_border_tv);
         TextView tvBg = (TextView) markView.findViewById(R.id.maker_tv);
         tvBg.setBackgroundResource(R.drawable.shape_circle_blue);
+        tvBorder.setBackgroundResource(R.drawable.shape_circle_blue);
+
         GradientDrawable drawable = (GradientDrawable) tvBg.getBackground();
+        GradientDrawable drawables = (GradientDrawable) tvBorder.getBackground();
+
+        drawables.setColor(Color.parseColor(clickMapBean.getQAqiColor()));
         drawable.setColor(Color.parseColor(clickMapBean.getAQIColor()));
+
         tvBg.setText(clickMapBean.getAQI());
         //将View转换为BitmapDescriptor
         BitmapDescriptor descriptor = BitmapDescriptorFactory.fromView(markView);

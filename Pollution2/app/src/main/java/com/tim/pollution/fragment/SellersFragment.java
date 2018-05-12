@@ -300,7 +300,6 @@ public class SellersFragment extends Fragment implements ICallBack {
                     }
                     tvIndex.setText("AQI");
                     tvO3.setText("O3");
-                    Log.e("lili","rankType="+ranktype+"dataType="+datatype+"pointtype="+pointtype);
                     getData();
                 }
                 break;
@@ -314,8 +313,8 @@ public class SellersFragment extends Fragment implements ICallBack {
                     vLast.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
                     recviewMonth.setVisibility(View.VISIBLE);
-                    tvIndex.setText("ZH");
-                    tvO3.setText("O3_8H");
+                    tvIndex.setText("综指");
+                    tvO3.setText("3_8H");
                     getData();
                 }
                 break;
@@ -330,7 +329,7 @@ public class SellersFragment extends Fragment implements ICallBack {
                     recyclerView.setVisibility(View.VISIBLE);
                     recviewMonth.setVisibility(View.GONE);
                     tvIndex.setText("AQI");
-                    tvO3.setText("O3_8H");
+                    tvO3.setText("3_8H");
                     getData();
                 }
                 break;
@@ -345,7 +344,7 @@ public class SellersFragment extends Fragment implements ICallBack {
                     recyclerView.setVisibility(View.VISIBLE);
                     recviewMonth.setVisibility(View.GONE);
                     tvIndex.setText("AQI");
-                    tvO3.setText("O3_8H");
+                    tvO3.setText("3_8H");
                     getData();
                 }
                 break;
@@ -359,7 +358,6 @@ public class SellersFragment extends Fragment implements ICallBack {
                     pointtype = "G";
                     tvSwitch.setSelected(true);
                 }
-                Log.e("lili","rankType="+ranktype+"dataType="+datatype+"pointtype="+pointtype);
                 getData();
                 break;
             case R.id.sellers_o_3:
@@ -378,7 +376,7 @@ public class SellersFragment extends Fragment implements ICallBack {
                     tvTitleType.setText("AQI");
                 } else {
                     ranktype = "ZH";
-                    tvTitleType.setText("ZH");
+                    tvTitleType.setText("综指");
                 }
                 getData();
                 break;

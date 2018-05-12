@@ -73,10 +73,12 @@ import com.tim.pollution.general.MDataType;
 import com.tim.pollution.general.MessageEvent;
 import com.tim.pollution.net.MapDAL;
 import com.tim.pollution.utils.ConstUtils;
+import com.tim.pollution.utils.DateUtil;
 import com.tim.pollution.utils.LocationUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -166,6 +168,7 @@ public class MapFragment extends Fragment implements ICallBack,
         View view = inflater.inflate(R.layout.fragment_map, null);
         ButterKnife.bind(this, view);
         mapView = (MapView) view.findViewById(R.id.fg_mTexturemap);
+        mapView.showZoomControls(false);
         mCurrentMode = MyLocationConfiguration.LocationMode.NORMAL;
         mBaiduMap = mapView.getMap();
         mBaiduMap.setMyLocationConfigeration(new MyLocationConfiguration(mCurrentMode,
@@ -188,6 +191,16 @@ public class MapFragment extends Fragment implements ICallBack,
         parms.put("key", Constants.key);
         parms.put("regiontype", "area");
         MapDAL.getInstance().getCityData(parms, this);
+    }
+
+    private String switchTime(String time) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            return sdf.format(DateUtil.strToDateLong(time));
+        } catch (Exception e) {
+            return time;
+        }
+
     }
 
     @Override
@@ -222,7 +235,7 @@ public class MapFragment extends Fragment implements ICallBack,
                 cityBeens.clear();
             }
             cityBeens = mapBean.getMessage().getCityBeens();
-            tvTime.setText(mapBean.getMessage().getTime());
+            tvTime.setText(switchTime(mapBean.getMessage().getTime()));
             if (datas.size() > 0) {
                 datas.clear();
             }
@@ -308,27 +321,33 @@ public class MapFragment extends Fragment implements ICallBack,
         OverlayOptions ooPolygon = null;
         if (colorType.equals("AQI")) {
             ooPolygon = new PolygonOptions().points(polyline).
-                    fillColor(Color.parseColor(cityBean.getAQIColor()));
+                    fillColor(Color.parseColor(insertStr(cityBean.getAQIColor())));
         } else if (colorType.equals("PM25")) {
             ooPolygon = new PolygonOptions().points(polyline).
-                    fillColor(Color.parseColor(cityBean.getPM25Color()));
+                    fillColor(Color.parseColor(insertStr(cityBean.getPM25Color())));
         } else if (colorType.equals("PM10")) {
             ooPolygon = new PolygonOptions().points(polyline).
-                    fillColor(Color.parseColor(cityBean.getPM10Color()));
+                    fillColor(Color.parseColor(insertStr(cityBean.getPM10Color())));
         } else if (colorType.equals("NO2")) {
             ooPolygon = new PolygonOptions().points(polyline).
-                    fillColor(Color.parseColor(cityBean.getNO2Color()));
+                    fillColor(Color.parseColor(insertStr(cityBean.getNO2Color())));
         } else if (colorType.equals("SO2")) {
             ooPolygon = new PolygonOptions().points(polyline).
-                    fillColor(Color.parseColor(cityBean.getSO2Color()));
+                    fillColor(Color.parseColor(insertStr(cityBean.getSO2Color())));
         } else if (colorType.equals("O3")) {
             ooPolygon = new PolygonOptions().points(polyline).
-                    fillColor(Color.parseColor(cityBean.getO3Color()));
+                    fillColor(Color.parseColor(insertStr(cityBean.getO3Color())));
         } else if (colorType.equals("CO")) {
             ooPolygon = new PolygonOptions().points(polyline).
-                    fillColor(Color.parseColor(cityBean.getCOColor()));
+                    fillColor(Color.parseColor(insertStr(cityBean.getCOColor())));
         }
         mBaiduMap.addOverlay(ooPolygon);//添加OverLay
+    }
+
+    private String insertStr(String colors){
+        StringBuilder  sb = new StringBuilder (colors);
+        sb.insert(1, "90");
+        return sb.toString();
     }
 
     @OnClick({R.id.no_2, R.id.map_aqi_tv, R.id.pm_25, R.id.pm_10, R.id.so_2,
