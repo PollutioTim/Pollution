@@ -14,7 +14,7 @@
             android:layout_height="46dp"
             android:textColor="@color/color_white"
             android:textSize="17sp"
-            android:text="地图"
+            android:text="污染地图"
             android:gravity="center"
             />
 
@@ -73,17 +73,21 @@
             android:id="@+id/map_ac_recyview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#7e7a7a7a"
-            android:layout_gravity="center|left"/>
+            android:padding="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/shape_map_color_bg"
+            android:layout_gravity="top|left"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#7e484848"
+            android:background="@drawable/shape_map_city_bg"
             android:layout_gravity="bottom"
             android:orientation="vertical">
 
             <LinearLayout
+                android:visibility="gone"
                 android:layout_marginTop="14dp"
                 android:layout_marginLeft="15dp"
                 android:layout_width="match_parent"

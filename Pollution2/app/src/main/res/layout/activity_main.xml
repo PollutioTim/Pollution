@@ -71,7 +71,7 @@
             android:paddingTop="10dp"
             android:singleLine="true"
             android:tag="{0,10,0,10}(24)"
-            android:text="排行"
+            android:text="排名"
             android:textColor="@color/color_white"
             android:textSize="24px" />
 
