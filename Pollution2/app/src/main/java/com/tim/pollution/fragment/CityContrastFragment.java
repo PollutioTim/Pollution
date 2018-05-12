@@ -341,33 +341,33 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         }
         int id = cityContrastRgType.getCheckedRadioButtonId();
         if (id == R.id.city_contrast_rbpm25_type) {
-            lines.add(getLine(citys.get(1).getPM25_data(), "#FFF1C55F"));
-            lines.add(getLine(citys.get(2).getPM25_data(), "#FF47F646"));
-            lines.add(getLine(citys.get(3).getPM25_data(), "#FF42DAFC"));
+            lines.add(getLine(citys.get(1).getPM25_data(), "#FFF1C55F","PM2.5"));
+            lines.add(getLine(citys.get(2).getPM25_data(), "#FF47F646","PM2.5"));
+            lines.add(getLine(citys.get(3).getPM25_data(), "#FF42DAFC","PM2.5"));
         } else if (id == R.id.city_contrast_rbpm10_type) {
-            lines.add(getLine(citys.get(1).getPM10_data(), "#FFF1C55F"));
-            lines.add(getLine(citys.get(2).getPM10_data(), "#FF47F646"));
-            lines.add(getLine(citys.get(3).getPM10_data(), "#FF42DAFC"));
+            lines.add(getLine(citys.get(1).getPM10_data(), "#FFF1C55F","PM10"));
+            lines.add(getLine(citys.get(2).getPM10_data(), "#FF47F646","PM10"));
+            lines.add(getLine(citys.get(3).getPM10_data(), "#FF42DAFC","PM10"));
         } else if (id == R.id.city_contrast_rbso2_type) {
-            lines.add(getLine(citys.get(1).getSO2_data(), "#FFF1C55F"));
-            lines.add(getLine(citys.get(2).getSO2_data(), "#FF47F646"));
-            lines.add(getLine(citys.get(3).getSO2_data(), "#FF42DAFC"));
+            lines.add(getLine(citys.get(1).getSO2_data(), "#FFF1C55F","SO₂"));
+            lines.add(getLine(citys.get(2).getSO2_data(), "#FF47F646","SO₂"));
+            lines.add(getLine(citys.get(3).getSO2_data(), "#FF42DAFC","SO₂"));
         } else if (id == R.id.city_contrast_rbno2_type) {
-            lines.add(getLine(citys.get(1).getNO2_data(), "#FFF1C55F"));
-            lines.add(getLine(citys.get(2).getNO2_data(), "#FF47F646"));
-            lines.add(getLine(citys.get(3).getNO2_data(), "#FF42DAFC"));
+            lines.add(getLine(citys.get(1).getNO2_data(), "#FFF1C55F" ,"NO₂"));
+            lines.add(getLine(citys.get(2).getNO2_data(), "#FF47F646","NO₂"));
+            lines.add(getLine(citys.get(3).getNO2_data(), "#FF42DAFC","NO₂"));
         } else if (id == R.id.city_contrast_rbo3_type) {
-            lines.add(getLine(citys.get(1).getO3_data(), "#FFF1C55F"));
-            lines.add(getLine(citys.get(2).getO3_data(), "#FF47F646"));
-            lines.add(getLine(citys.get(3).getO3_data(), "#FF42DAFC"));
+            lines.add(getLine(citys.get(1).getO3_data(), "#FFF1C55F","O₃"));
+            lines.add(getLine(citys.get(2).getO3_data(), "#FF47F646","O₃"));
+            lines.add(getLine(citys.get(3).getO3_data(), "#FF42DAFC","O₃"));
         } else if (id == R.id.city_contrast_rbco_type) {
-            lines.add(getLine(citys.get(1).getCO_data(), "#FFF1C55F"));
-            lines.add(getLine(citys.get(2).getCO_data(), "#FF47F646"));
-            lines.add(getLine(citys.get(3).getCO_data(), "#FF42DAFC"));
+            lines.add(getLine(citys.get(1).getCO_data(), "#FFF1C55F","CO"));
+            lines.add(getLine(citys.get(2).getCO_data(), "#FF47F646","CO"));
+            lines.add(getLine(citys.get(3).getCO_data(), "#FF42DAFC","CO"));
         } else if (id == R.id.city_contrast_rbaqi_type) {
-            lines.add(getLine(citys.get(1).getAQI_data(), "#FFF1C55F"));
-            lines.add(getLine(citys.get(2).getAQI_data(), "#FF47F646"));
-            lines.add(getLine(citys.get(3).getAQI_data(), "#FF42DAFC"));
+            lines.add(getLine(citys.get(1).getAQI_data(), "#FFF1C55F","AQI"));
+            lines.add(getLine(citys.get(2).getAQI_data(), "#FF47F646","AQI"));
+            lines.add(getLine(citys.get(3).getAQI_data(), "#FF42DAFC","AQI"));
         }
         lines.remove(null);
         LineChartData data = new LineChartData(lines);
@@ -502,7 +502,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
     }
 
 
-    private Line getLine(List<DataInfoBean> data, String color) {
+    private Line getLine(List<DataInfoBean> data, String color,String type) {
         if (data == null) {
             Toast.makeText(getContext(),"数据为空，不能作图！",Toast.LENGTH_LONG);
             return null;
@@ -510,7 +510,9 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         List<PointValue> pointValues = new ArrayList<PointValue>();// 节点数据结合
         for (int i = 0; i < data.size(); i++) {
             try{
-                pointValues.add(new PointValue(i, Float.parseFloat(data.get(i).getValue())));
+                PointValue point = new PointValue(i, Float.parseFloat(data.get(i).getValue()));
+                point.setLabel(type+" "+Float.parseFloat(data.get(i).getValue()));
+                pointValues.add(point);
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -526,7 +528,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         line.setHasLines(true);// 是否显示折线
         line.setHasPoints(true);// 是否显示节点
         line.setShape(ValueShape.CIRCLE);// 节点图形样式 DIAMOND菱形、SQUARE方形、CIRCLE圆形
-        line.setHasLabelsOnlyForSelected(false);// 隐藏数据，触摸可以显示
+        line.setHasLabelsOnlyForSelected(true);// 隐藏数据，触摸可以显示
         return line;
     }
 

@@ -33,6 +33,24 @@ public class RegionNetBean extends StateCode implements Serializable {
         private String RegionId;
         private String RegionName;
         private boolean isClick;
+        private List<RegionBean> regionBeens;
+        private boolean isClass;
+
+        public List<RegionBean> getRegionBeens() {
+            return regionBeens;
+        }
+
+        public void setRegionBeens(List<RegionBean> regionBeens) {
+            this.regionBeens = regionBeens;
+        }
+
+        public boolean isClass() {
+            return isClass;
+        }
+
+        public void setClass(boolean aClass) {
+            isClass = aClass;
+        }
 
         public boolean isClick() {
             return isClick;
@@ -59,5 +77,6 @@ public class RegionNetBean extends StateCode implements Serializable {
         public void setRegionName(String RegionName) {
             this.RegionName = RegionName;
         }
+
     }
 }

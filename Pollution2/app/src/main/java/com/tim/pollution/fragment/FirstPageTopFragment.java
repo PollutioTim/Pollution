@@ -150,7 +150,7 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
                 weatherLocationTime.setText(regionWeather.getMessage().getRegionList().getRegionName()+" " + switchTime(regionWeather.getMessage().getRegionList().getTime()));
                 weatherArcProgress.setProgressTextTop(regionWeather.getMessage().getRegionList().getPollutionLevel());
                 weatherArcProgress.setProgressTextBottom("首要污染物 " + regionWeather.getMessage().getRegionList().getTopPollution());
-                weatherArcProgress.setProgress(Double.valueOf(getTopPollutionPrograss(regionWeather, regionWeather.getMessage().getRegionList().getTopPollution())));
+                weatherArcProgress.setProgress(getTopPollutionPrograss(regionWeather, regionWeather.getMessage().getRegionList().getTopPollution()));
                 weatherArcProgress.setFinishedStrokeColor(getTopPollutionPrograssColor(regionWeather, regionWeather.getMessage().getRegionList().getTopPollution()));
                 String name = "w" + regionWeather.getMessage().getRegionList().getWeathercode();
                 weatherInfoImg.setImageResource(getImageResourceId(name));
@@ -302,7 +302,7 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
         return colorDrawable;
     }
 
-    private String getTopPollutionPrograss(RegionWeather regionWeather, String top) {
+    private double getTopPollutionPrograss(RegionWeather regionWeather, String top) {
 //        if (top.contains("PM25")||top.contains("PM2.5")) {
 //            return regionWeather.getMessage().getRegionList().getPM25();
 //        } else if (top.contains("PM10")) {
@@ -316,7 +316,13 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
 //        } else if (top.contains("CO")) {
 //            return regionWeather.getMessage().getRegionList().getCO();
 //        }
-        return regionWeather.getMessage().getRegionList().getAQI();
+        try{
+            return Double.valueOf(regionWeather.getMessage().getRegionList().getAQI());
+        }catch (Exception e){
+            e.printStackTrace();
+            return 0;
+        }
+
     }
     private int getTopPollutionPrograssColor(RegionWeather regionWeather, String top) {
 //        if (top.contains("PM25")||top.contains("PM2.5")) {

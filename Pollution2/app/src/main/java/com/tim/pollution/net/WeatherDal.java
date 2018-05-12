@@ -94,7 +94,7 @@ public class WeatherDal {
                             mData.setData(regionWeather);
                             callBack.onProgress(mData);
                         }else{
-                            callBack.onError("服务器异常",code.getCode()+"");
+                            callBack.onError("系统繁忙，请稍后再试",code.getCode()+"");
                         }
                     }
                 });
@@ -128,7 +128,7 @@ public class WeatherDal {
                             mData.setData(changeTrend);
                             callBack.onProgress(mData);
                         }else{
-                            callBack.onError("服务器异常",code.getCode()+"");
+                            callBack.onError("系统繁忙，请稍后再试",code.getCode()+"");
                         }
                     }
                 });
@@ -160,7 +160,7 @@ public class WeatherDal {
                             mData.setData(pointDataNet);
                             callBack.onProgress(mData);
                         }else{
-                            callBack.onError("服务器异常",code.getCode()+"");
+                            callBack.onError("系统繁忙，请稍后再试",code.getCode()+"");
                         }
                     }
                 });
@@ -193,7 +193,7 @@ public class WeatherDal {
                             mData.setData(dataBankNetBean);
                             callBack.onProgress(mData);
                         }else{
-                            callBack.onError("服务器异常",code.getCode()+"");
+                            callBack.onError("系统繁忙，请稍后再试",code.getCode()+"");
                         }
                     }
                 });
@@ -227,7 +227,7 @@ public class WeatherDal {
                             mData.setData(regionNetBean);
                             callBack.onProgress(mData);
                         }else{
-                            callBack.onError("服务器异常",code.getCode()+"");
+                            callBack.onError("系统繁忙，请稍后再试",code.getCode()+"");
                         }
                     }
                 });
