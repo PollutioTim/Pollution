@@ -336,9 +336,18 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         }
         List<AxisValue> axisXValues = new ArrayList<AxisValue>();
         final List<Line> lines = new ArrayList<Line>();
-        int size1=citys.get(1).getAQI_data().size();
-        int size2=citys.get(2).getAQI_data().size();
-        int size3=citys.get(3).getAQI_data().size();
+        int size1 = 0;
+        int size2 = 0;
+        int size3 = 0;
+        try{
+            size1=citys.get(1).getAQI_data().size();
+        }catch (Exception e){}
+        try{
+            size2=citys.get(2).getAQI_data().size();
+        }catch (Exception e){}
+        try{
+            size3=citys.get(3).getAQI_data().size();
+        }catch (Exception e){}
         int max=Math.max(size1,size2);
         max=Math.max(max,size3);
         if(max==size1){
