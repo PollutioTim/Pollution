@@ -39,6 +39,10 @@
             android:value="N4sLLL2BQYk2Ga04dRlOOahUG7UHOdG2" />
         <!-- android:value="YtPGwLHem5IUXmpkODrgcA89mRp5HVtL"田春艳 -->
         <!-- android:value="N4sLLL2BQYk2Ga04dRlOOahUG7UHOdG2" 李立 -->
+
+        <meta-data
+            android:name="BaiduMobAd_EXCEPTION_LOG"
+            android:value="true" />
         <activity android:name=".MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

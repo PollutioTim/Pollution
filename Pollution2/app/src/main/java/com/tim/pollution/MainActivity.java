@@ -1,5 +1,6 @@
 package com.tim.pollution;
 
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.baidu.mobstat.StatService;
 import com.hjm.bottomtabbar.BottomTabBar;
 import com.tim.pollution.activity.AboutUsActivity;
 import com.tim.pollution.fragment.AboutFragment;
@@ -57,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         Log.d("test","00002");
+        // 设置appKey
+        StatService.setAppKey("a362fc3133");
+        StatService.start(this);
+
         fragments = new ArrayList<>();
         fragments.add(new FirstPageFragment());
         fragments.add(new MapFragment());
