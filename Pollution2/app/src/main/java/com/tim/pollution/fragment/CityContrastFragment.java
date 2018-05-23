@@ -336,8 +336,20 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         }
         List<AxisValue> axisXValues = new ArrayList<AxisValue>();
         final List<Line> lines = new ArrayList<Line>();
-        for (int i = 0; i < citys.get(1).getAQI_data().size(); i++) {
-            axisXValues.add(new AxisValue(i).setLabel(switchTime(citys.get(1).getAQI_data().get(i).getTime())));
+        int size1=citys.get(1).getAQI_data().size();
+        int size2=citys.get(2).getAQI_data().size();
+        int size3=citys.get(3).getAQI_data().size();
+        int max=Math.max(size1,size2);
+        max=Math.max(max,size3);
+        if(max==size1){
+            max=1;
+        }else if(max==size2){
+            max=2;
+        }else{
+            max=3;
+        }
+        for (int i = 0; i < citys.get(max).getAQI_data().size(); i++) {
+            axisXValues.add(new AxisValue(i).setLabel(switchTime(citys.get(max).getAQI_data().get(i).getTime())));
         }
         int id = cityContrastRgType.getCheckedRadioButtonId();
         if (id == R.id.city_contrast_rbpm25_type) {
@@ -371,9 +383,12 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         }
         lines.remove(null);
         LineChartData data = new LineChartData(lines);
-
+        int LabelChars=8;
+        if(axisXValues.size()>25){
+            LabelChars=15;
+        }
         if (true) {
-            data.setAxisXBottom(new Axis(axisXValues).setHasLines(false).setTextColor(Color.WHITE).setName("").setHasTiltedLabels(false).setMaxLabelChars(8));
+            data.setAxisXBottom(new Axis(axisXValues).setHasLines(false).setTextColor(Color.WHITE).setName("").setHasTiltedLabels(false).setMaxLabelChars(LabelChars));
             data.setAxisYLeft(new Axis().setHasLines(false).setName("").setTextColor(Color.WHITE).setMaxLabelChars(4));
         } else {
             data.setAxisXBottom(null);
