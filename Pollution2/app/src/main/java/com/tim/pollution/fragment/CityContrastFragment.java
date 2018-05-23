@@ -339,6 +339,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         int size1 = 0;
         int size2 = 0;
         int size3 = 0;
+
         try{
             size1=citys.get(1).getAQI_data().size();
         }catch (Exception e){}
