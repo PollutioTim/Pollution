@@ -1,5 +1,6 @@
 package com.tim.pollution.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.provider.ContactsContract;
@@ -55,6 +56,7 @@ public class FocusCityActivity extends BaseActivity implements ICallBack {
     private Map<String,String> parms;
     private AlertDialog dialogAgain;
     private StickyRecyclerHeadersDecoration headersDecor;
+    private ProgressDialog pd;
 
     @Override
     public int intiLayout() {
@@ -69,6 +71,7 @@ public class FocusCityActivity extends BaseActivity implements ICallBack {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+        pd = ProgressDialog.show(this, "标题", "加载数据中，请耐心等待......");
         loadData("area",null);
         tvFocus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,8 +102,6 @@ public class FocusCityActivity extends BaseActivity implements ICallBack {
                 if (MDataType.REGIONNET_BEAN.equals(mData.getType())) {
                     if(id==null){
                         regionNetBean = (RegionNetBean) mData.getData();
-
-
                         //            regionNetBean = getTest();
                         if (regionNetBean != null) {
                             size=regionNetBean.getMessage().size();
@@ -111,13 +112,15 @@ public class FocusCityActivity extends BaseActivity implements ICallBack {
                             cityBeens.addAll(regionNetBean.getMessage());
                         }
                     }else{
-
                         if(regionNetBean!=null){
                             regionNetBean.getMessage().get(index).setRegionBeens(((RegionNetBean)mData.getData()).getMessage());
                             if(index==size-1){
                                 cityBeens.clear();
                                 cityBeens.addAll(regionNetBean.getMessage());
                                 recyclerView.setAdapter(new FocusCityWithClassAdapter(FocusCityActivity.this,cityBeens));
+                                if(pd!=null){
+                                    pd.dismiss();
+                                }
                                 return;
                             }
                             index++;
@@ -134,8 +137,11 @@ public class FocusCityActivity extends BaseActivity implements ICallBack {
                     cityBeens.clear();
                     cityBeens.addAll(regionNetBean.getMessage());
                     recyclerView.setAdapter(new FocusCityWithClassAdapter(FocusCityActivity.this,cityBeens));
+                    if(pd!=null){
+                        pd.dismiss();
+                    }
                 }
-                Toast.makeText(FocusCityActivity.this, msg, Toast.LENGTH_LONG);
+                Toast.makeText(FocusCityActivity.this, msg, Toast.LENGTH_LONG).show();
                 showAgainDailog(msg);
             }
         });

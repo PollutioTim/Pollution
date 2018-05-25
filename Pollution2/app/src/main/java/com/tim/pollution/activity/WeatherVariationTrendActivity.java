@@ -1,5 +1,6 @@
 package com.tim.pollution.activity;
 
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -80,6 +81,7 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
 
     @BindView(R.id.weather_detail_type)
     TextView ivType;
+    private ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +117,7 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
     }
 
     private void loadData(String type) {
+        pd = ProgressDialog.show(this, "标题", "加载数据中，请耐心等待......");
         Map<String, String> params = new HashMap<>();
         params.put("regionid", regionid);
         params.put("key", Constants.key);
@@ -146,6 +149,9 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
 
     @Override
     public void onSuccess(Object data) {
+        if(pd!=null){
+            pd.dismiss();
+        }
         MData mData = (MData) data;
         if (MDataType.CHANGE_TREND.equals(mData.getType())) {
             changeTrend = (ChangeTrend) mData.getData();
@@ -298,6 +304,9 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
 
     @Override
     public void onError(String msg, String eCode) {
-        Toast.makeText(this,msg,Toast.LENGTH_LONG);
+        if(pd!=null){
+            pd.dismiss();
+        }
+        Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
     }
 }

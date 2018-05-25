@@ -2,6 +2,7 @@ package com.tim.pollution.fragment;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -135,6 +136,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
     private TextView city3Value;
     private TextView className;
     private TextView classTime;
+    private ProgressDialog pd;
 
     @Nullable
     @Override
@@ -193,6 +195,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
      * 加载县区列表
      */
     private void loadRegionData() {
+        pd = ProgressDialog.show(getContext(), "标题", "加载数据中，请耐心等待......");
         Map<String, String> params = new HashMap<>();
         params.put("key", Constants.key);
         params.put("regiontype", "allregion");
@@ -213,7 +216,6 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         params.put("type", timeType);
         params.put("regionid", regionid);
         params.put("state", state + "");
-
         WeatherDal.getInstance().getPollTrend(params, new ICallBack() {
             @Override
             public void onSuccess(Object data) {
@@ -231,7 +233,6 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
 
             @Override
             public void onError(String msg, String eCode) {
-
             }
         });
     }
@@ -239,6 +240,9 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
 
     @Override
     public void onSuccess(Object data) {
+        if(pd!=null){
+            pd.dismiss();
+        }
         MData mData = (MData) data;
         if (MDataType.REGIONNET_BEAN.equals(mData.getType())) {
             regionNetBean = (RegionNetBean) mData.getData();
@@ -277,7 +281,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
             cityContrastList.setAdapter(cityContrastAdapter);
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(getContext(), "获取数据失败，请重试", Toast.LENGTH_LONG);
+            Toast.makeText(getContext(), "获取数据失败，请重试", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -505,7 +509,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
      */
     private Line getLine(List<DataInfoBean> data, String color, String type) {
         if (data == null) {
-            Toast.makeText(getContext(), "数据为空，不能作图！", Toast.LENGTH_LONG);
+            Toast.makeText(getContext(), "数据为空，不能作图！", Toast.LENGTH_LONG).show();
             return null;
         }
         List<PointValue> pointValues = new ArrayList<PointValue>();// 节点数据结合
@@ -565,7 +569,10 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
 
     @Override
     public void onError(String msg, String eCode) {
-        Toast.makeText(getContext(),msg,Toast.LENGTH_LONG);
+        if(pd!=null){
+            pd.dismiss();
+        }
+        Toast.makeText(getContext(),msg,Toast.LENGTH_LONG).show();
     }
 
 

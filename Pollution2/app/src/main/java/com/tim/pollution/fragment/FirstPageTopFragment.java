@@ -332,7 +332,7 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
 
     @Override
     public void onError(String msg, String eCode) {
-        Toast.makeText(getContext(),msg,Toast.LENGTH_LONG);
+        Toast.makeText(getContext(),msg,Toast.LENGTH_LONG).show();
         if (callBack != null) {
             callBack.error(regionId);
         }

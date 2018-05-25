@@ -1,5 +1,6 @@
 package com.tim.pollution.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
@@ -104,6 +105,7 @@ public class SiteWeatherDetailActivity extends AppCompatActivity implements ICal
     TextView weatherMainTitle;
     private String pointcode;
     private PointInfoNetBean pointInfoNetBean;
+    private ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,15 +135,18 @@ public class SiteWeatherDetailActivity extends AppCompatActivity implements ICal
     }
 
     private void loadData() {
+        pd = ProgressDialog.show(this, "标题", "加载数据中，请耐心等待......");
         Map<String, String> params = new HashMap<>();
         params.put("key", Constants.key);
         params.put("pointcode", pointcode);
         WeatherDal.getInstance().getPointData(params, this);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onSuccess(Object data) {
+        if(pd!=null){
+            pd.dismiss();
+        }
         MData mData = (MData) data;
         if (MDataType.POINT_INFONET_BEAN.equals(mData.getType())) {
             pointInfoNetBean = (PointInfoNetBean) mData.getData();
@@ -149,13 +154,14 @@ public class SiteWeatherDetailActivity extends AppCompatActivity implements ICal
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void initData() {
         if (pointInfoNetBean.getMessage() == null) {
+            Toast.makeText(this,"该站点信息为空，不可查看",Toast.LENGTH_LONG).show();
             this.finish();
             return;
         }
         if (pointInfoNetBean.getMessage().getPointListBean() == null) {
+            Toast.makeText(this,"该站点信息为空，不可查看",Toast.LENGTH_LONG).show();
             this.finish();
             return;
         }
@@ -346,7 +352,10 @@ public class SiteWeatherDetailActivity extends AppCompatActivity implements ICal
     }
     @Override
     public void onError(String msg, String eCode) {
-        Toast.makeText(this,msg,Toast.LENGTH_LONG);
+        if(pd!=null){
+            pd.dismiss();
+        }
+        Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
 
     }
 }

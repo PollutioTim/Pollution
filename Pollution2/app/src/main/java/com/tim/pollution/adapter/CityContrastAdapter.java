@@ -128,7 +128,7 @@ public class CityContrastAdapter extends BaseAdapter {
             data2 = getData().get(2).get(position);
             data3 = getData().get(3).get(position);
         }catch (Exception e){
-            Toast.makeText(context,"数组越界，请检查数据",Toast.LENGTH_LONG);
+            Toast.makeText(context,"数组越界，请检查数据",Toast.LENGTH_LONG).show();
         }
 
         if (convertView == null) {

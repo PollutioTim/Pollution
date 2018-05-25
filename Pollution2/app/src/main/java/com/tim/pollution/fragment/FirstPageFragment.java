@@ -1,6 +1,8 @@
 package com.tim.pollution.fragment;
 
 import android.app.Activity;
+import android.app.Application;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -99,6 +101,8 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
     private boolean isFirstLocate = true;
     private HomeFragmentAdapter homeFragmentAdapter;
     private Map<String, Fragment> fragmentMap = new HashMap<>();
+    private ProgressDialog pd;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //重新提交
@@ -176,6 +180,7 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
      * 获取县区列表
      */
     private void loadLocation() {
+        pd = ProgressDialog.show(getContext(), "标题", "加载数据中，请耐心等待......");
         SDKInitializer.initialize(getActivity().getApplicationContext());
         locationUtil = new LocationUtil(getActivity(), this);
         Map<String, String> params = new HashMap<>();
@@ -198,7 +203,7 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
             }
         } else {
             if (regionNetBean == null || regionNetBean.getMessage() == null) {
-                Toast.makeText(getContext(), "服务器异常，请稍后重试", Toast.LENGTH_LONG);
+                Toast.makeText(getContext(), "服务器异常，请稍后重试", Toast.LENGTH_LONG).show();
                 return;
             }
             regionIds.add(regionNetBean.getMessage().get(0).getRegionId());
@@ -221,11 +226,12 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
 
             @Override
             public void onPageSelected(int position) {
+                homeChart.setColumnChartData(null);
                 MessageBean msg = weatherDatamap.get(regionIds.get(position));
                 if (msg != null) {
+                    initList(msg);
                     initBaseInfo(msg);
                     initCharts2(msg);
-                    initList(msg);
                 }
                 //遍历存放图片的数组
                 for (int i = 0; i < fragments.size(); i++) {
@@ -304,7 +310,6 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
         MData mData = (MData) data;
         if (MDataType.REGIONNET_BEAN.equals(mData.getType())) {
             regionNetBean = (RegionNetBean) mData.getData();
-//            regionNetBean = getTest();
             if (regionNetBean != null) {
                 loadData();
             }
@@ -326,8 +331,10 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
 
     @Override
     public void onError(String msg, String eCode) {
-//        swipeRefreshLayout.setRefreshing(false);
-        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG);
+        if(pd!=null){
+            pd.dismiss();
+        }
+        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
         showAgainDailog(msg);
     }
 
@@ -441,6 +448,7 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
      *
      * @param
      */
+
     private void initList(MessageBean msg) {
         if (msg != null) {
             if (msg.getPoint_AQI() != null) {
@@ -483,6 +491,9 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
             }
         }
 
+            if(pd!=null){
+                pd.dismiss();
+            }
     }
 
     /**
@@ -500,6 +511,9 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
             initDots();
             homeFragmentAdapter.notifyDataSetChanged();
         }
+            if(pd!=null){
+                pd.dismiss();
+            }
     }
 
     private void initBaseInfo(MessageBean messageBean) {
