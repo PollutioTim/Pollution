@@ -318,7 +318,7 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
                 Log.e("test","fragment 城市："+regionWeather.getMessage().getRegionList().getRegionName());
                 setData(regionWeather);
                 if (callBack != null) {
-                    callBack.prograss(regionWeather.getMessage());
+                    callBack.prograss(regionWeather.getMessage(),regionid);
                 }
             }else{
                 if (callBack != null) {

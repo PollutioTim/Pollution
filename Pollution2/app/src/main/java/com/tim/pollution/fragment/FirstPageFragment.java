@@ -479,15 +479,35 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
      * @param messageBean
      */
     @Override
-    public void prograss(MessageBean messageBean) {
-        int index = regionIds.indexOf(messageBean.getRegionList().getRegionId());
-        Log.e("tcy1", "回来的城市：" + messageBean.getRegionList().getRegionName() + ",id:" + messageBean.getRegionList().getRegionId());
-        if (index >= 0) {
-            weatherDatamap.put(regionIds.get(index), messageBean);
-            if (index == 0) {
-                initBaseInfo(messageBean);
-                initCharts2(messageBean);
-                initList(messageBean);
+    public void prograss(MessageBean messageBean,String regionId) {
+        if(messageBean!=null){
+            if(messageBean.getRegionList()!=null){
+                int index = regionIds.indexOf(messageBean.getRegionList().getRegionId());
+                Log.e("tcy1", "回来的城市：" + messageBean.getRegionList().getRegionName() + ",id:" + messageBean.getRegionList().getRegionId());
+                if (index >= 0) {
+                    weatherDatamap.put(regionIds.get(index), messageBean);
+                    if (index == 0) {
+                        initBaseInfo(messageBean);
+                        initCharts2(messageBean);
+                        initList(messageBean);
+                    }
+                }
+            }else{
+                int index = regionIds.indexOf(regionId);
+                if (index > -1 && homeFragmentAdapter != null) {
+                    regionIds.remove(regionId);
+                    fragments.remove(fragmentMap.get(regionId));
+                    initDots();
+                    homeFragmentAdapter.notifyDataSetChanged();
+                }
+            }
+        }else{
+            int index = regionIds.indexOf(regionId);
+            if (index > -1 && homeFragmentAdapter != null) {
+                regionIds.remove(regionId);
+                fragments.remove(fragmentMap.get(regionId));
+                initDots();
+                homeFragmentAdapter.notifyDataSetChanged();
             }
         }
 
