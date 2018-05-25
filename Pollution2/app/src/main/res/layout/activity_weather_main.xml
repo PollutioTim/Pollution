@@ -275,8 +275,8 @@
 
                             android:layout_height="wrap_content"
 
-                            android:drawablePadding="3dp"
                             android:drawableEnd="@mipmap/pm25_white"
+                            android:drawablePadding="3dp"
                             android:text="66"
                             android:textColor="@color/color_white"
 
@@ -748,6 +748,7 @@
                 android:checkedButton="@+id/weather_main_detail_rbpm25_type"
 
                 android:orientation="horizontal">
+
                 <RadioButton
 
                     android:id="@+id/weather_main_detail_rbAQI_type"
@@ -761,10 +762,10 @@
                     android:button="@null"
 
 
-                    android:gravity="center"
-
-                    android:padding="10dp"
                     android:drawableLeft="@drawable/aqi_selecter"
+
+                    android:gravity="center"
+                    android:padding="10dp"
                     android:textColor="@drawable/white_green_selector" />
 
                 <RadioButton

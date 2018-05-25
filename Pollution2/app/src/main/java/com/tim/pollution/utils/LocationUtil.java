@@ -51,7 +51,7 @@ public class LocationUtil extends BDAbstractLocationListener {
             MData<BDLocation>mData = new MData<BDLocation>();
             mData.setType(MDataType.MAP);
             mData.setData(location);
-            callBack.onProgress(mData);
+            callBack.onSuccess(mData);
         }
     }
 

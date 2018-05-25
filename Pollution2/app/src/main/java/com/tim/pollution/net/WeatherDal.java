@@ -3,14 +3,12 @@ package com.tim.pollution.net;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.tim.pollution.bean.MapBean;
 import com.tim.pollution.bean.RegionWeather;
 import com.tim.pollution.bean.StateCode;
 import com.tim.pollution.bean.changetrend.ChangeTrend;
 import com.tim.pollution.bean.changetrend.DataBankNetBean;
 import com.tim.pollution.bean.changetrend.PointInfoNetBean;
 import com.tim.pollution.bean.changetrend.RegionNetBean;
-import com.tim.pollution.bean.weather.AQI24hBean;
 import com.tim.pollution.callback.ICallBack;
 import com.tim.pollution.general.MData;
 import com.tim.pollution.general.MDataType;
@@ -18,9 +16,6 @@ import com.tim.pollution.general.okhttp.OkHttpUtils;
 import com.tim.pollution.general.okhttp.builder.PostFormBuilder;
 import com.tim.pollution.general.okhttp.callback.StringCallback;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.List;
 import java.util.Map;
 
 import okhttp3.Call;
@@ -92,7 +87,7 @@ public class WeatherDal {
                             MData<RegionWeather>mData  = new MData<RegionWeather>();
                             mData.setType(MDataType.REGION_WEATHER);
                             mData.setData(regionWeather);
-                            callBack.onProgress(mData);
+                            callBack.onSuccess(mData);
                         }else{
                             callBack.onError("系统繁忙，请稍后再试",code.getCode()+"");
                         }
@@ -126,7 +121,7 @@ public class WeatherDal {
                             MData<ChangeTrend>mData  = new MData<ChangeTrend>();
                             mData.setType(MDataType.CHANGE_TREND);
                             mData.setData(changeTrend);
-                            callBack.onProgress(mData);
+                            callBack.onSuccess(mData);
                         }else{
                             callBack.onError("系统繁忙，请稍后再试",code.getCode()+"");
                         }
@@ -158,7 +153,7 @@ public class WeatherDal {
                             MData<PointInfoNetBean>mData  = new MData<PointInfoNetBean>();
                             mData.setType(MDataType.POINT_INFONET_BEAN);
                             mData.setData(pointDataNet);
-                            callBack.onProgress(mData);
+                            callBack.onSuccess(mData);
                         }else{
                             callBack.onError("系统繁忙，请稍后再试",code.getCode()+"");
                         }
@@ -191,7 +186,7 @@ public class WeatherDal {
                             MData<DataBankNetBean>mData  = new MData<DataBankNetBean>();
                             mData.setType(MDataType.DATA_BANKNET_BEAN);
                             mData.setData(dataBankNetBean);
-                            callBack.onProgress(mData);
+                            callBack.onSuccess(mData);
                         }else{
                             callBack.onError("系统繁忙，请稍后再试",code.getCode()+"");
                         }
@@ -205,7 +200,6 @@ public class WeatherDal {
      * @param params
      * @param callBack
      */
-//    http://218.26.106.43:10009/AppInterface/Region?regiontype=allregion&key=6DlLqAyx3mY=
     public void getRegion(Map<String ,String> params, final ICallBack callBack){
         PostFormBuilder postFormBuilder = OkHttpUtils.post().url(regionUrl).params(params);
         postFormBuilder.build().connTimeOut(20*1000)
@@ -225,7 +219,7 @@ public class WeatherDal {
                             MData<RegionNetBean>mData  = new MData<RegionNetBean>();
                             mData.setType(MDataType.REGIONNET_BEAN);
                             mData.setData(regionNetBean);
-                            callBack.onProgress(mData);
+                            callBack.onSuccess(mData);
                         }else{
                             callBack.onError("系统繁忙，请稍后再试",code.getCode()+"");
                         }

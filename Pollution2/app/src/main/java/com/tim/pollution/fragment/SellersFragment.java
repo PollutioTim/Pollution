@@ -454,7 +454,7 @@ public class SellersFragment extends Fragment implements ICallBack {
     }
 
     @Override
-    public void onProgress(Object data) {
+    public void onSuccess(Object data) {
         MData mData = (MData) data;
         if (mData.getType().equals(MDataType.RANK)) {
             RankMainBean rankMainBean = (RankMainBean) mData.getData();

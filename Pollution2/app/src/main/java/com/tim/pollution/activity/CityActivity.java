@@ -96,7 +96,7 @@ public class CityActivity extends BaseActivity implements ICallBack {
     }
 
     @Override
-    public void onProgress(Object data) {
+    public void onSuccess(Object data) {
         MData mData = (MData) data;
         if (mData.getType().equals(MDataType.MAP_DATA)) {//获得城市名
             MapBean mapBean = (MapBean) mData.getData();

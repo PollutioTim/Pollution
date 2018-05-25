@@ -13,5 +13,6 @@
     <string name="NO2">NO₂ </string>
     <string name="O3">O₃</string>
     <string name="CO">CO</string>
+    <string name="AQI">AQI</string>
 
 </resources>

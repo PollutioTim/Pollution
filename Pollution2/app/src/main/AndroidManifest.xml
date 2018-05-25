@@ -55,8 +55,6 @@
         <activity android:name=".activity.RelesExplainActvity" />
         <activity android:name=".activity.QualityReleaseActivity" />
         <activity android:name=".activity.AboutUsActivity" />
-        <activity android:name=".activity.WeatherDetailActivity" />
-        <activity android:name=".activity.WeatherMainActivity" />
 
         <activity android:name=".activity.CityActivity" >
 

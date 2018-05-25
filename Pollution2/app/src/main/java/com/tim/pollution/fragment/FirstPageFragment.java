@@ -25,7 +25,6 @@ import com.baidu.location.BDLocation;
 import com.baidu.mapapi.SDKInitializer;
 import com.tim.pollution.MyApplication;
 import com.tim.pollution.R;
-import com.tim.pollution.activity.CityActivity;
 import com.tim.pollution.activity.FocusCityActivity;
 import com.tim.pollution.activity.SiteWeatherDetailActivity;
 import com.tim.pollution.activity.WeatherVariationTrendActivity;
@@ -62,8 +61,6 @@ import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.ColumnChartView;
 
 public class FirstPageFragment extends Fragment implements ICallBack, AdapterView.OnItemClickListener, FragmentCallBack {
-
-
     @BindView(R.id.weather_title_location)
     TextView weatherTitleLocation;
     @BindView(R.id.textView)
@@ -99,19 +96,16 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
     @BindView(R.id.home_weather_info_time)
     TextView homeWeatherInfoTime;
     private LocationUtil locationUtil;
-    private boolean isFirstLocate= true;
-//    private SwipeRefreshLayout swipeRefreshLayout;
-
-
+    private boolean isFirstLocate = true;
+    private HomeFragmentAdapter homeFragmentAdapter;
+    private Map<String, Fragment> fragmentMap = new HashMap<>();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //重新提交
         //引用创建好的xml布局
         View view = inflater.inflate(R.layout.activity_home, container, false);
         findView(view);
-
         initClick();
-        Log.e("tcy", "onCreateView");
         return view;
 
     }
@@ -119,40 +113,23 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
     @Override
     public void onStart() {
         super.onStart();
-        Log.e("tcy", "onStart");
         loadLocation();
     }
 
-    /**
-     *
-     */
     private void findView(View view) {
-//        swipeRefreshLayout=(SwipeRefreshLayout)view.findViewById(R.id.home_rrfresh);
         homeWeatherInfoTime = (TextView) view.findViewById(R.id.home_weather_info_time);
         weatherTitleLocation = (TextView) view.findViewById(R.id.weather_title_location);
-
         textView = (TextView) view.findViewById(R.id.textView);
-
         weatherTitleLocationSelect = (TextView) view.findViewById(R.id.weather_title_location_select);
-
         homeVp = (WrapContentHeightViewPager) view.findViewById(R.id.home_vp);
-
         llDots = (LinearLayout) view.findViewById(R.id.ll_dots);
-
         homeTop = (LinearLayout) view.findViewById(R.id.home_top);
-
         homeDetail = (TextView) view.findViewById(R.id.home_detail);
-
         homeChart = (ColumnChartView) view.findViewById(R.id.home_chart);
-
         homeList = (WrapContentListView) view.findViewById(R.id.home_list);
-
         homeWeatherInfoName = (TextView) view.findViewById(R.id.home_weather_info_name);
-
         homeWeatherInfoVa = (TextView) view.findViewById(R.id.home_weather_info_va);
-
         homeWeatherInfoCity = (TextView) view.findViewById(R.id.home_weather_info_city);
-
         homeWeatherInfoCityVa = (TextView) view.findViewById(R.id.home_weather_info_city_va);
     }
 
@@ -168,10 +145,12 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        activity = activity;
-
+        this.activity=activity;
     }
 
+    /**
+     * 初始化点击事件
+     */
     private void initClick() {
         homeDetail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,32 +168,25 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
                 startActivity(intent);
             }
         });
-
-//        swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
-//                android.R.color.holo_orange_light, android.R.color.holo_red_light);
-//
-//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                loadLocation();
-//            }
-//        });
     }
 
-    Map<String, Fragment> fragmentMap = new HashMap<>();
 
+
+    /**
+     * 获取县区列表
+     */
     private void loadLocation() {
         SDKInitializer.initialize(getActivity().getApplicationContext());
         locationUtil = new LocationUtil(getActivity(), this);
-        if (true) {
-            Map<String, String> params = new HashMap<>();
-            params.put("key", Constants.key);
-            params.put("regiontype", "region");
-            WeatherDal.getInstance().getRegion(params, this);
-        }
+        Map<String, String> params = new HashMap<>();
+        params.put("key", Constants.key);
+        params.put("regiontype", "region");
+        WeatherDal.getInstance().getRegion(params, this);
     }
 
-    private HomeFragmentAdapter homeFragmentAdapter;
+    /**
+     * 显示关注城市，无关注城市，显示县区列表的第一项
+     */
     private void loadData() {
         homeVp.setAdapter(null);
         regionIds = new ArrayList<>();
@@ -230,20 +202,9 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
                 return;
             }
             regionIds.add(regionNetBean.getMessage().get(0).getRegionId());
-//            regionIds.add("140123");
-//            regionIds.add("140201");
         }
-//        //todo 写死
-//
-//        regionIds.add("140123");
-//        regionIds.add("140201");
-//        if (regionNetBean == null || regionNetBean.getMessage() == null) {
-//            return;
-//        }
-//        regionIds.add(regionNetBean.getMessage().get(0).getRegionId());
         fragments = new ArrayList<>();
         for (int i = 0; i < regionIds.size(); i++) {
-            Log.e("tcy", "循环：" + i + ",id:" + regionIds.get(i));
             FirstPageTopFragment fragment = new FirstPageTopFragment();
             Bundle bundle = new Bundle();
             bundle.putString("regionId", regionIds.get(i));//这里的values就是我们要传的值
@@ -251,9 +212,8 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
             fragments.add(fragment);
             fragmentMap.put(regionIds.get(i), fragment);
         }
-//        loadWeatherData(regionIds.get(0));
         initDots();
-        homeFragmentAdapter=new HomeFragmentAdapter(getChildFragmentManager(), fragments);
+        homeFragmentAdapter = new HomeFragmentAdapter(getChildFragmentManager(), fragments);
         homeVp.setAdapter(homeFragmentAdapter);
         homeVp.setCurrentItem(0);
         // 设置ViewPager的监听
@@ -267,7 +227,6 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
                     initCharts2(msg);
                     initList(msg);
                 }
-
                 //遍历存放图片的数组
                 for (int i = 0; i < fragments.size(); i++) {
                     //判断小点点与当前的图片是否对应，对应设置为亮色 ，否则设置为暗色
@@ -341,8 +300,7 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
     private Map<String, MessageBean> weatherDatamap = new HashMap<>();
 
     @Override
-    public void onProgress(Object data) {
-//        swipeRefreshLayout.setRefreshing(false);
+    public void onSuccess(Object data) {
         MData mData = (MData) data;
         if (MDataType.REGIONNET_BEAN.equals(mData.getType())) {
             regionNetBean = (RegionNetBean) mData.getData();
@@ -350,14 +308,14 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
             if (regionNetBean != null) {
                 loadData();
             }
-        }else if (mData.getType().equals(MDataType.MAP)){
-            try{
+        } else if (mData.getType().equals(MDataType.MAP)) {
+            try {
                 BDLocation location = (BDLocation) mData.getData();
                 if (isFirstLocate) {
                     weatherTitleLocation.setText(location.getDistrict());
                 }
 
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
 
@@ -390,7 +348,6 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 loadLocation();
-                showLoadingDailog();
                 dialogAgain.dismiss();
             }
         });
@@ -401,12 +358,6 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
         }
     }
 
-    /**
-     * 等待
-     */
-    private void showLoadingDailog() {
-//        ProgressDialog dialog = ProgressDialog.show(getContext(), "提示", "正在登陆中…", true, false, null);
-    }
 
     /**
      * 初始化表格
@@ -431,7 +382,7 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
                 for (int j = 0; j < numSubcolumns; ++j) {
                     //创建一个柱子，然后设置值和颜色，并添加到list中
                     SubcolumnValue sub = new SubcolumnValue(Float.valueOf(list.get(i).getAQI()), Color.parseColor(list.get(i).getAQIcolor()));
-                    sub.setLabel("AQI"+Float.valueOf(list.get(i).getAQI()));
+                    sub.setLabel("AQI" + Float.valueOf(list.get(i).getAQI()));
                     values.add(sub);
                     //设置X轴的柱子所对应的属性名称
                     axisXValues.add(new AxisValue(i).setLabel(switchTime(list.get(i).getTime())));
@@ -449,7 +400,7 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
             }
             List<AxisValue> axisYValues = new ArrayList<AxisValue>();
             for (int i = 0; i <= 500; i += 50) {
-                axisYValues.add(new AxisValue(i).setValue(i).setLabel("AQI "+i ));
+                axisYValues.add(new AxisValue(i).setValue(i).setLabel("AQI " + i));
             }
             //设置Columns添加到Data中
             ColumnChartData data = new ColumnChartData(columns);
@@ -460,22 +411,15 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
             //最后将所有值显示在View中
             homeChart.setColumnChartData(data);
             homeChart.setZoomEnabled(false);
-/*            Viewport v = new Viewport(homeChart.getMaximumViewport());
-            v.right =30;
-            v.top = 500;
-//            v.bottom=4;
-            homeChart.setCurrentViewport(v);*/
             Viewport v = new Viewport(homeChart.getMaximumViewport());
             v.bottom = 0f;
-            v.top += v.top*0.2;
+            v.top += v.top * 0.2;
 
             //固定Y轴的范围,如果没有这个,Y轴的范围会根据数据的最大值和最小值决定,这不是我想要的
             homeChart.setMaximumViewport(v);
 
             //这2个属性的设置一定要在lineChart.setMaximumViewport(v);这个方法之后,不然显示的坐标数据是不能左右滑动查看更多数据的
-           /* v.left = totalDays - 7;
-            v.right = totalDays - 1;*/
-            v.right =30;
+            v.right = 30;
             homeChart.setCurrentViewport(v);
 
         } else {
@@ -492,7 +436,6 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
         }
 
     }
-
     /**
      * 初始化列表
      *
@@ -551,14 +494,11 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
     public void error(String regionId) {
         Log.e("tcy1", "移除：" + regionId);
         int index = regionIds.indexOf(regionId);//// TODO: 2018/5/4
-        if (index > -1&&homeFragmentAdapter!=null) {
+        if (index > -1 && homeFragmentAdapter != null) {
             regionIds.remove(regionId);
-//            fragments.remove(index);
-            fragments.remove( fragmentMap.get(regionId));
+            fragments.remove(fragmentMap.get(regionId));
             initDots();
-//            homeVp.removeAllViews();
             homeFragmentAdapter.notifyDataSetChanged();
-//            homeVp.setAdapter(new HomeFragmentAdapter(getChildFragmentManager(), fragments));
         }
     }
 

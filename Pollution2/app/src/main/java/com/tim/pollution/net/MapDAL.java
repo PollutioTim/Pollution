@@ -66,7 +66,7 @@ public class MapDAL {
                             MData<MapBean>mData  = new MData<MapBean>();
                             mData.setType(MDataType.MAP_DATA);
                             mData.setData(mapBean);
-                            callBack.onProgress(mData);
+                            callBack.onSuccess(mData);
                         }
                     }
                 });
@@ -88,7 +88,7 @@ public class MapDAL {
                             MData<ClickMapListBean>mData  = new MData<ClickMapListBean>();
                             mData.setType(MDataType.MAP_CLICK_DATA);
                             mData.setData(mapBean);
-                            callBack.onProgress(mData);
+                            callBack.onSuccess(mData);
                         }
                     }
                 });
@@ -111,7 +111,7 @@ public class MapDAL {
                             MData<MapPointBean>mData  = new MData<MapPointBean>();
                             mData.setType(MDataType.MAP_POINT_DATA);
                             mData.setData(mapBean);
-                            callBack.onProgress(mData);
+                            callBack.onSuccess(mData);
                         }
                     }
                 });
@@ -134,7 +134,7 @@ public class MapDAL {
                             MData<ClickPointBean>mData  = new MData<ClickPointBean>();
                             mData.setType(MDataType.MAP_POINT_CLICK_DATA);
                             mData.setData(mapBean);
-                            callBack.onProgress(mData);
+                            callBack.onSuccess(mData);
                         }
                     }
                 });

@@ -226,7 +226,7 @@ public class MapFragment extends Fragment implements ICallBack,
     }
 
     @Override
-    public void onProgress(Object data) {
+    public void onSuccess(Object data) {
         MData data1 = (MData) data;
         if (data1.getType().equals(MDataType.MAP_DATA)) {//获得城市名
             MapBean mapBean = (MapBean) data1.getData();

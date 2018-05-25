@@ -3,6 +3,7 @@ package com.tim.pollution;
 import android.app.Application;
 import android.content.Context;
 
+import com.baidu.mobstat.StatService;
 import com.tim.pollution.bean.LevePollutionBean;
 import com.tim.pollution.general.SharedPreferencesHelper;
 
@@ -39,6 +40,8 @@ public class MyApplication extends Application {
         //初始化自定首选项
         myPreferences = new SharedPreferencesHelper(mContext,"pollution");
         LevePollutionBeans = new ArrayList<>();
+
+
     }
 
     /**

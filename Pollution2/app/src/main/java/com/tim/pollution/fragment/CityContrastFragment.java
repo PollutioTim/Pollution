@@ -93,9 +93,6 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
     TextView cityContrastSp3;
     @BindView(R.id.city_contrast_chart)
     LineChartView cityContrastChart;
-//    @BindView(R.id.city_contrast_info)
-//    TextView cityContrastInfo;
-
     RadioButton cityContrastRbaqiType;
     @BindView(R.id.city_contrast_rbpm25_type)
     RadioButton cityContrastRbpm25Type;
@@ -113,8 +110,6 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
     RadioGroup cityContrastRgType;
     @BindView(R.id.city_contrast_list)
     ListView cityContrastList;
-
-    DataBankNetBean dataBankNetBean;
     @BindView(R.id.city_contrast_city1)
     TextView cityContrastCity1;
     @BindView(R.id.city_contrast_city2)
@@ -144,7 +139,6 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        return super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.activity_city_contrast, container, false);
         timeTypes.add("12h");
         timeTypes.add("24h");
@@ -160,51 +154,31 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
      * 初始化控件
      */
     private void findView(View view) {
-
         cityContrastSp1 = (TextView) view.findViewById(R.id.city_contrast_sp1);
-
         cityContrastSp2 = (TextView) view.findViewById(R.id.city_contrast_sp2);
-
         cityContrastSp3 = (TextView) view.findViewById(R.id.city_contrast_sp3);
-
         cityContrastChart = (LineChartView) view.findViewById(R.id.city_contrast_chart);
-
-//        cityContrastInfo = (TextView) view.findViewById(R.id.city_contrast_info);
         cityContrastRbaqiType = (RadioButton) view.findViewById(R.id.city_contrast_rbaqi_type);
         cityContrastRbpm25Type = (RadioButton) view.findViewById(R.id.city_contrast_rbpm25_type);
-
         cityContrastRbpm10Type = (RadioButton) view.findViewById(R.id.city_contrast_rbpm10_type);
-
         cityContrastRbso2Type = (RadioButton) view.findViewById(R.id.city_contrast_rbso2_type);
-
         cityContrastRbno2Type = (RadioButton) view.findViewById(R.id.city_contrast_rbno2_type);
-
         cityContrastRbo3Type = (RadioButton) view.findViewById(R.id.city_contrast_rbo3_type);
-
         cityContrastRbcoType = (RadioButton) view.findViewById(R.id.city_contrast_rbco_type);
-
         cityContrastRgType = (RadioGroup) view.findViewById(R.id.city_contrast_rg_type);
-
         cityContrastList = (ListView) view.findViewById(R.id.city_contrast_list);
-
         cityContrastCity1 = (TextView) view.findViewById(R.id.city_contrast_city1);
-
         cityContrastCity2 = (TextView) view.findViewById(R.id.city_contrast_city2);
-
         cityContrastCity3 = (TextView) view.findViewById(R.id.city_contrast_city3);
         cityContrastTimeSwitch = (TextView) view.findViewById(R.id.city_contrast_time_switch);
-        
-        city1=(TextView)view.findViewById(R.id.city_contrast_info_city1);
-        city1Value=(TextView)view.findViewById(R.id.city_contrast_info_city1_value);
-        
-        city2=(TextView)view.findViewById(R.id.city_contrast_info_city2);
-        city2Value=(TextView)view.findViewById(R.id.city_contrast_info_city2_value);
-
-        city3=(TextView)view.findViewById(R.id.city_contrast_info_city3);
-        city3Value=(TextView)view.findViewById(R.id.city_contrast_info_city3_value);
-
-         className=(TextView)view.findViewById(R.id.city_contrast_info_class);
-        classTime=(TextView)view.findViewById(R.id.city_contrast_info_class_time);
+        city1 = (TextView) view.findViewById(R.id.city_contrast_info_city1);
+        city1Value = (TextView) view.findViewById(R.id.city_contrast_info_city1_value);
+        city2 = (TextView) view.findViewById(R.id.city_contrast_info_city2);
+        city2Value = (TextView) view.findViewById(R.id.city_contrast_info_city2_value);
+        city3 = (TextView) view.findViewById(R.id.city_contrast_info_city3);
+        city3Value = (TextView) view.findViewById(R.id.city_contrast_info_city3_value);
+        className = (TextView) view.findViewById(R.id.city_contrast_info_class);
+        classTime = (TextView) view.findViewById(R.id.city_contrast_info_class_time);
     }
 
     private void initOnclick() {
@@ -226,8 +200,12 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
     }
 
     private String datatype = "PM25";
-    private String ranktype = "real";
 
+    /**
+     * 加载数据
+     * @param regionid
+     * @param state
+     */
     private void loadData(String regionid, final int state) {
         cityContrastRgType.check(R.id.city_contrast_rbaqi_type);
         Map<String, String> params = new HashMap<>();
@@ -238,7 +216,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
 
         WeatherDal.getInstance().getPollTrend(params, new ICallBack() {
             @Override
-            public void onProgress(Object data) {
+            public void onSuccess(Object data) {
                 MData mData = (MData) data;
                 if (MDataType.CHANGE_TREND.equals(mData.getType())) {
                     ChangeTrend changTrend = (ChangeTrend) mData.getData();
@@ -260,11 +238,10 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
 
 
     @Override
-    public void onProgress(Object data) {
+    public void onSuccess(Object data) {
         MData mData = (MData) data;
         if (MDataType.REGIONNET_BEAN.equals(mData.getType())) {
             regionNetBean = (RegionNetBean) mData.getData();
-//            regionNetBean = getTest();
             if (regionNetBean != null) {
                 initSpinner();
             }
@@ -284,11 +261,14 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
             String vaule2 = cityContrastSp2.getText() + "  " + citys.get(2).getAQI_data().get(citys.get(2).getAQI_data().size() - 1).getValue();
             String vaule3 = cityContrastSp3.getText() + "  " + citys.get(3).getAQI_data().get(citys.get(3).getAQI_data().size() - 1).getValue();
             String value = "AQI  " + switchTime(time) + "\n" + vaule1 + "\n" + vaule2 + "\n" + vaule3;
-//            cityContrastInfo.setText(value);
-            className.setText("AQI");classTime.setText(switchTime(time));
-            city1.setText(cityContrastSp1.getText());city1Value.setText(citys.get(1).getAQI_data().get(citys.get(1).getAQI_data().size() - 1).getValue());
-            city2.setText(cityContrastSp2.getText());city2Value.setText( citys.get(2).getAQI_data().get(citys.get(2).getAQI_data().size() - 1).getValue());
-            city3.setText(cityContrastSp3.getText());city3Value.setText(citys.get(3).getAQI_data().get(citys.get(3).getAQI_data().size() - 1).getValue());
+            className.setText("AQI");
+            classTime.setText(switchTime(time));
+            city1.setText(cityContrastSp1.getText());
+            city1Value.setText(citys.get(1).getAQI_data().get(citys.get(1).getAQI_data().size() - 1).getValue());
+            city2.setText(cityContrastSp2.getText());
+            city2Value.setText(citys.get(2).getAQI_data().get(citys.get(2).getAQI_data().size() - 1).getValue());
+            city3.setText(cityContrastSp3.getText());
+            city3Value.setText(citys.get(3).getAQI_data().get(citys.get(3).getAQI_data().size() - 1).getValue());
             cityContrastTimeSwitch.setText(timeType.toUpperCase());
 //        initChars();
             initFrom();
@@ -302,10 +282,10 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
     }
 
     private String switchTime(String time) {
-        try{
+        try {
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
             return sdf.format(DateUtil.strToDateLong(time));
-        }catch (Exception e){
+        } catch (Exception e) {
             return time;
         }
 
@@ -340,62 +320,65 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         int size2 = 0;
         int size3 = 0;
 
-        try{
-            size1=citys.get(1).getAQI_data().size();
-        }catch (Exception e){}
-        try{
-            size2=citys.get(2).getAQI_data().size();
-        }catch (Exception e){}
-        try{
-            size3=citys.get(3).getAQI_data().size();
-        }catch (Exception e){}
-        int max=Math.max(size1,size2);
-        max=Math.max(max,size3);
-        if(max==size1){
-            max=1;
-        }else if(max==size2){
-            max=2;
-        }else{
-            max=3;
+        try {
+            size1 = citys.get(1).getAQI_data().size();
+        } catch (Exception e) {
+        }
+        try {
+            size2 = citys.get(2).getAQI_data().size();
+        } catch (Exception e) {
+        }
+        try {
+            size3 = citys.get(3).getAQI_data().size();
+        } catch (Exception e) {
+        }
+        int max = Math.max(size1, size2);
+        max = Math.max(max, size3);
+        if (max == size1) {
+            max = 1;
+        } else if (max == size2) {
+            max = 2;
+        } else {
+            max = 3;
         }
         for (int i = 0; i < citys.get(max).getAQI_data().size(); i++) {
             axisXValues.add(new AxisValue(i).setLabel(switchTime(citys.get(max).getAQI_data().get(i).getTime())));
         }
         int id = cityContrastRgType.getCheckedRadioButtonId();
         if (id == R.id.city_contrast_rbpm25_type) {
-            lines.add(getLine(citys.get(1).getPM25_data(), "#FFF1C55F","PM2.5"));
-            lines.add(getLine(citys.get(2).getPM25_data(), "#FF47F646","PM2.5"));
-            lines.add(getLine(citys.get(3).getPM25_data(), "#FF42DAFC","PM2.5"));
+            lines.add(getLine(citys.get(1).getPM25_data(), "#FFF1C55F", "PM2.5"));
+            lines.add(getLine(citys.get(2).getPM25_data(), "#FF47F646", "PM2.5"));
+            lines.add(getLine(citys.get(3).getPM25_data(), "#FF42DAFC", "PM2.5"));
         } else if (id == R.id.city_contrast_rbpm10_type) {
-            lines.add(getLine(citys.get(1).getPM10_data(), "#FFF1C55F","PM10"));
-            lines.add(getLine(citys.get(2).getPM10_data(), "#FF47F646","PM10"));
-            lines.add(getLine(citys.get(3).getPM10_data(), "#FF42DAFC","PM10"));
+            lines.add(getLine(citys.get(1).getPM10_data(), "#FFF1C55F", "PM10"));
+            lines.add(getLine(citys.get(2).getPM10_data(), "#FF47F646", "PM10"));
+            lines.add(getLine(citys.get(3).getPM10_data(), "#FF42DAFC", "PM10"));
         } else if (id == R.id.city_contrast_rbso2_type) {
-            lines.add(getLine(citys.get(1).getSO2_data(), "#FFF1C55F","SO₂"));
-            lines.add(getLine(citys.get(2).getSO2_data(), "#FF47F646","SO₂"));
-            lines.add(getLine(citys.get(3).getSO2_data(), "#FF42DAFC","SO₂"));
+            lines.add(getLine(citys.get(1).getSO2_data(), "#FFF1C55F", "SO₂"));
+            lines.add(getLine(citys.get(2).getSO2_data(), "#FF47F646", "SO₂"));
+            lines.add(getLine(citys.get(3).getSO2_data(), "#FF42DAFC", "SO₂"));
         } else if (id == R.id.city_contrast_rbno2_type) {
-            lines.add(getLine(citys.get(1).getNO2_data(), "#FFF1C55F" ,"NO₂"));
-            lines.add(getLine(citys.get(2).getNO2_data(), "#FF47F646","NO₂"));
-            lines.add(getLine(citys.get(3).getNO2_data(), "#FF42DAFC","NO₂"));
+            lines.add(getLine(citys.get(1).getNO2_data(), "#FFF1C55F", "NO₂"));
+            lines.add(getLine(citys.get(2).getNO2_data(), "#FF47F646", "NO₂"));
+            lines.add(getLine(citys.get(3).getNO2_data(), "#FF42DAFC", "NO₂"));
         } else if (id == R.id.city_contrast_rbo3_type) {
-            lines.add(getLine(citys.get(1).getO3_data(), "#FFF1C55F","O₃"));
-            lines.add(getLine(citys.get(2).getO3_data(), "#FF47F646","O₃"));
-            lines.add(getLine(citys.get(3).getO3_data(), "#FF42DAFC","O₃"));
+            lines.add(getLine(citys.get(1).getO3_data(), "#FFF1C55F", "O₃"));
+            lines.add(getLine(citys.get(2).getO3_data(), "#FF47F646", "O₃"));
+            lines.add(getLine(citys.get(3).getO3_data(), "#FF42DAFC", "O₃"));
         } else if (id == R.id.city_contrast_rbco_type) {
-            lines.add(getLine(citys.get(1).getCO_data(), "#FFF1C55F","CO"));
-            lines.add(getLine(citys.get(2).getCO_data(), "#FF47F646","CO"));
-            lines.add(getLine(citys.get(3).getCO_data(), "#FF42DAFC","CO"));
+            lines.add(getLine(citys.get(1).getCO_data(), "#FFF1C55F", "CO"));
+            lines.add(getLine(citys.get(2).getCO_data(), "#FF47F646", "CO"));
+            lines.add(getLine(citys.get(3).getCO_data(), "#FF42DAFC", "CO"));
         } else if (id == R.id.city_contrast_rbaqi_type) {
-            lines.add(getLine(citys.get(1).getAQI_data(), "#FFF1C55F","AQI"));
-            lines.add(getLine(citys.get(2).getAQI_data(), "#FF47F646","AQI"));
-            lines.add(getLine(citys.get(3).getAQI_data(), "#FF42DAFC","AQI"));
+            lines.add(getLine(citys.get(1).getAQI_data(), "#FFF1C55F", "AQI"));
+            lines.add(getLine(citys.get(2).getAQI_data(), "#FF47F646", "AQI"));
+            lines.add(getLine(citys.get(3).getAQI_data(), "#FF42DAFC", "AQI"));
         }
         lines.remove(null);
         LineChartData data = new LineChartData(lines);
-        int LabelChars=8;
-        if(axisXValues.size()>25){
-            LabelChars=15;
+        int LabelChars = 8;
+        if (axisXValues.size() > 25) {
+            LabelChars = 15;
         }
         if (true) {
             data.setAxisXBottom(new Axis(axisXValues).setHasLines(false).setTextColor(Color.WHITE).setName("").setHasTiltedLabels(false).setMaxLabelChars(LabelChars));
@@ -411,7 +394,6 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         cityContrastChart.setZoomEnabled(true);
 
         Viewport v = new Viewport(cityContrastChart.getMaximumViewport());
-       float y= v.top;
         v.bottom = 0f;
         v.top += 30f;
 
@@ -420,10 +402,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
 
 
         //这2个属性的设置一定要在lineChart.setMaximumViewport(v);这个方法之后,不然显示的坐标数据是不能左右滑动查看更多数据的
-           /* v.left = totalDays - 7;
-            v.right = totalDays - 1;*/
-        v.right =30;
-//        v.top = y+200f;
+        v.right = 30;
         cityContrastChart.setCurrentViewport(v);
         cityContrastChart.setOnValueTouchListener(new LineChartOnValueSelectListener() {
             @Override
@@ -436,9 +415,9 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
                 List<DataInfoBean> data2 = null;
                 List<DataInfoBean> data3 = null;
                 ChangeTrendMessageBean msg = citys.get(lineIndex + 1);
-                ChangeTrendMessageBean msg1=citys.get(1);
-                ChangeTrendMessageBean msg2=citys.get(2);
-                ChangeTrendMessageBean msg3=citys.get(3);
+                ChangeTrendMessageBean msg1 = citys.get(1);
+                ChangeTrendMessageBean msg2 = citys.get(2);
+                ChangeTrendMessageBean msg3 = citys.get(3);
                 if (id == R.id.city_contrast_rbpm25_type) {
                     type = "PM2.5";
                     data = msg.getPM25_data();
@@ -485,40 +464,30 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
 
                 if (data != null) {
                     String time = switchTime(data.get(pointIndex).getTime());
-                    String city = "";
-                    if (lineIndex == 0) {
-                        city = cityContrastSp1.getText().toString();
-                    } else if (lineIndex == 1) {
-                        city = cityContrastSp2.getText().toString();
-                    } else if (lineIndex == 2) {
-                        city = cityContrastSp3.getText().toString();
-                    }
-//                    cityContrastInfo.setText(type + " " + time + "\n" + city + " " + data.get(pointIndex).getValue());
-                    className.setText(type);classTime.setText(switchTime(time));
-                    try{
-                        city1.setText(cityContrastSp1.getText());city1Value.setText(data1.get(pointIndex).getValue());
-                    }catch (Exception e){
+                    className.setText(type);
+                    classTime.setText(switchTime(time));
+                    try {
+                        city1.setText(cityContrastSp1.getText());
+                        city1Value.setText(data1.get(pointIndex).getValue());
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    try{
-                        city2.setText(cityContrastSp2.getText());city2Value.setText(data2.get(pointIndex).getValue());
-                    }catch (Exception e){
+                    try {
+                        city2.setText(cityContrastSp2.getText());
+                        city2Value.setText(data2.get(pointIndex).getValue());
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    try{
-                        city3.setText(cityContrastSp3.getText());city3Value.setText(data3.get(pointIndex).getValue());
-                    }catch (Exception e){
+                    try {
+                        city3.setText(cityContrastSp3.getText());
+                        city3Value.setText(data3.get(pointIndex).getValue());
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
-//                    city1.setText(cityContrastSp1.getText());city1Value.setText(data1.get(pointIndex).getValue());
-//                    city2.setText(cityContrastSp2.getText());city2Value.setText(data2.get(pointIndex).getValue());
-//                    city3.setText(cityContrastSp3.getText());city3Value.setText(data3.get(pointIndex).getValue());
-
                 } else {
                     initData(-1);
                 }
             }
-
             @Override
             public void onValueDeselected() {
 
@@ -527,18 +496,25 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
     }
 
 
-    private Line getLine(List<DataInfoBean> data, String color,String type) {
+    /**
+     * 获取折线
+     * @param data
+     * @param color
+     * @param type
+     * @return
+     */
+    private Line getLine(List<DataInfoBean> data, String color, String type) {
         if (data == null) {
-            Toast.makeText(getContext(),"数据为空，不能作图！",Toast.LENGTH_LONG);
+            Toast.makeText(getContext(), "数据为空，不能作图！", Toast.LENGTH_LONG);
             return null;
         }
         List<PointValue> pointValues = new ArrayList<PointValue>();// 节点数据结合
         for (int i = 0; i < data.size(); i++) {
-            try{
+            try {
                 PointValue point = new PointValue(i, Float.parseFloat(data.get(i).getValue()));
-                point.setLabel(type+" "+Float.parseFloat(data.get(i).getValue()));
+                point.setLabel(type + " " + Float.parseFloat(data.get(i).getValue()));
                 pointValues.add(point);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -559,7 +535,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
 
 
     /**
-     *
+     * 初始化城市
      */
     private void initSpinner() {
         if (regionNetBean != null) {
@@ -589,7 +565,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
 
     @Override
     public void onError(String msg, String eCode) {
-
+        Toast.makeText(getContext(),msg,Toast.LENGTH_LONG);
     }
 
 
@@ -633,6 +609,11 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
     private int state1;
 
 
+    /**
+     * 城市选择弹框
+     * @param view
+     * @param state
+     */
     private void showCitySelect(View view, int state) {
         this.state1 = state;
         View viewDialog = LayoutInflater.from(getContext()).inflate(R.layout.pop_window, null);
@@ -677,22 +658,6 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         dialog.show();
     }
 
-    private RegionNetBean getTest() {
-
-        InputStreamReader inputStreamReader = null;
-        try {
-            InputStreamReader inputReader = new InputStreamReader(getResources().getAssets().open("city.json"));
-            BufferedReader bufReader = new BufferedReader(inputReader);
-            String line = "";
-            String Result = "";
-            while ((line = bufReader.readLine()) != null)
-                Result += line;
-            return new Gson().fromJson(Result, RegionNetBean.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
     @Override
     public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
@@ -706,10 +671,14 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
                 String vaule3 = cityContrastSp3.getText() + " " + citys.get(3).getPM25_data().get(citys.get(3).getPM25_data().size() - 1).getValue();
                 String value = "PM2.5 " + switchTime(time) + "\n" + vaule1 + "\n" + vaule2 + "\n" + vaule3;
 //                cityContrastInfo.setText(value);
-                className.setText("PM2.5");classTime.setText(switchTime(time));
-                city1.setText(cityContrastSp1.getText());city1Value.setText(citys.get(1).getPM25_data().get(citys.get(1).getPM25_data().size() - 1).getValue());
-                city2.setText(cityContrastSp2.getText());city2Value.setText( citys.get(2).getPM25_data().get(citys.get(2).getPM25_data().size() - 1).getValue());
-                city3.setText(cityContrastSp3.getText());city3Value.setText(citys.get(3).getPM25_data().get(citys.get(3).getPM25_data().size() - 1).getValue());
+                className.setText("PM2.5");
+                classTime.setText(switchTime(time));
+                city1.setText(cityContrastSp1.getText());
+                city1Value.setText(citys.get(1).getPM25_data().get(citys.get(1).getPM25_data().size() - 1).getValue());
+                city2.setText(cityContrastSp2.getText());
+                city2Value.setText(citys.get(2).getPM25_data().get(citys.get(2).getPM25_data().size() - 1).getValue());
+                city3.setText(cityContrastSp3.getText());
+                city3Value.setText(citys.get(3).getPM25_data().get(citys.get(3).getPM25_data().size() - 1).getValue());
             } catch (Exception e) {
             }
 
@@ -721,10 +690,14 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
                 String vaule3 = cityContrastSp3.getText() + " " + citys.get(3).getPM10_data().get(citys.get(3).getPM10_data().size() - 1).getValue();
                 String value = "PM10 " + switchTime(time) + "\n" + vaule1 + "\n" + vaule2 + "\n" + vaule3;
 //                cityContrastInfo.setText(value);
-                className.setText("PM10");classTime.setText(switchTime(time));
-                city1.setText(cityContrastSp1.getText());city1Value.setText(citys.get(1).getPM10_data().get(citys.get(1).getPM10_data().size() - 1).getValue());
-                city2.setText(cityContrastSp2.getText());city2Value.setText( citys.get(2).getPM10_data().get(citys.get(2).getPM10_data().size() - 1).getValue());
-                city3.setText(cityContrastSp3.getText());city3Value.setText(citys.get(3).getPM10_data().get(citys.get(3).getPM10_data().size() - 1).getValue());
+                className.setText("PM10");
+                classTime.setText(switchTime(time));
+                city1.setText(cityContrastSp1.getText());
+                city1Value.setText(citys.get(1).getPM10_data().get(citys.get(1).getPM10_data().size() - 1).getValue());
+                city2.setText(cityContrastSp2.getText());
+                city2Value.setText(citys.get(2).getPM10_data().get(citys.get(2).getPM10_data().size() - 1).getValue());
+                city3.setText(cityContrastSp3.getText());
+                city3Value.setText(citys.get(3).getPM10_data().get(citys.get(3).getPM10_data().size() - 1).getValue());
             } catch (Exception e) {
             }
 
@@ -737,10 +710,14 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
                 String vaule3 = cityContrastSp3.getText() + " " + citys.get(3).getSO2_data().get(citys.get(3).getSO2_data().size() - 1).getValue();
                 String value = "SO₂ " + switchTime(time) + "\n" + vaule1 + "\n" + vaule2 + "\n" + vaule3;
 //                cityContrastInfo.setText(value);
-                className.setText("SO₂");classTime.setText(switchTime(time));
-                city1.setText(cityContrastSp1.getText());city1Value.setText(citys.get(1).getSO2_data().get(citys.get(1).getSO2_data().size() - 1).getValue());
-                city2.setText(cityContrastSp2.getText());city2Value.setText( citys.get(2).getSO2_data().get(citys.get(2).getSO2_data().size() - 1).getValue());
-                city3.setText(cityContrastSp3.getText());city3Value.setText(citys.get(3).getSO2_data().get(citys.get(3).getSO2_data().size() - 1).getValue());
+                className.setText("SO₂");
+                classTime.setText(switchTime(time));
+                city1.setText(cityContrastSp1.getText());
+                city1Value.setText(citys.get(1).getSO2_data().get(citys.get(1).getSO2_data().size() - 1).getValue());
+                city2.setText(cityContrastSp2.getText());
+                city2Value.setText(citys.get(2).getSO2_data().get(citys.get(2).getSO2_data().size() - 1).getValue());
+                city3.setText(cityContrastSp3.getText());
+                city3Value.setText(citys.get(3).getSO2_data().get(citys.get(3).getSO2_data().size() - 1).getValue());
             } catch (Exception e) {
             }
 
@@ -753,10 +730,14 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
                 String vaule3 = cityContrastSp3.getText() + " " + citys.get(3).getNO2_data().get(citys.get(3).getNO2_data().size() - 1).getValue();
                 String value = "NO₂ " + switchTime(time) + "\n" + vaule1 + "\n" + vaule2 + "\n" + vaule3;
 //                cityContrastInfo.setText(value);
-                className.setText("NO₂");classTime.setText(switchTime(time));
-                city1.setText(cityContrastSp1.getText());city1Value.setText(citys.get(1).getNO2_data().get(citys.get(1).getNO2_data().size() - 1).getValue());
-                city2.setText(cityContrastSp2.getText());city2Value.setText( citys.get(2).getNO2_data().get(citys.get(2).getNO2_data().size() - 1).getValue());
-                city3.setText(cityContrastSp3.getText());city3Value.setText(citys.get(3).getNO2_data().get(citys.get(3).getNO2_data().size() - 1).getValue());
+                className.setText("NO₂");
+                classTime.setText(switchTime(time));
+                city1.setText(cityContrastSp1.getText());
+                city1Value.setText(citys.get(1).getNO2_data().get(citys.get(1).getNO2_data().size() - 1).getValue());
+                city2.setText(cityContrastSp2.getText());
+                city2Value.setText(citys.get(2).getNO2_data().get(citys.get(2).getNO2_data().size() - 1).getValue());
+                city3.setText(cityContrastSp3.getText());
+                city3Value.setText(citys.get(3).getNO2_data().get(citys.get(3).getNO2_data().size() - 1).getValue());
             } catch (Exception e) {
             }
 
@@ -769,10 +750,14 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
                 String vaule3 = cityContrastSp3.getText() + " " + citys.get(3).getO3_data().get(citys.get(3).getO3_data().size() - 1).getValue();
                 String value = "O₃ " + switchTime(time) + "\n" + vaule1 + "\n" + vaule2 + "\n" + vaule3;
 //                cityContrastInfo.setText(value);
-                className.setText("O₃");classTime.setText(switchTime(time));
-                city1.setText(cityContrastSp1.getText());city1Value.setText(citys.get(1).getO3_data().get(citys.get(1).getO3_data().size() - 1).getValue());
-                city2.setText(cityContrastSp2.getText());city2Value.setText( citys.get(2).getO3_data().get(citys.get(2).getO3_data().size() - 1).getValue());
-                city3.setText(cityContrastSp3.getText());city3Value.setText(citys.get(3).getO3_data().get(citys.get(3).getO3_data().size() - 1).getValue());
+                className.setText("O₃");
+                classTime.setText(switchTime(time));
+                city1.setText(cityContrastSp1.getText());
+                city1Value.setText(citys.get(1).getO3_data().get(citys.get(1).getO3_data().size() - 1).getValue());
+                city2.setText(cityContrastSp2.getText());
+                city2Value.setText(citys.get(2).getO3_data().get(citys.get(2).getO3_data().size() - 1).getValue());
+                city3.setText(cityContrastSp3.getText());
+                city3Value.setText(citys.get(3).getO3_data().get(citys.get(3).getO3_data().size() - 1).getValue());
             } catch (Exception e) {
             }
 
@@ -785,10 +770,14 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
                 String vaule3 = cityContrastSp3.getText() + " " + citys.get(3).getCO_data().get(citys.get(3).getCO_data().size() - 1).getValue();
                 String value = "CO " + switchTime(time) + "\n" + vaule1 + "\n" + vaule2 + "\n" + vaule3;
 //                cityContrastInfo.setText(value);
-                className.setText("CO");classTime.setText(switchTime(time));
-                city1.setText(cityContrastSp1.getText());city1Value.setText(citys.get(1).getCO_data().get(citys.get(1).getCO_data().size() - 1).getValue());
-                city2.setText(cityContrastSp2.getText());city2Value.setText( citys.get(2).getCO_data().get(citys.get(2).getCO_data().size() - 1).getValue());
-                city3.setText(cityContrastSp3.getText());city3Value.setText(citys.get(3).getCO_data().get(citys.get(3).getCO_data().size() - 1).getValue());
+                className.setText("CO");
+                classTime.setText(switchTime(time));
+                city1.setText(cityContrastSp1.getText());
+                city1Value.setText(citys.get(1).getCO_data().get(citys.get(1).getCO_data().size() - 1).getValue());
+                city2.setText(cityContrastSp2.getText());
+                city2Value.setText(citys.get(2).getCO_data().get(citys.get(2).getCO_data().size() - 1).getValue());
+                city3.setText(cityContrastSp3.getText());
+                city3Value.setText(citys.get(3).getCO_data().get(citys.get(3).getCO_data().size() - 1).getValue());
             } catch (Exception e) {
             }
 
@@ -801,10 +790,14 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
                 String vaule3 = cityContrastSp3.getText() + " " + citys.get(3).getAQI_data().get(citys.get(3).getAQI_data().size() - 1).getValue();
                 String value = "AQI " + switchTime(time) + "\n" + vaule1 + "\n" + vaule2 + "\n" + vaule3;
 //                cityContrastInfo.setText(value);
-                className.setText("AQI");classTime.setText(switchTime(time));
-                city1.setText(cityContrastSp1.getText());city1Value.setText(citys.get(1).getAQI_data().get(citys.get(1).getAQI_data().size() - 1).getValue());
-                city2.setText(cityContrastSp2.getText());city2Value.setText( citys.get(2).getAQI_data().get(citys.get(2).getAQI_data().size() - 1).getValue());
-                city3.setText(cityContrastSp3.getText());city3Value.setText(citys.get(3).getAQI_data().get(citys.get(3).getAQI_data().size() - 1).getValue());
+                className.setText("AQI");
+                classTime.setText(switchTime(time));
+                city1.setText(cityContrastSp1.getText());
+                city1Value.setText(citys.get(1).getAQI_data().get(citys.get(1).getAQI_data().size() - 1).getValue());
+                city2.setText(cityContrastSp2.getText());
+                city2Value.setText(citys.get(2).getAQI_data().get(citys.get(2).getAQI_data().size() - 1).getValue());
+                city3.setText(cityContrastSp3.getText());
+                city3Value.setText(citys.get(3).getAQI_data().get(citys.get(3).getAQI_data().size() - 1).getValue());
             } catch (Exception e) {
             }
 

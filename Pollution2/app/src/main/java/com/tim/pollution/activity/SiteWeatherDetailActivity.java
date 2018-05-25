@@ -120,7 +120,7 @@ public class SiteWeatherDetailActivity extends AppCompatActivity implements ICal
         weatherMainDetailRgType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-                initChars2();
+                initChars();
             }
         });
         weatherMainBack.setOnClickListener(new View.OnClickListener() {
@@ -141,7 +141,7 @@ public class SiteWeatherDetailActivity extends AppCompatActivity implements ICal
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
-    public void onProgress(Object data) {
+    public void onSuccess(Object data) {
         MData mData = (MData) data;
         if (MDataType.POINT_INFONET_BEAN.equals(mData.getType())) {
             pointInfoNetBean = (PointInfoNetBean) mData.getData();
@@ -194,14 +194,13 @@ public class SiteWeatherDetailActivity extends AppCompatActivity implements ICal
         weatherMainCoPro.setMaxCount(500);
         weatherMainCoPro.setCurrentCount(getIntFromString(pointInfoNetBean.getMessage().getPointListBean().getCO()));
         weatherMainCoPro.setPrograssColor(pointInfoNetBean.getMessage().getPointListBean().getCOcolor());
-        //todo 颜色
-        initChars2();
+        initChars();
 
     }
 
 
 
-    private  void initChars2(){
+    private  void initChars(){
         if (pointInfoNetBean.getMessage() == null) {
             return;
         }
@@ -285,8 +284,6 @@ public class SiteWeatherDetailActivity extends AppCompatActivity implements ICal
             weatherMainChart.setMaximumViewport(v);
 
             //这2个属性的设置一定要在lineChart.setMaximumViewport(v);这个方法之后,不然显示的坐标数据是不能左右滑动查看更多数据的
-           /* v.left = totalDays - 7;
-            v.right = totalDays - 1;*/
             v.right =30;
             weatherMainChart.setCurrentViewport(v);
         }

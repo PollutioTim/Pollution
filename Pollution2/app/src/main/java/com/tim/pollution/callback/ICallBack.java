@@ -6,7 +6,7 @@ package com.tim.pollution.callback;
 
 public interface ICallBack<T> {
 
-    public void onProgress(T data);
+    public void onSuccess(T data);
 
     public void onError(String msg, String eCode);
 }

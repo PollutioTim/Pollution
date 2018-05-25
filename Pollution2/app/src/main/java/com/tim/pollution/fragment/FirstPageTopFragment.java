@@ -58,8 +58,6 @@ import lecho.lib.hellocharts.model.SubcolumnValue;
  */
 public class FirstPageTopFragment extends Fragment implements ICallBack, View.OnClickListener, AdapterView.OnItemClickListener {
 
-
-    Unbinder unbinder;
     TextView weatherLocationTime;
     ArcProgress weatherArcProgress;
     ImageView weatherInfoImg;
@@ -82,8 +80,7 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
     private RegionWeather regionWeather;
 
     String regionId = "";
-
-
+    String regionid ;
     private FragmentCallBack callBack;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -94,7 +91,6 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
         Log.e("tcy","接受的城市id01:"+regionId);
         findView(view);
         setClick();
-        SeekBar seekBar;
         unbinder1 = ButterKnife.bind(this, view);
         return view;
 
@@ -103,18 +99,16 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         setRegionId(regionId);
-
     }
 
 
     /**
-     *
+     * 加载数据
+     * @param regionid
      */
     public void setRegionId(String regionid) {
         this.regionid = regionid;
-
         iniData();
     }
 
@@ -122,14 +116,8 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
      * 点击事件
      */
     private void setClick() {
-//        weatherDetail.setOnClickListener(this);
         weatherHealthTip.setOnClickListener(this);
-//        weatherTitleLocationSelect.setOnClickListener(this);
     }
-
-
-    String regionid ;
-
 
     /**
      * 获取数据
@@ -142,7 +130,10 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
         WeatherDal.getInstance().getHomeData(params, this);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    /**
+     * 设置数据
+     * @param regionWeather
+     */
     private void setData(RegionWeather regionWeather) {
         if (regionWeather != null) {
             if (regionWeather.getMessage().getRegionList() != null) {
@@ -160,7 +151,6 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
                 weatherPm25Pro.setMaxCount(500);
                 weatherPm25Pro.setCurrentCount(getIntFromString(regionWeather.getMessage().getRegionList().getPM25()));
                 weatherPm25Pro.setPrograssColor(regionWeather.getMessage().getRegionList().getPM25color());
-//                weatherPm25Pro.setProgressTintList(ColorStateList.valueOf(Color.parseColor(regionWeather.getMessage().getRegionList().getPM25color())));
                 weatherPm10.setText(regionWeather.getMessage().getRegionList().getPM10());
                 weatherPm10Pro.setMaxCount(500);
                 weatherPm10Pro.setCurrentCount(getIntFromString(regionWeather.getMessage().getRegionList().getPM10()));
@@ -209,9 +199,6 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        callBack = (FragmentCallBack) context;
-//        FragmentManager manager = getFragmentManager();
-//        callBack= (FragmentCallBack) manager.getFragments().get(0);
        callBack= (FragmentCallBack) getParentFragment();
     }
 
@@ -229,93 +216,29 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
             e.printStackTrace();
             return 0;
         }
-
-    }
-
-    private void initForm(RegionWeather regionWeather) {
-//        weatherChart
-        if (regionWeather.getMessage().getAQI_24h() != null) {
-            List<AQI24hBean> list = regionWeather.getMessage().getAQI_24h();
-            //每个集合显示几条柱子
-            int numSubcolumns = 1;
-            //显示多少个集合
-            int numColumns = list.size();
-            //保存所有的柱子
-            List<Column> columns = new ArrayList<Column>();
-            //保存每个竹子的值
-            List<SubcolumnValue> values;
-            List<AxisValue> axisXValues = new ArrayList<AxisValue>();
-            List<AxisValue> axY = new ArrayList<AxisValue>();
-            int value = 0;
-            //对每个集合的柱子进行遍历
-            for (int i = 0; i < numColumns; ++i) {
-
-                values = new ArrayList<SubcolumnValue>();
-                //循环所有柱子（list）
-                for (int j = 0; j < numSubcolumns; ++j) {
-                    //创建一个柱子，然后设置值和颜色，并添加到list中
-                    if (list.get(i).getAQI() != null) {
-                        values.add(new SubcolumnValue(Float.valueOf(list.get(i).getAQI()), Color.parseColor(list.get(i).getAQIcolor())));
-                    }
-                    //设置X轴的柱子所对应的属性名称
-                    String time = list.get(i).getTime();
-                    if (value == 5) {
-                        value = 0;
-                        Log.e("test", "....." + time);
-                        axisXValues.add(new AxisValue(i).setLabel(time.substring(time.indexOf(" "))));
-                    } else {
-                        value++;
-                    }
-                }
-                //将每个属性的拥有的柱子，添加到Column中
-                Column column = new Column(values);
-                //是否显示每个柱子的Lable
-                if (list.get(i).getTime().contains("1:00") || list.get(i).getTime().contains("8:00") || list.get(i).getTime().contains("18:00") || list.get(i).getTime().contains("2:00")) {
-                    column.setHasLabels(false);
-                } else {
-                    column.setHasLabels(false);
-                }
-                //设置每个柱子的Lable是否选中，为false，表示不用选中，一直显示在柱子上
-                column.setHasLabelsOnlyForSelected(false);
-                //将每个属性得列全部添加到List中
-                columns.add(column);
-            }
-
-            //设置Columns添加到Data中
-            ColumnChartData data = new ColumnChartData(columns);
-            //设置X轴显示在底部，并且显示每个属性的Lable，字体颜色为黑色，X轴的名字为“学历”，每个柱子的Lable斜着显示，距离X轴的距离为8
-            data.setAxisXBottom(new Axis(axisXValues).setHasLines(false).setTextColor(Color.WHITE).setHasTiltedLabels(false).setMaxLabelChars(3));
-            //属性值含义同X轴
-            data.setAxisYLeft(new Axis().setHasLines(false).setTextColor(Color.WHITE).setMaxLabelChars(10));
-            //最后将所有值显示在View中
-//            weatherChart.setColumnChartData(data);
-        }
-
-
     }
 
 
-    private ColorDrawable getDrawableFormString(String colorStr) {
-        ColorDrawable colorDrawable = new ColorDrawable();
-        int color = Color.parseColor(colorStr);
-        colorDrawable.setColor(color);
-        return colorDrawable;
-    }
-
+    /**
+     *  获取进度
+     * @param regionWeather
+     * @param top
+     * @return
+     */
     private double getTopPollutionPrograss(RegionWeather regionWeather, String top) {
-//        if (top.contains("PM25")||top.contains("PM2.5")) {
-//            return regionWeather.getMessage().getRegionList().getPM25();
-//        } else if (top.contains("PM10")) {
-//            return regionWeather.getMessage().getRegionList().getPM10();
-//        } else if (top.contains("SO2")) {
-//            return regionWeather.getMessage().getRegionList().getSO2();
-//        } else if (top.contains("NO2")) {
-//            return regionWeather.getMessage().getRegionList().getNO2();
-//        } else if (top.contains("O3")) {
-//            return regionWeather.getMessage().getRegionList().getO3();
-//        } else if (top.contains("CO")) {
-//            return regionWeather.getMessage().getRegionList().getCO();
-//        }
+/*        if (top.contains("PM25")||top.contains("PM2.5")) {
+            return regionWeather.getMessage().getRegionList().getPM25();
+        } else if (top.contains("PM10")) {
+            return regionWeather.getMessage().getRegionList().getPM10();
+        } else if (top.contains("SO2")) {
+            return regionWeather.getMessage().getRegionList().getSO2();
+        } else if (top.contains("NO2")) {
+            return regionWeather.getMessage().getRegionList().getNO2();
+        } else if (top.contains("O3")) {
+            return regionWeather.getMessage().getRegionList().getO3();
+        } else if (top.contains("CO")) {
+            return regionWeather.getMessage().getRegionList().getCO();
+        }*/
         try{
             return Double.valueOf(regionWeather.getMessage().getRegionList().getAQI());
         }catch (Exception e){
@@ -324,20 +247,27 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
         }
 
     }
+
+    /**
+     * 获取颜色值
+     * @param regionWeather
+     * @param top
+     * @return
+     */
     private int getTopPollutionPrograssColor(RegionWeather regionWeather, String top) {
-//        if (top.contains("PM25")||top.contains("PM2.5")) {
-//            return Color.parseColor(regionWeather.getMessage().getRegionList().getPM25color());
-//        } else if (top.contains("PM10")) {
-//            return Color.parseColor( regionWeather.getMessage().getRegionList().getPM10color());
-//        } else if (top.contains("SO2")) {
-//            return Color.parseColor( regionWeather.getMessage().getRegionList().getSO2color());
-//        } else if (top.contains("NO2")) {
-//            return Color.parseColor( regionWeather.getMessage().getRegionList().getNO2color());
-//        } else if (top.contains("O3")) {
-//            return Color.parseColor( regionWeather.getMessage().getRegionList().getO3color());
-//        } else if (top.contains("CO")) {
-//            return Color.parseColor( regionWeather.getMessage().getRegionList().getCOcolor());
-//        }
+     /*   if (top.contains("PM25")||top.contains("PM2.5")) {
+            return Color.parseColor(regionWeather.getMessage().getRegionList().getPM25color());
+        } else if (top.contains("PM10")) {
+            return Color.parseColor( regionWeather.getMessage().getRegionList().getPM10color());
+        } else if (top.contains("SO2")) {
+            return Color.parseColor( regionWeather.getMessage().getRegionList().getSO2color());
+        } else if (top.contains("NO2")) {
+            return Color.parseColor( regionWeather.getMessage().getRegionList().getNO2color());
+        } else if (top.contains("O3")) {
+            return Color.parseColor( regionWeather.getMessage().getRegionList().getO3color());
+        } else if (top.contains("CO")) {
+            return Color.parseColor( regionWeather.getMessage().getRegionList().getCOcolor());
+        }*/
         return  Color.parseColor( regionWeather.getMessage().getRegionList().getAQIcolor());
     }
 
@@ -349,7 +279,6 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
         }catch (Exception e){
             e.printStackTrace();
         }
-
         //如果没有在"mipmap"下找到imageName,将会返回0
         return resId;
     }
@@ -358,65 +287,35 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
      *
      */
     private void findView(View view) {
-//        weatherTitleLocation = (TextView) view.findViewById(R.id.weather_title_location);
-//
-//        textView = (TextView) view.findViewById(R.id.textView);
-//
-//        weatherTitleLocationSelect = (TextView) view.findViewById(R.id.weather_title_location_select);
-
         weatherLocationTime = (TextView) view.findViewById(R.id.weather_location_time);
-
         weatherArcProgress = (ArcProgress) view.findViewById(R.id.weather_arcProgress);
-
         weatherInfoImg = (ImageView) view.findViewById(R.id.weather_info_img);
-
         weatherTemperature = (TextView) view.findViewById(R.id.weather_temperature);
-
         weatherWind = (TextView) view.findViewById(R.id.weather_wind);
-
         weatherPm25 = (TextView) view.findViewById(R.id.weather_pm25);
-
         weatherPm25Pro = (ProgressView) view.findViewById(R.id.weather_pm25_pro);
-
         weatherPm10 = (TextView) view.findViewById(R.id.weather_pm10);
-
         weatherPm10Pro = (ProgressView) view.findViewById(R.id.weather_pm10_pro);
-
         weatherSo2 = (TextView) view.findViewById(R.id.weather_so2);
-
         weatherSo2Pro = (ProgressView) view.findViewById(R.id.weather_so2_pro);
-
         weatherNo2 = (TextView) view.findViewById(R.id.weather_no2);
-
         weatherNo2Pro = (ProgressView) view.findViewById(R.id.weather_no2_pro);
-
         weatherO3 = (TextView) view.findViewById(R.id.weather_o3);
-
         weatherO3Pro = (ProgressView) view.findViewById(R.id.weather_o3_pro);
-
         weatherCo = (TextView) view.findViewById(R.id.weather_co);
-
         weatherCoPro = (ProgressView) view.findViewById(R.id.weather_co_pro);
-
         weatherHealthTip = (ImageView) view.findViewById(R.id.weather_health_tip);
 
-//        weatherDetail = (TextView) view.findViewById(R.id.weather_detail);
-//
-//        weatherChart = (ColumnChartView) view.findViewById(R.id.weather_chart);
-//
-//        weatherPointList = (WrapContentListView) view.findViewById(R.id.weather_point_list);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
-    public void onProgress(Object data) {
-        Log.e("tcy","onProgress regionId:"+regionId);
+    public void onSuccess(Object data) {
+        Log.e("test","onSuccess regionId:"+regionId);
         MData mData = (MData) data;
         if (MDataType.REGION_WEATHER.equals(mData.getType())) {
             regionWeather = (RegionWeather) mData.getData();
-//            regionWeather = getTest();
             if (regionWeather != null) {
-                Log.e("tcy","fragment 城市："+regionWeather.getMessage().getRegionList().getRegionName());
+                Log.e("test","fragment 城市："+regionWeather.getMessage().getRegionList().getRegionName());
                 setData(regionWeather);
                 if (callBack != null) {
                     callBack.prograss(regionWeather.getMessage());
@@ -426,7 +325,6 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
                     callBack.error(regionId);
                 }
             }
-
         }
     }
 
@@ -441,33 +339,9 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
 
     }
 
-
-
-    private RegionWeather getTest() {
-
-        InputStreamReader inputStreamReader = null;
-        try {
-            InputStreamReader inputReader = new InputStreamReader(getResources().getAssets().open("test.json"));
-            BufferedReader bufReader = new BufferedReader(inputReader);
-            String line = "";
-            String Result = "";
-            while ((line = bufReader.readLine()) != null)
-                Result += line;
-            return new Gson().fromJson(Result, RegionWeather.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-//            case R.id.weather_detail://变化趋势
-//                Intent intent = new Intent(getContext(), WeatherVariationTrendActivity.class);
-//                intent.putExtra("regionid", regionid);
-//                startActivity(intent);
-//                break;
             case R.id.weather_health_tip://健康提示
                 showTip();
                 break;
@@ -478,6 +352,9 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
         }
     }
 
+    /**
+     * 温馨提示
+     */
     private void showTip() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("温馨提示");

@@ -261,7 +261,7 @@ public class MapActivity extends BaseActivity implements ICallBack,
      * @param data
      */
     @Override
-    public void onProgress(Object data) {
+    public void onSuccess(Object data) {
         MData data1 = (MData) data;
         if (data1.getType().equals(MDataType.MAP_CLICK_DATA)) {//获得区县
             ClickMapListBean mapBean = (ClickMapListBean) data1.getData();

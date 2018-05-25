@@ -152,7 +152,7 @@ public class CityContrastActivity extends AppCompatActivity implements ICallBack
 
         WeatherDal.getInstance().getPollTrend(params, new ICallBack() {
             @Override
-            public void onProgress(Object data) {
+            public void onSuccess(Object data) {
                 MData mData = (MData) data;
                 if (MDataType.CHANGE_TREND.equals(mData.getType())) {
                     ChangeTrend changTrend = (ChangeTrend) mData.getData();
@@ -173,7 +173,7 @@ public class CityContrastActivity extends AppCompatActivity implements ICallBack
 
 
     @Override
-    public void onProgress(Object data) {
+    public void onSuccess(Object data) {
         MData mData = (MData) data;
         if (MDataType.REGIONNET_BEAN.equals(mData.getType())) {
             regionNetBean = (RegionNetBean) mData.getData();

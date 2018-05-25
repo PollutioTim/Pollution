@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tim.pollution.R;
@@ -45,8 +46,6 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
 
     String regionid;
 
-
-
     @BindView(R.id.weather_detail_rg_time)
     RadioGroup weatherDetailRgTime;
     @BindView(R.id.weather_detail_chart)
@@ -79,6 +78,8 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
     ImageView ivBack;
     private ChangeTrend changeTrend;
 
+    @BindView(R.id.weather_detail_type)
+    TextView ivType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,7 +145,7 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
     }
 
     @Override
-    public void onProgress(Object data) {
+    public void onSuccess(Object data) {
         MData mData = (MData) data;
         if (MDataType.CHANGE_TREND.equals(mData.getType())) {
             changeTrend = (ChangeTrend) mData.getData();
@@ -156,8 +157,6 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
      *
      */
     private void initData() {
-//        weatherDetailChart
-
         initList();
     }
 
@@ -175,24 +174,31 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
         if (id == R.id.weather_detail_rbpm25_type) {
             initData = changeTrend.getMessage().getPM25_data();
             type="PM2.5";
+            ivType.setText("PM2.5");
         } else if (id == R.id.weather_detail_rbpm10_type) {
             initData = changeTrend.getMessage().getPM10_data();
             type="PM10";
+            ivType.setText("PM10");
         } else if (id == R.id.weather_detail_rbso2_type) {
             initData = changeTrend.getMessage().getSO2_data();
             type="SO₂";
+            ivType.setText(getResources().getString(R.string.SO2));
         } else if (id == R.id.weather_detail_rbno2_type) {
             initData = changeTrend.getMessage().getNO2_data();
             type="NO₂";
+            ivType.setText(getResources().getString(R.string.NO2));
         } else if (id == R.id.weather_detail_rbo3_type) {
             initData = changeTrend.getMessage().getO3_data();
             type="O₃";
+            ivType.setText(getResources().getString(R.string.O3));
         } else if (id == R.id.weather_detail_rbco_type) {
             initData = changeTrend.getMessage().getCO_data();
             type="CO";
+            ivType.setText(getResources().getString(R.string.CO));
         }else if(id==R.id.weather_detail_rbaqi_type){
             initData = changeTrend.getMessage().getAQI_data();
             type="AQI";
+            ivType.setText(getResources().getString(R.string.AQI));
         }
         if(initData==null){
             return;
@@ -203,13 +209,10 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
     }
 
     private int value_code=2;
-    private String type="12h";
     /**
      * 初始化图标
      */
     private void initChart(List<DataInfoBean> initData,String type) {
-//        weatherDetailChart
-
         if (initData != null) {
             List<DataInfoBean> list =initData;
             //每个集合显示几条柱子
@@ -288,8 +291,6 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
             weatherDetailChart.setMaximumViewport(v);
 
             //这2个属性的设置一定要在lineChart.setMaximumViewport(v);这个方法之后,不然显示的坐标数据是不能左右滑动查看更多数据的
-           /* v.left = totalDays - 7;
-            v.right = totalDays - 1;*/
             v.right =30;
             weatherDetailChart.setCurrentViewport(v);
         }

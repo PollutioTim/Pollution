@@ -51,7 +51,6 @@ public class FocusCityActivity extends BaseActivity implements ICallBack {
     private List<RegionNetBean.RegionBean>cityBeens;
 
     private FocusCityWithClassAdapter adapter;
-//    private GridLayoutManager lm;
     private RegionNetBean regionNetBean;
     private Map<String,String> parms;
     private AlertDialog dialogAgain;
@@ -67,19 +66,13 @@ public class FocusCityActivity extends BaseActivity implements ICallBack {
         cityBeens = new ArrayList<>();
         tvFocus.setVisibility(View.VISIBLE);
         adapter = new FocusCityWithClassAdapter(this,cityBeens);
-//        lm = new GridLayoutManager(this,4);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-
         recyclerView.setAdapter(adapter);
-
-        // 为RecyclerView添加Decorator装饰器
-
         loadData("area",null);
         tvFocus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                adapter.getFocusCity();
                 try{
                     List<String> regions=((FocusCityWithClassAdapter)recyclerView.getAdapter()).getFocusCity();
                     CityListSaveUtil.putList(FocusCityActivity.this,CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY,regions);
@@ -101,7 +94,7 @@ public class FocusCityActivity extends BaseActivity implements ICallBack {
         }
         WeatherDal.getInstance().getRegion(parms, new ICallBack() {
             @Override
-            public void onProgress(Object data) {
+            public void onSuccess(Object data) {
                 MData mData = (MData) data;
                 if (MDataType.REGIONNET_BEAN.equals(mData.getType())) {
                     if(id==null){
@@ -116,8 +109,6 @@ public class FocusCityActivity extends BaseActivity implements ICallBack {
                                 regionBean.setClass(true);
                             }
                             cityBeens.addAll(regionNetBean.getMessage());
-//                            adapter.notifyDataSetChanged();
-
                         }
                     }else{
 
@@ -131,14 +122,6 @@ public class FocusCityActivity extends BaseActivity implements ICallBack {
                             }
                             index++;
                             loadData("singlecity",regionNetBean.getMessage().get(index).getRegionId());
-                           /* for (DataBankNetBean.MessageBean.RankDataBean rankDataBean:dataBankNetBean.getMessage().getRank_data()){
-                                if(rankDataBean.getAreaid()==areaId){
-                                    rankDataBean.setRankDataBeens(((DataBankNetBean)mData.getData()).getMessage().getRank_data());
-                                    if(index>=size){
-                                        adapter.notifyDataSetChanged();
-                                    }
-                                }
-                            }*/
                         }
                     }
                 }
@@ -178,14 +161,13 @@ public class FocusCityActivity extends BaseActivity implements ICallBack {
     }
 
     @Override
-    public void onProgress(Object data) {
+    public void onSuccess(Object data) {
 
 
     }
 
     @Override
     public void onError(String msg, String eCode) {
-//        swipeRefreshLayout.setRefreshing(false);
 
     }
 

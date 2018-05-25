@@ -64,7 +64,7 @@ public class RankDAL {
                             MData<RankMainBean> mData  = new MData<RankMainBean>();
                             mData.setType(MDataType.RANK);
                             mData.setData(rankMainBean);
-                            callBack.onProgress(mData);
+                            callBack.onSuccess(mData);
                         }
                     }
                 });
@@ -87,7 +87,7 @@ public class RankDAL {
                             MData<RankLastBean> mData  = new MData<RankLastBean>();
                             mData.setType(MDataType.RANK_LAST);
                             mData.setData(rankMainBean);
-                            callBack.onProgress(mData);
+                            callBack.onSuccess(mData);
                         }
                     }
                 });
