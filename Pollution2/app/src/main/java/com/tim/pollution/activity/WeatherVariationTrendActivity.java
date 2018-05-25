@@ -117,7 +117,7 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
     }
 
     private void loadData(String type) {
-        pd = ProgressDialog.show(this, "标题", "加载数据中，请耐心等待......");
+        pd = ProgressDialog.show(this, "提示", "加载数据中，请耐心等待......");
         Map<String, String> params = new HashMap<>();
         params.put("regionid", regionid);
         params.put("key", Constants.key);

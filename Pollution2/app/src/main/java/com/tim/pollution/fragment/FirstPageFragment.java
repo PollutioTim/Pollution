@@ -149,7 +149,7 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.activity=activity;
+        this.activity = activity;
     }
 
     /**
@@ -175,12 +175,11 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
     }
 
 
-
     /**
      * 获取县区列表
      */
     private void loadLocation() {
-        pd = ProgressDialog.show(getContext(), "标题", "加载数据中，请耐心等待......");
+        pd = ProgressDialog.show(getContext(), "提示", "加载数据中，请耐心等待......");
         SDKInitializer.initialize(getActivity().getApplicationContext());
         locationUtil = new LocationUtil(getActivity(), this);
         Map<String, String> params = new HashMap<>();
@@ -331,7 +330,7 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
 
     @Override
     public void onError(String msg, String eCode) {
-        if(pd!=null){
+        if (pd != null) {
             pd.dismiss();
         }
         Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
@@ -443,6 +442,7 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
         }
 
     }
+
     /**
      * 初始化列表
      *
@@ -491,9 +491,9 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
             }
         }
 
-            if(pd!=null){
-                pd.dismiss();
-            }
+        if (pd != null) {
+            pd.dismiss();
+        }
     }
 
     /**
@@ -511,9 +511,9 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
             initDots();
             homeFragmentAdapter.notifyDataSetChanged();
         }
-            if(pd!=null){
-                pd.dismiss();
-            }
+        if (pd != null) {
+            pd.dismiss();
+        }
     }
 
     private void initBaseInfo(MessageBean messageBean) {

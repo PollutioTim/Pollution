@@ -135,7 +135,7 @@ public class SiteWeatherDetailActivity extends AppCompatActivity implements ICal
     }
 
     private void loadData() {
-        pd = ProgressDialog.show(this, "标题", "加载数据中，请耐心等待......");
+        pd = ProgressDialog.show(this, "提示", "加载数据中，请耐心等待......");
         Map<String, String> params = new HashMap<>();
         params.put("key", Constants.key);
         params.put("pointcode", pointcode);

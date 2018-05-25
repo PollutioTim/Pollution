@@ -195,7 +195,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
      * 加载县区列表
      */
     private void loadRegionData() {
-        pd = ProgressDialog.show(getContext(), "标题", "加载数据中，请耐心等待......");
+        pd = ProgressDialog.show(getContext(), "提示", "加载数据中，请耐心等待......");
         Map<String, String> params = new HashMap<>();
         params.put("key", Constants.key);
         params.put("regiontype", "allregion");

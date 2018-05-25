@@ -71,7 +71,7 @@ public class FocusCityActivity extends BaseActivity implements ICallBack {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-        pd = ProgressDialog.show(this, "标题", "加载数据中，请耐心等待......");
+        pd = ProgressDialog.show(this, "提示", "加载数据中，请耐心等待......");
         loadData("area",null);
         tvFocus.setOnClickListener(new View.OnClickListener() {
             @Override
