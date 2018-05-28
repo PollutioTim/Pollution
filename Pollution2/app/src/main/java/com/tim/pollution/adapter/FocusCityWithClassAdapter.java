@@ -37,6 +37,7 @@ public class FocusCityWithClassAdapter extends RecyclerView.Adapter<FocusCityWit
         this.data = cityBeens;
         regionBeans=CityListSaveUtil.getList(context,CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY);
 //        focusCity.addAll(regionBeans);
+        regionBeans=CityListSaveUtil.getList(context,CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY);
 
     }
 
@@ -63,7 +64,7 @@ public class FocusCityWithClassAdapter extends RecyclerView.Adapter<FocusCityWit
                 holder.llCity.setVisibility(View.VISIBLE);
                 holder.tvCityClass.setVisibility(View.GONE);
                 holder.tvName.setText(regionBean.getRegionName());
-                regionBeans=CityListSaveUtil.getList(context,CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY);
+
                 if(regionBeans==null){
                     regionBeans=new ArrayList<String>();
                 }
