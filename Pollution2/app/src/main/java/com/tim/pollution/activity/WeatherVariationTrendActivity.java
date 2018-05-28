@@ -82,6 +82,8 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
     @BindView(R.id.weather_detail_type)
     TextView ivType;
     private ProgressDialog pd;
+    private List<DataInfoBean> initData;
+    private ChangeTrendAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +91,9 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
         setContentView(R.layout.activity_weather_detail);
         ButterKnife.bind(this);
         regionid = getIntent().getStringExtra("regionid");
+        initData=new ArrayList<>();
+        adapter=new ChangeTrendAdapter(this, initData);
+        weatherDetailList.setAdapter(adapter);
         setClick();
 
     }
@@ -163,53 +168,65 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
      *
      */
     private void initData() {
-        initList();
+        try{
+            initList();
+        }catch (Exception e){
+            e.printStackTrace();
+            weatherDetailChart.setColumnChartData(null);
+            initData.clear();
+            adapter.notifyDataSetChanged();
+        }
+
     }
 
     /**
      * 初始化列表
      */
     private void initList() {
-        if (changeTrend!=null&&changeTrend.getMessage() == null) {
-            //// TODO: 2018/4/26 数据为空
+        if (changeTrend==null||changeTrend.getMessage() == null) {
+            weatherDetailChart.setColumnChartData(null);
+            initData.clear();
+            adapter.notifyDataSetChanged();
             return;
         }
         int id = weatherDetailRgType.getCheckedRadioButtonId();
-        List<DataInfoBean> initData = new ArrayList<>();
+        initData .clear();
+        /*= new ArrayList<>();*/
         String type="";
         if (id == R.id.weather_detail_rbpm25_type) {
-            initData = changeTrend.getMessage().getPM25_data();
+            initData .addAll(changeTrend.getMessage().getPM25_data());
             type="PM2.5";
             ivType.setText("PM2.5");
         } else if (id == R.id.weather_detail_rbpm10_type) {
-            initData = changeTrend.getMessage().getPM10_data();
+            initData  .addAll(changeTrend.getMessage().getPM10_data());
             type="PM10";
             ivType.setText("PM10");
         } else if (id == R.id.weather_detail_rbso2_type) {
-            initData = changeTrend.getMessage().getSO2_data();
+            initData  .addAll( changeTrend.getMessage().getSO2_data());
             type="SO₂";
             ivType.setText(getResources().getString(R.string.SO2));
         } else if (id == R.id.weather_detail_rbno2_type) {
-            initData = changeTrend.getMessage().getNO2_data();
+            initData  .addAll( changeTrend.getMessage().getNO2_data());
             type="NO₂";
             ivType.setText(getResources().getString(R.string.NO2));
         } else if (id == R.id.weather_detail_rbo3_type) {
-            initData = changeTrend.getMessage().getO3_data();
+            initData  .addAll( changeTrend.getMessage().getO3_data());
             type="O₃";
             ivType.setText(getResources().getString(R.string.O3));
         } else if (id == R.id.weather_detail_rbco_type) {
-            initData = changeTrend.getMessage().getCO_data();
+            initData  .addAll( changeTrend.getMessage().getCO_data());
             type="CO";
             ivType.setText(getResources().getString(R.string.CO));
         }else if(id==R.id.weather_detail_rbaqi_type){
-            initData = changeTrend.getMessage().getAQI_data();
+            initData .addAll(changeTrend.getMessage().getAQI_data());
             type="AQI";
             ivType.setText(getResources().getString(R.string.AQI));
         }
         if(initData==null){
             return;
         }
-        weatherDetailList.setAdapter(new ChangeTrendAdapter(this, initData));
+//        weatherDetailList.setAdapter();
+        adapter.notifyDataSetChanged();
         initChart(initData,type);
 
     }
