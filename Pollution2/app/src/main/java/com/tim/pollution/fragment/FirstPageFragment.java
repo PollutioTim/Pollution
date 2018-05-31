@@ -458,11 +458,17 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
         homeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getContext(), SiteWeatherDetailActivity.class);
-                String regionid = regionIds.get(homeVp.getCurrentItem());
-                String pointcode = weatherDatamap.get(regionid).getPoint_AQI().get(position).getPointCode();
-                intent.putExtra("pointcode", pointcode);
-                startActivity(intent);
+                try{
+                    Intent intent = new Intent(getContext(), SiteWeatherDetailActivity.class);
+                    String regionid = regionIds.get(homeVp.getCurrentItem());
+                    String pointcode = weatherDatamap.get(regionid).getPoint_AQI().get(position).getPointCode();
+                    intent.putExtra("pointcode", pointcode);
+                    startActivity(intent);
+                }catch (Exception e){
+                    e.printStackTrace();
+                    Toast.makeText(getContext(),"系统繁忙，请刷新后重试",Toast.LENGTH_LONG).show();
+                }
+
             }
         });
     }
