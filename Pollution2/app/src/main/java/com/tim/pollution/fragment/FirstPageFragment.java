@@ -161,8 +161,10 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), WeatherVariationTrendActivity.class);
                 int position = homeVp.getCurrentItem();
-                intent.putExtra("regionid", regionIds.get(position));
-                startActivity(intent);
+                if(regionIds!=null&&regionIds.size()>0){
+                    intent.putExtra("regionid", regionIds.get(position));
+                    startActivity(intent);
+                }
             }
         });
         weatherTitleLocationSelect.setOnClickListener(new View.OnClickListener() {
@@ -371,6 +373,7 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
     private void initCharts2(MessageBean msg) {
         if (msg.getAQI_24h() != null && msg.getAQI_24h().size() > 0) {
             List<AQI24hBean> list = msg.getAQI_24h();
+            Log.w("tcy","柱状图："+list.toString());
             //每个集合显示几条柱子
             int numSubcolumns = 1;
             //显示多少个集合
@@ -388,7 +391,7 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
                 for (int j = 0; j < numSubcolumns; ++j) {
                     //创建一个柱子，然后设置值和颜色，并添加到list中
                     SubcolumnValue sub = new SubcolumnValue(Float.valueOf(list.get(i).getAQI()), Color.parseColor(list.get(i).getAQIcolor()));
-                    sub.setLabel("AQI" + Float.valueOf(list.get(i).getAQI()));
+                    sub.setLabel("AQI " + getIntFromString(list.get(i).getAQI())+"\n 时间 "+switchTime(list.get(i).getTime()));
                     values.add(sub);
                     //设置X轴的柱子所对应的属性名称
                     axisXValues.add(new AxisValue(i).setLabel(switchTime(list.get(i).getTime())));
@@ -426,13 +429,28 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
 
             //这2个属性的设置一定要在lineChart.setMaximumViewport(v);这个方法之后,不然显示的坐标数据是不能左右滑动查看更多数据的
             v.right = 30;
+//            v.left = 5;
             homeChart.setCurrentViewport(v);
 
         } else {
             homeChart.setColumnChartData(null);
         }
     }
-
+    /**
+     * string-->int
+     *
+     * @param s
+     * @return
+     */
+    private int getIntFromString(String s) {
+        try {
+            int i = (int) Math.ceil(Double.valueOf(s));
+            return i;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
     private String switchTime(String time) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");

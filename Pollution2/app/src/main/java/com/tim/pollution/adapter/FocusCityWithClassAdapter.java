@@ -11,14 +11,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tim.pollution.R;
-import com.tim.pollution.bean.changetrend.DataBankNetBean;
-import com.tim.pollution.bean.changetrend.DataInfoBean;
 import com.tim.pollution.bean.changetrend.RegionNetBean;
 import com.tim.pollution.callback.OnItemClickListener;
 import com.tim.pollution.utils.CityListSaveUtil;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -37,7 +34,7 @@ public class FocusCityWithClassAdapter extends RecyclerView.Adapter<FocusCityWit
         this.data = cityBeens;
         regionBeans=CityListSaveUtil.getList(context,CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY);
 //        focusCity.addAll(regionBeans);
-        regionBeans=CityListSaveUtil.getList(context,CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY);
+//        regionBeans=CityListSaveUtil.getList(context,CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY);
 
     }
 

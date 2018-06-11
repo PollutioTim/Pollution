@@ -346,7 +346,11 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
             max = 3;
         }
         for (int i = 0; i < citys.get(max).getAQI_data().size(); i++) {
-            axisXValues.add(new AxisValue(i).setLabel(switchTime(citys.get(max).getAQI_data().get(i).getTime())));
+            String time=DateUtil.switchTime(citys.get(max).getAQI_data().get(i).getTime(),DateUtil.TIME_TYPE02);
+            if(timeType.contains("day")){
+                time=DateUtil.switchTime02(citys.get(max).getAQI_data().get(i).getTime(),DateUtil.TIME_TYPE03);
+            }
+            axisXValues.add(new AxisValue(i).setLabel(time));
         }
         int id = cityContrastRgType.getCheckedRadioButtonId();
         if (id == R.id.city_contrast_rbpm25_type) {
@@ -380,22 +384,19 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         }
         lines.remove(null);
         LineChartData data = new LineChartData(lines);
-        int LabelChars = 8;
-        if (axisXValues.size() > 25) {
-            LabelChars = 15;
-        }
         if (true) {
-            data.setAxisXBottom(new Axis(axisXValues).setHasLines(false).setTextColor(Color.WHITE).setName("").setHasTiltedLabels(false).setMaxLabelChars(LabelChars));
+            data.setAxisXBottom(new Axis(axisXValues).setHasLines(false).setTextColor(Color.WHITE).setName("").setHasTiltedLabels(false).setMaxLabelChars(4));
             data.setAxisYLeft(new Axis().setHasLines(false).setName("").setTextColor(Color.WHITE).setMaxLabelChars(4));
         } else {
             data.setAxisXBottom(null);
             data.setAxisYLeft(null);
         }
-
         data.setBaseValue(Float.NEGATIVE_INFINITY);
         cityContrastChart.setValueSelectionEnabled(false);
         cityContrastChart.setLineChartData(data);
         cityContrastChart.setZoomEnabled(true);
+        cityContrastChart.setMaxZoom(3);
+        cityContrastChart.setInteractive(true);
 
         Viewport v = new Viewport(cityContrastChart.getMaximumViewport());
         v.bottom = 0f;
@@ -407,6 +408,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
 
         //这2个属性的设置一定要在lineChart.setMaximumViewport(v);这个方法之后,不然显示的坐标数据是不能左右滑动查看更多数据的
         v.right = 30;
+//        v.left = 30;
         cityContrastChart.setCurrentViewport(v);
         cityContrastChart.setOnValueTouchListener(new LineChartOnValueSelectListener() {
             @Override
@@ -515,8 +517,13 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         List<PointValue> pointValues = new ArrayList<PointValue>();// 节点数据结合
         for (int i = 0; i < data.size(); i++) {
             try {
-                PointValue point = new PointValue(i, Float.parseFloat(data.get(i).getValue()));
-                point.setLabel(type + " " + Float.parseFloat(data.get(i).getValue()));
+                String time=DateUtil.switchTime(data.get(i).getTime(),DateUtil.TIME_TYPE02);
+                if(timeType.contains("day")){
+                    time=DateUtil.switchTime02(data.get(i).getTime(),DateUtil.TIME_TYPE03);
+                }
+
+                PointValue point = new PointValue(i, getFloatFromString(data.get(i).getValue()));
+                point.setLabel(type + " " + getIntFromString(data.get(i).getValue())+" 时间 "+time);
                 pointValues.add(point);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -537,7 +544,36 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         return line;
     }
 
+    /**
+     * string-->int
+     *
+     * @param s
+     * @return
+     */
+    private int getIntFromString(String s) {
+        try{
+            int i = (int) Math.ceil(Double.valueOf(s));
+            return i;
+        }catch (Exception e){
+            return 0;
+        }
 
+    }
+    /**
+     * string-->int
+     *
+     * @param s
+     * @return
+     */
+    private float getFloatFromString(String s) {
+        try{
+            float i = Float.valueOf(s);
+            return i;
+        }catch (Exception e){
+            return 0;
+        }
+
+    }
     /**
      * 初始化城市
      */

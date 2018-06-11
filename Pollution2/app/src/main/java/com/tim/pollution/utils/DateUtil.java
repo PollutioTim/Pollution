@@ -726,6 +726,38 @@ public class DateUtil {
         return date1.compareTo(date2);
     }
 
+    public static String LIST_TIME="MM.dd HH:mm";
+    public static String TIME_TYPE01="yyyy-MM-dd HH:mm";
+    public static String TIME_TYPE02="HH:mm";
+    public static String TIME_TYPE03="MM.dd";
+    /**
+     *
+     * @param time yyyy-MM-dd HH:mm:ss
+     * @return  strToDate
+     */
+    public static String switchTime(String time,String type) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(type);
+            return sdf.format(strToDateLong(time));
+        } catch (Exception e) {
+            return time;
+        }
 
+    }
 
+    /**
+     *
+     * @param time yyyy-MM-dd
+     * @param type
+     * @return
+     */
+    public static String switchTime02(String time,String type) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(type);
+            return sdf.format(strToDate(time));
+        } catch (Exception e) {
+            return time;
+        }
+
+    }
 }

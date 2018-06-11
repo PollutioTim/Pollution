@@ -40,4 +40,12 @@ public class AQI24hBean implements Serializable {
     public void setAQIcolor(String AQIcolor) {
         this.AQIcolor = AQIcolor;
     }
+
+    @Override
+    public String toString() {
+        return "AQI24hBean{" +
+                "time='" + time + '\'' +
+                ", AQI='" + AQI + '\'' +
+                '}';
+    }
 }

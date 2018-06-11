@@ -35,15 +35,18 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:padding="@dimen/padding">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
+
                         <ImageView
                             android:layout_width="12dp"
                             android:layout_height="13dp"
-                            android:src="@mipmap/location"
-                            android:layout_gravity="center"/>
+                            android:layout_gravity="center"
+                            android:src="@mipmap/location" />
+
                         <TextView
                             android:id="@+id/weather_title_location"
                             android:layout_width="wrap_content"
@@ -85,19 +88,18 @@
                     android:id="@+id/home_vp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
-
+                <LinearLayout
+                    android:id="@+id/ll_dots"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/main"
+                    android:gravity="center"
+                    android:minHeight="10dp"
+                    android:orientation="horizontal"
+                    android:paddingBottom="10dp" />
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/ll_dots"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:background="@color/main"
-                android:gravity="center"
-                android:minHeight="10dp"
-                android:orientation="horizontal"
-                android:padding="10dp" />
+
 
            <!-- <ScrollView
                 android:layout_width="match_parent"
@@ -110,6 +112,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/main"
                 android:descendantFocusability="blocksDescendants"
+                android:layout_marginTop="10dp"
                 android:orientation="vertical">
 
                 <LinearLayout

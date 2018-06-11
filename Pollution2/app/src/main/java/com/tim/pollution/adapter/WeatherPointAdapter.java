@@ -14,8 +14,10 @@ import android.widget.TextView;
 
 import com.tim.pollution.R;
 import com.tim.pollution.bean.weather.PointAQIBean;
+import com.tim.pollution.utils.DateUtil;
 import com.tim.pollution.utils.ViewUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -62,7 +64,7 @@ public class WeatherPointAdapter extends BaseAdapter {
         }
         holder = (ViewHolder) convertView.getTag();
         holder.tvCity.setText(pointAQIBean.getPointName());
-        holder.tvTime.setText(pointAQIBean.getTime());
+        holder.tvTime.setText(DateUtil.switchTime(pointAQIBean.getTime(),DateUtil.LIST_TIME));
         holder.tvAQI.setText(pointAQIBean.getAQI());
 //        holder.tvAQI.setBackground(getDrawableFormString(pointAQIBean.getAQIcolor()));
         holder.tvAQI.setBackground(ViewUtils.getShapeDrawable(pointAQIBean.getAQIcolor()));
@@ -79,5 +81,14 @@ public class WeatherPointAdapter extends BaseAdapter {
         TextView tvCity;
         TextView tvTime;
         TextView tvAQI;
+    }
+    private String switchTime(String time) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("MM.dd HH:mm");
+            return sdf.format(DateUtil.strToDateLong(time));
+        } catch (Exception e) {
+            return time;
+        }
+
     }
 }

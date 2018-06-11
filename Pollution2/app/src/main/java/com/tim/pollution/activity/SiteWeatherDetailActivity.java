@@ -165,12 +165,11 @@ public class SiteWeatherDetailActivity extends AppCompatActivity implements ICal
             this.finish();
             return;
         }
-
         weatherMainTitle.setText(pointInfoNetBean.getMessage().getPointListBean().getPointName());
-        weatherMainLocationTime.setText(pointInfoNetBean.getMessage().getPointListBean().getTime());
+        weatherMainLocationTime.setText(DateUtil.switchTime(pointInfoNetBean.getMessage().getPointListBean().getTime(),DateUtil.TIME_TYPE01));
         weatherMainArcProgress.setProgressTextTop(pointInfoNetBean.getMessage().getPointListBean().getPollutionLevel());
         weatherMainArcProgress.setProgressTextBottom("首要污染物 " + pointInfoNetBean.getMessage().getPointListBean().getTopPollution());
-        weatherMainArcProgress.setProgress(Double.valueOf(getTopPollutionPrograss(pointInfoNetBean, pointInfoNetBean.getMessage().getPointListBean().getTopPollution())));
+        weatherMainArcProgress.setProgress(getDoubleFromString(getTopPollutionPrograss(pointInfoNetBean, pointInfoNetBean.getMessage().getPointListBean().getTopPollution())));
         weatherMainArcProgress.setFinishedStrokeColor(getTopPollutionPrograssColor(pointInfoNetBean, pointInfoNetBean.getMessage().getPointListBean().getTopPollution()));
         String name = "w" + pointInfoNetBean.getMessage().getPointListBean().getWeathercode();
         weatherMainInfoImg.setImageResource(getImageResourceId(name));
@@ -253,8 +252,8 @@ public class SiteWeatherDetailActivity extends AppCompatActivity implements ICal
                 //循环所有柱子（list）
                 for (int j = 0; j < numSubcolumns; ++j) {
                     //创建一个柱子，然后设置值和颜色，并添加到list中
-                    SubcolumnValue sub = new SubcolumnValue(Float.valueOf(list.get(i).getValue()), Color.parseColor(list.get(i).getValuecolor()));
-                    sub.setLabel(type+" "+Float.valueOf(list.get(i).getValue()));
+                    SubcolumnValue sub = new SubcolumnValue(getIntFromString(list.get(i).getValue()), Color.parseColor(list.get(i).getValuecolor()));
+                    sub.setLabel(type+" "+getIntFromString(list.get(i).getValue())+" 时间 "+DateUtil.switchTime(list.get(i).getTime(),DateUtil.TIME_TYPE02));
                     values.add(sub);
                     //设置X轴的柱子所对应的属性名称
                     axisXValues.add(new AxisValue(i).setLabel(switchTime(list.get(i).getTime())));
@@ -307,10 +306,28 @@ public class SiteWeatherDetailActivity extends AppCompatActivity implements ICal
      * @return
      */
     private int getIntFromString(String s) {
-        int i = (int) Math.ceil(Double.valueOf(s));
-        return i;
-    }
+        try{
+            int i = (int) Math.ceil(Double.valueOf(s));
+            return i;
+        }catch (Exception e){
+            return 0;
+        }
 
+    }
+    /**
+     * string-->double
+     *
+     * @param s
+     * @return
+     */
+    private double getDoubleFromString(String s) {
+        try{
+            double i = Double.valueOf(s);
+            return i;
+        }catch (Exception e){
+            return 0;
+        }
+    }
     public int getImageResourceId(String name) {
         Context ctx = getBaseContext();
         int resId = getResources().getIdentifier(name, "mipmap", ctx.getPackageName());

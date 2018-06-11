@@ -23,6 +23,7 @@ import com.tim.pollution.general.Constants;
 import com.tim.pollution.general.MData;
 import com.tim.pollution.general.MDataType;
 import com.tim.pollution.net.WeatherDal;
+import com.tim.pollution.utils.DateUtil;
 import com.tim.pollution.view.WrapContentListView;
 
 import java.util.ArrayList;
@@ -143,8 +144,8 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
                     value_code=5;
                     break;
                 case R.id.weather_detail_rb30_time:
-                    loadData("day");
                     value_code=6;
+                    loadData("day");
                     break;
             }
         }else {
@@ -198,11 +199,11 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
             type="PM2.5";
             ivType.setText("PM2.5");
         } else if (id == R.id.weather_detail_rbpm10_type) {
-            initData  .addAll(changeTrend.getMessage().getPM10_data());
+            initData.addAll(changeTrend.getMessage().getPM10_data());
             type="PM10";
             ivType.setText("PM10");
         } else if (id == R.id.weather_detail_rbso2_type) {
-            initData  .addAll( changeTrend.getMessage().getSO2_data());
+            initData .addAll( changeTrend.getMessage().getSO2_data());
             type="SO₂";
             ivType.setText(getResources().getString(R.string.SO2));
         } else if (id == R.id.weather_detail_rbno2_type) {
@@ -256,32 +257,22 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
                 //循环所有柱子（list）
 
                 for (int j = 0; j < numSubcolumns; ++j) {
+                    String time = list.get(i).getTime();
+                    if(value_code==6){
+                        time=DateUtil.switchTime02(time,DateUtil.TIME_TYPE03);
+                    }else{
+                        time=DateUtil.switchTime(time,DateUtil.TIME_TYPE02);
+
+                    }
                     //创建一个柱子，然后设置值和颜色，并添加到list中
                     if(list.get(i).getValue()!=null){
                         SubcolumnValue sub = new SubcolumnValue(Float.valueOf(list.get(i).getValue()), Color.parseColor(list.get(i).getValuecolor()));
-                        sub.setLabel(type+" "+Float.valueOf(list.get(i).getValue()));
+                        sub.setLabel(type+" "+getIntFromString(list.get(i).getValue())+" 时间 "+time);
                         values.add(sub);
                     }
                     //设置X轴的柱子所对应的属性名称
-                    String time = list.get(i).getTime();
 
-                    if (value == value_code) {
-                        value = 0;
-                        Log.e("test","....."+time);
-                        try{
-                            if(time.contains(" ")){
-                                axisXValues.add(new AxisValue(i).setLabel(time.substring(time.indexOf(" "))));
-                            }else{
-                                axisXValues.add(new AxisValue(i).setLabel(time));
-                            }
-
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
-
-                    } else {
-                        value++;
-                    }
+                    axisXValues.add(new AxisValue(i).setLabel(time));
                 }
                 //将每个属性的拥有的柱子，添加到Column中
                 Column column = new Column(values);
@@ -300,7 +291,7 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
             //设置Columns添加到Data中
             ColumnChartData data = new ColumnChartData(columns);
             //设置X轴显示在底部，并且显示每个属性的Lable，字体颜色为黑色，X轴的名字为“学历”，每个柱子的Lable斜着显示，距离X轴的距离为8
-            data.setAxisXBottom(new Axis(axisXValues).setHasLines(false).setTextColor(Color.WHITE).setHasTiltedLabels(false).setMaxLabelChars(3));
+            data.setAxisXBottom(new Axis(axisXValues).setHasLines(false).setTextColor(Color.WHITE).setHasTiltedLabels(false).setMaxLabelChars(5));
             //属性值含义同X轴
             data.setAxisYLeft(new Axis().setHasLines(false).setTextColor(Color.WHITE).setMaxLabelChars(5));
             //最后将所有值显示在View中
@@ -319,6 +310,21 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
         }
     }
 
+    /**
+     * string-->int
+     *
+     * @param s
+     * @return
+     */
+    private int getIntFromString(String s) {
+        try {
+            int i = (int) Math.ceil(Double.valueOf(s));
+            return i;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
     @Override
     public void onError(String msg, String eCode) {
         if(pd!=null){

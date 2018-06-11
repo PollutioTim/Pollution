@@ -15,6 +15,7 @@ import com.tim.pollution.R;
 import com.tim.pollution.bean.changetrend.ChangeTrend;
 import com.tim.pollution.bean.changetrend.DataInfoBean;
 import com.tim.pollution.bean.weather.PointAQIBean;
+import com.tim.pollution.utils.DateUtil;
 
 import java.util.List;
 
@@ -61,7 +62,11 @@ public class ChangeTrendAdapter extends BaseAdapter {
             convertView.setTag(holder);
         }
         holder = (ViewHolder) convertView.getTag();
-        holder.tvTime.setText(dataInfoBeen.getTime());
+        String time=DateUtil.switchTime(dataInfoBeen.getTime(),DateUtil.LIST_TIME);
+        if(time.contains("-")){
+            time=DateUtil.switchTime02(dataInfoBeen.getTime(),DateUtil.TIME_TYPE03);
+        }
+        holder.tvTime.setText(time);
         holder.tvAQI.setText(dataInfoBeen.getValue());
 
         return convertView;
