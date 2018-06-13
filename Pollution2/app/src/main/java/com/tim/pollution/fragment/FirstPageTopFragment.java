@@ -126,7 +126,7 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
         Log.e("tcy","接受的城市id:"+regionId);
         Map<String, String> params = new HashMap<>();
         params.put("key", Constants.key);
-        params.put("regionid", regionid);//// TODO: 2018/4/25 暂时写死
+        params.put("regionid", regionid);
         WeatherDal.getInstance().getHomeData(params, this);
     }
 

@@ -54,7 +54,7 @@
                             android:layout_alignParentLeft="true"
                             android:layout_marginRight="3dp"
                             android:gravity="center_vertical"
-                            android:text="小店区"
+                            android:text="地区"
                             android:textColor="@color/color_white"
                             android:textSize="13sp" />
 
