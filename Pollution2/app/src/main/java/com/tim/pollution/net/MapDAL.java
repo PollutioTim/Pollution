@@ -71,6 +71,7 @@ public class MapDAL {
                     }
                 });
     }
+
     public void getClickCityData(Map<String ,String>params, final ICallBack callBack){
         PostFormBuilder postFormBuilder = OkHttpUtils.post().url(mapUrls).params(params);
         postFormBuilder.build().connTimeOut(20*1000)
@@ -93,6 +94,7 @@ public class MapDAL {
                     }
                 });
     }
+
     public void getPointData(Map<String ,String>params, final ICallBack callBack){
         PostFormBuilder postFormBuilder = OkHttpUtils.post().url(mapUrls).params(params);
         postFormBuilder.build().connTimeOut(20*1000)
@@ -116,6 +118,7 @@ public class MapDAL {
                     }
                 });
     }
+    //暂时不用
     public void getPointClickData(Map<String ,String>params, final ICallBack callBack){
         PostFormBuilder postFormBuilder = OkHttpUtils.post().url(mapUrls).params(params);
         postFormBuilder.build().connTimeOut(20*1000)

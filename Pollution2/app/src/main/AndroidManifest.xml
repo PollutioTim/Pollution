@@ -36,9 +36,9 @@
         tools:replace="android:icon, android:theme">
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="N4sLLL2BQYk2Ga04dRlOOahUG7UHOdG2" />
+            android:value="C2GMqEjD202cncpLjTPgDQTjMw51U7f8" />
         <!-- android:value="YtPGwLHem5IUXmpkODrgcA89mRp5HVtL"田春艳 -->
-        <!-- android:value="N4sLLL2BQYk2Ga04dRlOOahUG7UHOdG2" 李立 -->
+        <!-- android:value="C2GMqEjD202cncpLjTPgDQTjMw51U7f8" 李立 -->
 
         <meta-data
             android:name="BaiduMobAd_EXCEPTION_LOG"
@@ -64,6 +64,7 @@
         <activity android:name=".activity.MapActivity"
             android:launchMode="singleTask"/>
         <activity android:name=".activity.FocusCityActivity" />
+        <activity android:name=".activity.SellersDetailActivity" />
 
     </application>
 

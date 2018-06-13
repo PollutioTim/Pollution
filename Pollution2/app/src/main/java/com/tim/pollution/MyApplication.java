@@ -1,10 +1,12 @@
 package com.tim.pollution;
 
+import android.Manifest;
 import android.app.Application;
 import android.content.Context;
 
 import com.baidu.mobstat.StatService;
 import com.tim.pollution.bean.LevePollutionBean;
+import com.tim.pollution.general.BaseActivity;
 import com.tim.pollution.general.SharedPreferencesHelper;
 
 import java.util.ArrayList;

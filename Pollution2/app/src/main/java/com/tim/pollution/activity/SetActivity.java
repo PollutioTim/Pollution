@@ -25,5 +25,4 @@ import butterknife.OnClick;
 
 public class SetActivity extends Fragment {
 
-
 }

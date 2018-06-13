@@ -36,6 +36,7 @@ import com.tim.pollution.bean.changetrend.DataBankNetBean;
 import com.tim.pollution.bean.changetrend.DataInfoBean;
 import com.tim.pollution.bean.changetrend.RegionNetBean;
 import com.tim.pollution.callback.ICallBack;
+import com.tim.pollution.general.BaseActivity;
 import com.tim.pollution.general.Constants;
 import com.tim.pollution.general.MData;
 import com.tim.pollution.general.MDataType;
@@ -66,7 +67,7 @@ import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.ColumnChartView;
 import lecho.lib.hellocharts.view.LineChartView;
 
-public class CityContrastActivity extends AppCompatActivity implements ICallBack, AdapterView.OnItemSelectedListener, View.OnClickListener, RadioGroup.OnCheckedChangeListener {
+public class CityContrastActivity extends BaseActivity implements ICallBack, AdapterView.OnItemSelectedListener, View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
     @BindView(R.id.city_contrast_sp1)
     TextView cityContrastSp1;
@@ -115,8 +116,22 @@ public class CityContrastActivity extends AppCompatActivity implements ICallBack
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_city_contrast);
-        ButterKnife.bind(this);
+        setActivityName("城市列表选择");
+
+    }
+
+    @Override
+    public int intiLayout() {
+        return R.layout.activity_city_contrast;
+    }
+
+    @Override
+    public void initView() {
+
+    }
+
+    @Override
+    public void initData() {
         pointtype = getIntent().getStringExtra("regiontype");
         loadRegionData();
         initOnclick();

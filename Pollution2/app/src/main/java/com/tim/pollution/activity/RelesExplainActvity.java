@@ -34,9 +34,11 @@ public class RelesExplainActvity extends BaseActivity {
 
     @Override
     public void initView() {
+        setActivityName("发布说明");
         tvTitle.setText(getResources().getString(R.string.release_title));
         StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_white), 0);
     }
+
 
     @Override
     public void initData() {

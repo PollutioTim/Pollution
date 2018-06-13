@@ -62,6 +62,7 @@ public class CityActivity extends BaseActivity implements ICallBack {
 
     @Override
     public void initView() {
+        setActivityName("城市列表选择");
         cityBeens = new ArrayList<>();
 
         adapter = new CityAdapter(this,cityBeens);

@@ -20,6 +20,7 @@ import com.tim.pollution.R;
 import com.tim.pollution.bean.changetrend.DataInfoBean;
 import com.tim.pollution.bean.changetrend.PointInfoNetBean;
 import com.tim.pollution.callback.ICallBack;
+import com.tim.pollution.general.BaseActivity;
 import com.tim.pollution.general.Constants;
 import com.tim.pollution.general.MData;
 import com.tim.pollution.general.MDataType;
@@ -47,7 +48,7 @@ import lecho.lib.hellocharts.view.ColumnChartView;
 /**
  * 站点天气详情
  */
-public class SiteWeatherDetailActivity extends AppCompatActivity implements ICallBack {
+public class SiteWeatherDetailActivity extends BaseActivity implements ICallBack {
 
     @BindView(R.id.weather_main_location_time)
     TextView weatherMainLocationTime;
@@ -108,15 +109,19 @@ public class SiteWeatherDetailActivity extends AppCompatActivity implements ICal
     private ProgressDialog pd;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_weather_main);
-        ButterKnife.bind(this);
+    public int intiLayout() {
+        return R.layout.activity_weather_main;
+    }
+
+    @Override
+    public void initView() {
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        setActivityName("站点天气详情");
         pointcode = getIntent().getStringExtra("pointcode");
         loadData();
         weatherMainDetailRgType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -153,8 +158,8 @@ public class SiteWeatherDetailActivity extends AppCompatActivity implements ICal
             initData();
         }
     }
-
-    private void initData() {
+    @Override
+    public void initData() {
         if (pointInfoNetBean.getMessage() == null) {
             Toast.makeText(this,"该站点信息为空，不可查看",Toast.LENGTH_LONG).show();
             this.finish();

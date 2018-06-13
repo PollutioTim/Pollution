@@ -1,5 +1,6 @@
 package com.tim.pollution;
 
+import android.Manifest;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -21,6 +22,7 @@ import com.tim.pollution.fragment.MainFragment;
 import com.tim.pollution.fragment.MapFragment;
 import com.tim.pollution.fragment.PKFragment;
 import com.tim.pollution.fragment.SellersFragment;
+import com.tim.pollution.general.BaseActivity;
 import com.tim.pollution.view.CustomViewPager;
 
 import java.util.ArrayList;

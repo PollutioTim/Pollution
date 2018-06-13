@@ -65,6 +65,7 @@ public class FocusCityActivity extends BaseActivity implements ICallBack {
 
     @Override
     public void initView() {
+        setActivityName("城市列表");
         cityBeens = new ArrayList<>();
         tvFocus.setVisibility(View.VISIBLE);
         adapter = new FocusCityWithClassAdapter(this,cityBeens);

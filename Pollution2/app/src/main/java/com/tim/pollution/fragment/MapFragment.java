@@ -78,6 +78,7 @@ import com.tim.pollution.utils.LocationUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -160,6 +161,7 @@ public class MapFragment extends Fragment implements ICallBack,
     private String colorType = "AQI";
     private MapBean mapBean;
     private GeoCoder mSearch;
+    private String strTime = "";
 
     @Nullable
     @Override
@@ -235,6 +237,7 @@ public class MapFragment extends Fragment implements ICallBack,
                 cityBeens.clear();
             }
             cityBeens = mapBean.getMessage().getCityBeens();
+            strTime = switchTime(mapBean.getMessage().getTime());
             tvTime.setText(switchTime(mapBean.getMessage().getTime()));
             if (datas.size() > 0) {
                 datas.clear();
@@ -248,7 +251,6 @@ public class MapFragment extends Fragment implements ICallBack,
             BDLocation location = (BDLocation) data1.getData();
 //            if (isFirstLocate) {
             LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
-
             MyLocationData.Builder locationBuilder = new MyLocationData.Builder();
             locationBuilder.latitude(location.getLatitude());
             locationBuilder.longitude(location.getLongitude());
@@ -259,7 +261,7 @@ public class MapFragment extends Fragment implements ICallBack,
                     //要移动的点
                     .target(ll)
                     //放大地图到20倍
-                    .zoom(8)
+                    .zoom(9)
                     .build();
             //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
             MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
@@ -315,36 +317,40 @@ public class MapFragment extends Fragment implements ICallBack,
     }
 
     private void setColor(List<LatLng> polyline, CityBean cityBean) {
-        OverlayOptions ooPolyline11 = new PolylineOptions().width(10)
-                .points(polyline).dottedLine(true).color(Color.RED);
-        mBaiduMap.addOverlay(ooPolyline11);//添加OverLay
-        OverlayOptions ooPolygon = null;
-        if (colorType.equals("AQI")) {
-            ooPolygon = new PolygonOptions().points(polyline).
-                    fillColor(Color.parseColor(insertStr(cityBean.getAQIColor())));
-        } else if (colorType.equals("PM25")) {
-            ooPolygon = new PolygonOptions().points(polyline).
-                    fillColor(Color.parseColor(insertStr(cityBean.getPM25Color())));
-        } else if (colorType.equals("PM10")) {
-            ooPolygon = new PolygonOptions().points(polyline).
-                    fillColor(Color.parseColor(insertStr(cityBean.getPM10Color())));
-        } else if (colorType.equals("NO2")) {
-            ooPolygon = new PolygonOptions().points(polyline).
-                    fillColor(Color.parseColor(insertStr(cityBean.getNO2Color())));
-        } else if (colorType.equals("SO2")) {
-            ooPolygon = new PolygonOptions().points(polyline).
-                    fillColor(Color.parseColor(insertStr(cityBean.getSO2Color())));
-        } else if (colorType.equals("O3")) {
-            ooPolygon = new PolygonOptions().points(polyline).
-                    fillColor(Color.parseColor(insertStr(cityBean.getO3Color())));
-        } else if (colorType.equals("CO")) {
-            ooPolygon = new PolygonOptions().points(polyline).
-                    fillColor(Color.parseColor(insertStr(cityBean.getCOColor())));
+        try {
+            OverlayOptions ooPolyline11 = new PolylineOptions().width(10)
+                    .points(polyline).dottedLine(true).color(Color.RED);
+            mBaiduMap.addOverlay(ooPolyline11);//添加OverLay
+            OverlayOptions ooPolygon = null;
+            if (colorType.equals("AQI")) {
+                ooPolygon = new PolygonOptions().points(polyline).
+                        fillColor(Color.parseColor(insertStr(cityBean.getAQIColor())));
+            } else if (colorType.equals("PM25")) {
+                ooPolygon = new PolygonOptions().points(polyline).
+                        fillColor(Color.parseColor(insertStr(cityBean.getPM25Color())));
+            } else if (colorType.equals("PM10")) {
+                ooPolygon = new PolygonOptions().points(polyline).
+                        fillColor(Color.parseColor(insertStr(cityBean.getPM10Color())));
+            } else if (colorType.equals("NO2")) {
+                ooPolygon = new PolygonOptions().points(polyline).
+                        fillColor(Color.parseColor(insertStr(cityBean.getNO2Color())));
+            } else if (colorType.equals("SO2")) {
+                ooPolygon = new PolygonOptions().points(polyline).
+                        fillColor(Color.parseColor(insertStr(cityBean.getSO2Color())));
+            } else if (colorType.equals("O3")) {
+                ooPolygon = new PolygonOptions().points(polyline).
+                        fillColor(Color.parseColor(insertStr(cityBean.getO3Color())));
+            } else if (colorType.equals("CO")) {
+                ooPolygon = new PolygonOptions().points(polyline).
+                        fillColor(Color.parseColor(insertStr(cityBean.getCOColor())));
+            }
+            mBaiduMap.addOverlay(ooPolygon);//添加OverLay
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        mBaiduMap.addOverlay(ooPolygon);//添加OverLay
     }
 
-    private String insertStr(String colors){
+    private String insertStr(String colors) throws ClassCastException{
         StringBuilder  sb = new StringBuilder (colors);
         sb.insert(1, "90");
         return sb.toString();
@@ -478,6 +484,7 @@ public class MapFragment extends Fragment implements ICallBack,
 
                     Intent intent = new Intent(getActivity(), MapActivity.class);
                     intent.putExtra("id",cityBean.getRegionId());
+                    intent.putExtra("time",strTime);
                     startActivity(intent);
                 }
             }

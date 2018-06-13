@@ -28,6 +28,24 @@
             android:gravity="center"
             android:text="1"
             android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            >
+            <TextView
+                android:id="@+id/item_vlaue_tv"
+                android:layout_width="50dp"
+                android:gravity="center"
+                android:text="1"
+                android:textSize="12sp"
+                android:background="@drawable/shape_item_rank"
+                android:textColor="@color/color_white"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
         <TextView
             android:id="@+id/item_pollution_tv"
             android:layout_width="0dp"
@@ -38,22 +56,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:layout_height="match_parent" />
-       <LinearLayout
-           android:layout_width="0dp"
-           android:layout_weight="1"
-           android:layout_height="match_parent"
-           android:gravity="center"
-           >
-           <TextView
-               android:id="@+id/item_vlaue_tv"
-               android:layout_width="50dp"
-               android:gravity="center"
-               android:text="1"
-               android:textSize="12sp"
-               android:background="@drawable/shape_item_rank"
-               android:textColor="@color/color_white"
-               android:layout_height="wrap_content" />
-       </LinearLayout>
+
 
 
     </LinearLayout>

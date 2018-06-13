@@ -1,27 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/color_white">
     <!--头部-->
     <RelativeLayout
         android:id="@+id/sellers_rl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/gree_blue">
-
-        <TextView
-            android:id="@+id/sellers_station_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="46dp"
-            android:textColor="@color/color_white"
-            android:textSize="14sp"
-            android:gravity="center"
-            android:layout_marginLeft="12dp"
-            android:text="站点+"
+        <ImageView
+            android:id="@+id/sellers_detail_back"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="6dp"
+            android:layout_marginLeft="10dp"
             android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            />
-
+            android:src="@drawable/back"
+            android:visibility="gone"/>
         <TextView
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
@@ -40,7 +36,7 @@
             android:textSize="14sp"
             android:drawablePadding="2dp"
             android:drawableRight="@mipmap/ic_switch"
-            android:text="国控"
+            android:text="区县"
             android:layout_marginRight="12dp"
             android:layout_alignParentRight="true"
             android:gravity="center"
@@ -49,14 +45,15 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/color_white">
         <LinearLayout
             android:id="@+id/title_ll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/black"
             android:orientation="horizontal"
-            android:weightSum="4">
+            android:weightSum="5">
 
             <LinearLayout
                 android:id="@+id/now_ll"
@@ -97,7 +94,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/tx_gray"
-                    android:text="累计排"
+                    android:text="累计"
                     android:layout_marginTop="10dp"
                     android:textSize="13sp"
                     android:layout_gravity="center"
@@ -124,7 +121,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/tx_gray"
-                    android:text="昨日排"
+                    android:text="日"
                     android:layout_marginTop="10dp"
                     android:textSize="13sp"
                     android:layout_gravity="center"
@@ -150,7 +147,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/tx_gray"
-                    android:text="上月排"
+                    android:text="月"
                     android:layout_marginTop="10dp"
                     android:textSize="13sp"
                     android:layout_gravity="center"
@@ -165,12 +162,130 @@
                     android:background="@color/color_white"/>
 
             </LinearLayout>
+            <LinearLayout
+                android:id="@+id/year_ll"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/year_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/tx_gray"
+                    android:text="年"
+                    android:layout_marginTop="10dp"
+                    android:textSize="13sp"
+                    android:layout_gravity="center"
+                    />
+                <View
+                    android:id="@+id/year_view"
+                    android:layout_width="38dp"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="5dp"
+                    android:visibility="invisible"
+                    android:layout_marginBottom="4dp"
+                    android:background="@color/color_white"/>
 
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/time_ll"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_below="@+id/title_ll"
+            android:background="@color/color_white"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/time_seller_tv"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:textSize="13sp"
+                android:textColor="@color/black"
+                android:layout_marginLeft="10dp"
+                android:gravity="center|left"/>
+
+            <TextView
+                android:id="@+id/unit_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="13sp"
+                android:textColor="@color/black"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/switch_ll"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_below="@+id/time_ll"
+            android:background="@color/color_white"
+            android:weightSum="4"
+            android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/seller_one_rb"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:text="11"
+                    android:layout_marginLeft="20dp"
+                    android:padding="5dp"
+                    android:textColor="@drawable/select_tx_color"
+                    android:background="@drawable/select_left_btn"
+                    android:textSize="14sp"
+                    android:layout_gravity="center"
+                    android:gravity="center"/>
+
+                <Button
+                    android:id="@+id/seller_two_rb"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:text="102"
+                    android:background="@drawable/select_top_bottom_bt"
+                    android:textColor="@drawable/select_tx_color"
+                    android:textSize="14sp"
+                    android:layout_gravity="center"
+                    android:gravity="center"/>
+
+                <Button
+                    android:id="@+id/seller_three_rb"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:text="通道城市"
+                    android:background="@drawable/select_top_bottom_bt"
+                    android:textColor="@drawable/select_tx_color"
+                    android:textSize="14sp"
+                    android:layout_gravity="center"
+                    android:gravity="center"/>
+
+            <Button
+                android:id="@+id/seller_four_rb"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_marginRight="20dp"
+                android:text="汾渭平原"
+                android:textColor="@drawable/select_tx_color"
+                android:textSize="14sp"
+                android:background="@drawable/select_right_bg"
+                android:layout_gravity="center"
+                android:gravity="center"/>
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/title_below_ll"
-            android:layout_below="@+id/title_ll"
+            android:layout_below="@+id/switch_ll"
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:background="@color/color_white"
@@ -196,16 +311,7 @@
                 android:gravity="center"
                 android:text="城市"
                 android:layout_height="match_parent" />
-            <TextView
-                android:id="@+id/item_pollution_type_tv"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:textSize="12sp"
-                android:text="首要污染物"
-                android:textColor="@color/color_gray"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_height="match_parent" />
+
             <LinearLayout
                 android:id="@+id/sellers_sort_ll"
                 android:layout_width="0dp"
@@ -224,20 +330,33 @@
                     android:layout_height="wrap_content" />
 
                 <ImageView
-                    android:layout_width="8dp"
-                    android:layout_height="8dp"
+                    android:id="@+id/top_down_iv"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_marginLeft="3dp"
-                    android:src="@mipmap/ic_top_switch"
+                    android:src="@drawable/ic_top_jiantou"
                     android:layout_gravity="center"/>
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/item_pollution_type_tv"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:textSize="12sp"
+                android:text="首要污染物"
+                android:textColor="@color/color_gray"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="match_parent" />
         </LinearLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/title_below_ll"
-            android:layout_above="@+id/bottom_ll">
+            android:layout_above="@+id/bottom_ll"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/sellers_recyview"
                 android:layout_width="match_parent"
@@ -421,7 +540,6 @@
                 />
 
         </LinearLayout>
-
     </RelativeLayout>
 
 </LinearLayout>

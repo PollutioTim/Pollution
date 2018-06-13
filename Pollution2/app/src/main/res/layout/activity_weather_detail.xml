@@ -27,10 +27,10 @@
                     android:id="@+id/weather_detail_back"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:padding="10dp"
-                    android:layout_gravity="center"
-                    android:scaleType="center"
-                    android:src="@mipmap/back" />
+                    android:padding="6dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/back" />
 
                 <TextView
                     android:layout_width="match_parent"

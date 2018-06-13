@@ -12,73 +12,108 @@ import java.util.List;
 public class RankMainBean extends StateCode implements Serializable {
 
     @SerializedName("message")
-    private List<Message> messages;
+    private Message messages;
 
-    public List<Message> getMessages() {
+    public Message getMessages() {
         return messages;
     }
 
-    public void setMessages(List<Message> messages) {
+    public void setMessages(Message messages) {
         this.messages = messages;
     }
 
+
     public class Message{
-        private String ranking;
-        private String name;
-        private String toppoll;
-        private String value;
-        @SerializedName("valuecolor")
-        private String valueColor;
+        private String time;
 
-        public String getRanking() {
-            return ranking;
+        public String getTime() {
+            return time;
         }
 
-        public void setRanking(String ranking) {
-            this.ranking = ranking;
+        public void setTime(String time) {
+            this.time = time;
         }
 
-        public String getName() {
-            return name;
+        @SerializedName("rank_data")
+        private List<Content>contents;
+
+        public List<Content> getContents() {
+            return contents;
         }
 
-        public void setName(String name) {
-            this.name = name;
+        public void setContents(List<Content> contents) {
+            this.contents = contents;
         }
 
-        public String getToppoll() {
-            return toppoll;
+        public class Content {
+            @SerializedName("areaid")
+            private String id;
+            private String ranking;
+            private String name;
+            private String toppoll;
+            private String value;
+            @SerializedName("valuecolor")
+            private String valueColor;
+
+            public String getId() {
+                return id;
+            }
+
+            public void setId(String id) {
+                this.id = id;
+            }
+
+            public String getRanking() {
+                return ranking;
+            }
+
+            public void setRanking(String ranking) {
+                this.ranking = ranking;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public String getToppoll() {
+                return toppoll;
+            }
+
+            public void setToppoll(String toppoll) {
+                this.toppoll = toppoll;
+            }
+
+            public String getValue() {
+                return value;
+            }
+
+            public void setValue(String value) {
+                this.value = value;
+            }
+
+            public String getValueColor() {
+                return valueColor;
+            }
+
+            public void setValueColor(String valueColor) {
+                this.valueColor = valueColor;
+            }
+
+            @Override
+            public String toString() {
+                return "Message{" +
+                        "ranking='" + ranking + '\'' +
+                        ", name='" + name + '\'' +
+                        ", toppoll='" + toppoll + '\'' +
+                        ", value='" + value + '\'' +
+                        ", valueColor='" + valueColor + '\'' +
+                        '}';
+            }
         }
 
-        public void setToppoll(String toppoll) {
-            this.toppoll = toppoll;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        public void setValue(String value) {
-            this.value = value;
-        }
-
-        public String getValueColor() {
-            return valueColor;
-        }
-
-        public void setValueColor(String valueColor) {
-            this.valueColor = valueColor;
-        }
-
-        @Override
-        public String toString() {
-            return "Message{" +
-                    "ranking='" + ranking + '\'' +
-                    ", name='" + name + '\'' +
-                    ", toppoll='" + toppoll + '\'' +
-                    ", value='" + value + '\'' +
-                    ", valueColor='" + valueColor + '\'' +
-                    '}';
-        }
     }
 }

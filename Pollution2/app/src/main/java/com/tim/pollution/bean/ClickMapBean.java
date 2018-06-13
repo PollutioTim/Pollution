@@ -29,6 +29,15 @@ public class ClickMapBean extends StateCode implements Serializable {
     private String AQI;
     @SerializedName("AQIcolor")
     private String AQIColor;
+    private boolean isClick;
+
+    public boolean isClick() {
+        return isClick;
+    }
+
+    public void setClick(boolean click) {
+        isClick = click;
+    }
 
     public String getRegionId() {
         return regionId;

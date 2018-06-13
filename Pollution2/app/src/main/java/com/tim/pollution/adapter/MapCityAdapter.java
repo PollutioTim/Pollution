@@ -3,6 +3,7 @@ package com.tim.pollution.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ public class MapCityAdapter extends RecyclerView.Adapter<MapCityAdapter.ViewHold
 
     private Context context;
     private List<ClickMapBean> datas;
+
     public MapCityAdapter(Context context, List<ClickMapBean> clickMapBeens) {
         this.context = context;
         this.datas = clickMapBeens;
@@ -36,15 +38,33 @@ public class MapCityAdapter extends RecyclerView.Adapter<MapCityAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.tvValue.setText(datas.get(position).getAQI());
         holder.tvName.setText(datas.get(position).getRegionName());
+        holder.tvName.setTextColor
+                (context.getResources().getColor(R.color.color_white));
+        holder.tvValue.setTextColor
+                (context.getResources().getColor(R.color.color_white));
+
+        if(datas.get(position).isClick()){
+            Log.e("lili","positions="+position);
+            holder.tvName.setTextColor(context.getResources().getColor(R.color.main));
+            holder.tvValue.setTextColor(context.getResources().getColor(R.color.main));
+        }
+
         holder.llCity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.e("lili","--------");
                 onItemClickListener.onItemClick(position);
+                for(ClickMapBean clickMapBean : datas){
+                    clickMapBean.setClick(false);
+                }
+                datas.get(position).setClick(true);
             }
         });
+
+
 
     }
 

@@ -29,6 +29,7 @@ public class QualityReleaseActivity extends BaseActivity {
 
     @Override
     public void initView() {
+        setActivityName("空气质量");
         tvTitle.setText(getResources().getString(R.string.quity_release_title));
         StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_white), 0);
     }

@@ -1,5 +1,6 @@
 package com.tim.pollution.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -9,20 +10,30 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.SuperscriptSpan;
 import android.util.Log;
+import android.util.TimeUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.tim.pollution.MainActivity;
 import com.tim.pollution.R;
+import com.tim.pollution.activity.SellersDetailActivity;
 import com.tim.pollution.adapter.RankAdapter;
 import com.tim.pollution.adapter.RankLastAdapter;
 import com.tim.pollution.bean.MyData;
@@ -32,8 +43,11 @@ import com.tim.pollution.callback.ICallBack;
 import com.tim.pollution.general.MData;
 import com.tim.pollution.general.MDataType;
 import com.tim.pollution.net.RankDAL;
+import com.tim.pollution.utils.DateUtil;
+import com.tim.pollution.utils.TimeString;
 import com.woodnaonly.arcprogress.Utils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -52,13 +66,11 @@ import static android.support.v4.widget.DrawerLayout.STATE_SETTLING;
 
 /**
  * Created by lenovo on 2018/4/23.
- * 排行
+ * 排名
  */
 
 
 public class SellersFragment extends Fragment implements ICallBack {
-    @BindView(R.id.sellers_station_tv)
-    TextView tvStation;
     @BindView(R.id.sellers_swicth_tv)
     TextView tvSwitch;
     @BindView(R.id.now_ll)
@@ -67,6 +79,8 @@ public class SellersFragment extends Fragment implements ICallBack {
     LinearLayout llAll;
     @BindView(R.id.yesterday_ll)
     LinearLayout llYestday;
+    @BindView(R.id.year_ll)
+    LinearLayout llYear;
     @BindView(R.id.last_ll)
     LinearLayout llLast;
     @BindView(R.id.now_tv)
@@ -85,7 +99,19 @@ public class SellersFragment extends Fragment implements ICallBack {
     TextView tvLast;
     @BindView(R.id.last_view)
     View vLast;
+    @BindView(R.id.year_view)
+    View vYear;
+    @BindView(R.id.year_tv)
+    TextView tvYear;
 
+    @BindView(R.id.seller_one_rb)
+    Button btn11;
+    @BindView(R.id.seller_two_rb)
+    Button btn102;
+    @BindView(R.id.seller_three_rb)
+    Button btntongdao;
+    @BindView(R.id.seller_four_rb)
+    Button btnPinYuan;
 
     @BindView(R.id.index_all_tv)
     TextView tvIndex;
@@ -131,18 +157,25 @@ public class SellersFragment extends Fragment implements ICallBack {
     RecyclerView recviewMonth;
     @BindView(R.id.sellers_rl)
     RelativeLayout rl;
+    @BindView(R.id.unit_tv)
+    TextView tvUnit;
+    @BindView(R.id.time_seller_tv)
+    TextView tvTime;
 
-//    @BindView(R.id.city_tv)
+    //    @BindView(R.id.city_tv)
     TextView tvCity;
-//    @BindView(R.id.region_tv)
+    //    @BindView(R.id.region_tv)
     TextView tvRegion;
-//    @BindView(R.id.point_tv)
+    //    @BindView(R.id.point_tv)
     TextView tvPoint;
     @BindView(R.id.sellers_sort_ll)
     LinearLayout llSort;
+    @BindView(R.id.top_down_iv)
+    ImageView ivTopDown;
+
     private Map<String, String> parms;
-    private List<RankMainBean.Message> datas;
-    private List<RankLastBean.Message> rankLasts;
+    private List<RankMainBean.Message.Content> datas;
+    private List<RankLastBean.Message.Content> rankLasts;
     private RankAdapter adapter;
     private RankLastAdapter lastAdapter;
     private String datatype = "real";//初始为real
@@ -150,10 +183,12 @@ public class SellersFragment extends Fragment implements ICallBack {
     private String ranktype = "AQI";//初始为aqi
     private LinearLayoutManager lm;
     private LinearLayoutManager lms;
-    private String regiontype = "city";
+    private String regiontype = "city";//区域类型
+    private String areatype = "allregion";//区县 allregion、Point
     private boolean flag = true;
-    int height ;
-
+    private boolean isClick= true;//箭头的选择
+    int height;
+    private boolean isSelect = true;//是否选择了aqi
 
     @Nullable
     @Override
@@ -166,9 +201,12 @@ public class SellersFragment extends Fragment implements ICallBack {
         tvNow.setTextColor(getResources().getColor(R.color.color_white));
         vNow.setVisibility(View.VISIBLE);
         setTextColor();
+        setBtnClear();
+        btn11.setSelected(true);
         tvIndex.setTextColor(getResources().getColor(R.color.color_white));
         tvIndex.setText("AQI");
         tvTitleType.setText("AQI");
+        tvUnit.setText("mg/m3");
         initMain();
         initLast();
         getData();
@@ -180,24 +218,36 @@ public class SellersFragment extends Fragment implements ICallBack {
         lm.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(lm);
         datas = new ArrayList<>();
-        adapter = new RankAdapter(getActivity(), datas);
+        adapter = new RankAdapter(datas);
         recyclerView.setAdapter(adapter);
+
+        adapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, int i) {
+                Intent intent = new Intent(getActivity(), SellersDetailActivity.class);
+                intent.putExtra("item", datas.get(i).getId());
+                intent.putExtra("regiontype", regiontype);
+                intent.putExtra("datatype", datatype);
+                intent.putExtra("ranktype", ranktype);
+                intent.putExtra("areatype", areatype);
+                startActivity(intent);
+            }
+        });
 
         ViewTreeObserver vto = rl.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 rl.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                height =rl.getHeight();
-                Log.e("lili","height="+height);
+                height = rl.getHeight();
                 int statusBarHeight1 = -1;
-//获取status_bar_height资源的ID
+                //获取status_bar_height资源的ID
                 int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
                 if (resourceId > 0) {
                     //根据资源ID获取响应的尺寸值
                     statusBarHeight1 = getResources().getDimensionPixelSize(resourceId);
                 }
-                height = height+statusBarHeight1;
+                height = height + statusBarHeight1;
             }
         });
     }
@@ -208,8 +258,20 @@ public class SellersFragment extends Fragment implements ICallBack {
         recviewMonth.setLayoutManager(lms);
 
         rankLasts = new ArrayList<>();
-        lastAdapter = new RankLastAdapter(getActivity(), rankLasts);
+        lastAdapter = new RankLastAdapter(rankLasts);
         recviewMonth.setAdapter(lastAdapter);
+        lastAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, int i) {
+                Intent intent = new Intent(getActivity(), SellersDetailActivity.class);
+                intent.putExtra("item", rankLasts.get(i).getAreaid());
+                intent.putExtra("regiontype", regiontype);
+                intent.putExtra("datatype", datatype);
+                intent.putExtra("ranktype", ranktype);
+                intent.putExtra("areatype", areatype);
+                startActivity(intent);
+            }
+        });
     }
 
     private void getData() {
@@ -220,69 +282,37 @@ public class SellersFragment extends Fragment implements ICallBack {
         parms.put("regiontype", regiontype);
         parms.put("datatype", datatype);
         parms.put("ranktype", ranktype);
-        parms.put("pointtype", pointtype);
-        if (!llLast.isSelected()) {
-            RankDAL.getInstance().getRank(parms, this);
-        } else {
+        parms.put("areatype", areatype);
+        Log.e("lili", "regiontype = " + regiontype + ",datatype=" + datatype + ",ranktype=" + ranktype
+                + ",areatype=" + areatype);
+        if (llLast.isSelected() || llYear.isSelected()) {
             RankDAL.getInstance().getRankLast(parms, this);
+        } else {
+            RankDAL.getInstance().getRank(parms, this);
         }
     }
 
     @OnClick({R.id.now_ll, R.id.last_ll, R.id.yesterday_ll, R.id.all_ll, R.id.sellers_swicth_tv
             , R.id.sellers_o_3, R.id.index_all_tv, R.id.sellers_pm_25, R.id.sellers_pm_10, R.id.sellers_so_2,
-            R.id.sellers_co_tv, R.id.sellers_no_2,R.id.sellers_station_tv, R.id.sellers_sort_ll})
+            R.id.sellers_co_tv, R.id.sellers_no_2, R.id.sellers_sort_ll, R.id.seller_one_rb, R.id.seller_two_rb
+            , R.id.year_ll, R.id.seller_four_rb, R.id.seller_three_rb})
     public void OnClick(View view) {
         switch (view.getId()) {
-            case R.id.sellers_sort_ll:
-                if(flag){
+            case R.id.sellers_sort_ll://顺序
+                if (flag) {//正序
                     Collections.reverse(datas);
                     adapter.notifyDataSetChanged();
-                }else{
+                } else {
                     Collections.reverse(rankLasts);
                     lastAdapter.notifyDataSetChanged();
                 }
-                break;
-            case R.id.sellers_station_tv:
-                //弹出站点的选择框
-                View popupView = getActivity().getLayoutInflater().inflate(R.layout.popuwindow_layout, null);
-                tvPoint = (TextView) popupView.findViewById(R.id.point_tv);
-                tvCity = (TextView) popupView.findViewById(R.id.city_tv);
-                tvRegion = (TextView) popupView.findViewById(R.id.region_tv);
-                final PopupWindow window = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT,true);
-                window.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F8F8F8")));
-                window.setFocusable(true);
-                window.setOutsideTouchable(true);
-                window.update();
-                window.showAsDropDown(popupView, 10, height);
-                tvPoint.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        regiontype = "point";
-                        if("".equals(pointtype)){
-                            Toast.makeText(getActivity(),"请选择站点类型",Toast.LENGTH_LONG).show();
-                        }else{
-                            getData();
-                        }
-                        window.dismiss();
-                    }
-                });
-                tvCity.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        regiontype = "city";
-                        getData();
-                        window.dismiss();
-                    }
-                });
-                tvRegion.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        regiontype = "region";
-                        getData();
-                        window.dismiss();
-                    }
-                });
+                if(isClick){
+                    isClick = false;
+                    ivTopDown.setImageResource(R.drawable.ic_down_jiantou);
+                }else{
+                    isClick = true;
+                    ivTopDown.setImageResource(R.drawable.ic_top_jiantou);
+                }
                 break;
             case R.id.now_ll://实时
                 setClear();
@@ -295,7 +325,7 @@ public class SellersFragment extends Fragment implements ICallBack {
                     recyclerView.setVisibility(View.VISIBLE);
                     recviewMonth.setVisibility(View.GONE);
 
-                    if(ranktype.equals("ZH")){
+                    if (ranktype.equals("ZH")) {
                         ranktype = "AQI";
                     }
                     tvIndex.setText("AQI");
@@ -314,6 +344,9 @@ public class SellersFragment extends Fragment implements ICallBack {
                     recyclerView.setVisibility(View.GONE);
                     recviewMonth.setVisibility(View.VISIBLE);
                     tvIndex.setText("综指");
+                    if (isSelect) {
+                        ranktype = "ZH";
+                    }
                     tvO3.setText("3_8H");
                     getData();
                 }
@@ -348,14 +381,32 @@ public class SellersFragment extends Fragment implements ICallBack {
                     getData();
                 }
                 break;
+            case R.id.year_ll://年排
+                setClear();
+                datatype = "year";
+                llYear.setSelected(true);
+                if (llYear.isSelected()) {
+                    flag = false;
+                    tvYear.setTextColor(getResources().getColor(R.color.color_white));
+                    vYear.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                    recviewMonth.setVisibility(View.VISIBLE);
+                    tvIndex.setText("综指");
+                    if (isSelect) {
+                        ranktype = "ZH";
+                    }
+                    tvO3.setText("3_8H");
+                    getData();
+                }
+                break;
             case R.id.sellers_swicth_tv:
                 if (tvSwitch.isSelected()) {
-                    tvSwitch.setText("省控");
-                    pointtype = "S";
+                    tvSwitch.setText("区县");
+                    areatype = "allregion";
                     tvSwitch.setSelected(false);
                 } else {
-                    tvSwitch.setText("国控");
-                    pointtype = "G";
+                    tvSwitch.setText("站点");
+                    areatype = "point";
                     tvSwitch.setSelected(true);
                 }
                 getData();
@@ -366,58 +417,96 @@ public class SellersFragment extends Fragment implements ICallBack {
                 tvO3.setTextColor(getResources().getColor(R.color.color_white));
                 ranktype = "O3";
                 tvTitleType.setText("O3");
+                tvUnit.setText("ug/m3");
                 getData();
                 break;
             case R.id.index_all_tv://aqi 和zh选择切换
                 setTextColor();
                 tvIndex.setTextColor(getResources().getColor(R.color.color_white));
-                if (!llLast.isSelected()) {
-                    ranktype = "AQI";
-                    tvTitleType.setText("AQI");
-                } else {
+                isSelect = true;
+                if (llLast.isSelected() || llYear.isSelected()) {
                     ranktype = "ZH";
                     tvTitleType.setText("综指");
+                } else {
+                    ranktype = "AQI";
+                    tvTitleType.setText("AQI");
                 }
+                isSelect = true;
+                tvUnit.setText("ug/m3");
                 getData();
                 break;
             case R.id.sellers_pm_25:
                 setTextColor();
+                isSelect = false;
                 tv25.setTextColor(getResources().getColor(R.color.color_white));
                 tvPM2.setTextColor(getResources().getColor(R.color.color_white));
                 ranktype = "PM25";
                 tvTitleType.setText("PM25");
-                Log.e("lili","rankType="+ranktype+"dataType="+datatype+"pointtype="+pointtype);
+                Log.e("lili", "rankType=" + ranktype + "dataType=" + datatype + "pointtype=" + pointtype);
                 getData();
+                tvUnit.setText("ug/m3");
                 break;
             case R.id.sellers_pm_10:
                 setTextColor();
+                isSelect = false;
                 tv10.setTextColor(getResources().getColor(R.color.color_white));
                 tvPM10.setTextColor(getResources().getColor(R.color.color_white));
                 ranktype = "PM10";
                 tvTitleType.setText("PM10");
+                tvUnit.setText("ug/m3");
                 getData();
                 break;
             case R.id.sellers_so_2:
                 setTextColor();
+                isSelect = false;
                 tvSO.setTextColor(getResources().getColor(R.color.color_white));
                 tvSO2.setTextColor(getResources().getColor(R.color.color_white));
                 ranktype = "SO2";
                 tvTitleType.setText("SO2");
+                tvUnit.setText("ug/m3");
                 getData();
                 break;
             case R.id.sellers_co_tv:
                 setTextColor();
+                isSelect = false;
                 tvCO.setTextColor(getResources().getColor(R.color.color_white));
                 ranktype = "CO";
                 tvTitleType.setText("CO");
+                tvUnit.setText("mg/m3");
                 getData();
                 break;
             case R.id.sellers_no_2:
                 setTextColor();
+                isSelect = false;
                 tvNO.setTextColor(getResources().getColor(R.color.color_white));
                 tv2.setTextColor(getResources().getColor(R.color.color_white));
                 ranktype = "NO2";
                 tvTitleType.setText("NO2");
+                tvUnit.setText("ug/m3");
+                getData();
+                break;
+            case R.id.seller_one_rb://11个城市
+                regiontype = "city";
+                setBtnClear();
+                btn11.setSelected(true);
+                getData();
+                break;
+            case R.id.seller_two_rb://102个县
+                regiontype = "region";
+                setBtnClear();
+                btn102.setSelected(true);
+                getData();
+                break;
+            case R.id.seller_three_rb://通道
+                regiontype = "TD";
+                setBtnClear();
+                btntongdao.setSelected(true);
+                getData();
+                break;
+            case R.id.seller_four_rb://平原
+                regiontype = "PY";
+                setBtnClear();
+                btnPinYuan.setSelected(true);
                 getData();
                 break;
         }
@@ -428,6 +517,8 @@ public class SellersFragment extends Fragment implements ICallBack {
         tvAll.setTextColor(getResources().getColor(R.color.tx_gray));
         tvLast.setTextColor(getResources().getColor(R.color.tx_gray));
         tvYesterday.setTextColor(getResources().getColor(R.color.tx_gray));
+        tvYear.setTextColor(getResources().getColor(R.color.tx_gray));
+        vYear.setVisibility(View.INVISIBLE);
         vNow.setVisibility(View.INVISIBLE);
         vAll.setVisibility(View.INVISIBLE);
         vYesterday.setVisibility(View.INVISIBLE);
@@ -436,6 +527,7 @@ public class SellersFragment extends Fragment implements ICallBack {
         llLast.setSelected(false);
         llYestday.setSelected(false);
         llAll.setSelected(false);
+        llYear.setSelected(false);
     }
 
     private void setTextColor() {
@@ -453,6 +545,13 @@ public class SellersFragment extends Fragment implements ICallBack {
         tvNO.setTextColor(getResources().getColor(R.color.gree_blue));
     }
 
+    private void setBtnClear() {
+        btn11.setSelected(false);
+        btn102.setSelected(false);
+        btntongdao.setSelected(false);
+        btnPinYuan.setSelected(false);
+    }
+
     @Override
     public void onSuccess(Object data) {
         MData mData = (MData) data;
@@ -462,8 +561,10 @@ public class SellersFragment extends Fragment implements ICallBack {
                 if (datas.size() > 0 || rankLasts.size() > 0) {
                     datas.clear();
                 }
-                datas .addAll( rankMainBean.getMessages());
-                Log.e("lili","datas="+datas.toString());
+                datas.addAll(rankMainBean.getMessages().getContents());
+
+                tvTime.setText(TimeString.switchTime(
+                        rankMainBean.getMessages().getTime()));
                 adapter.notifyDataSetChanged();
             }
         } else if (mData.getType().equals(MDataType.RANK_LAST)) {
@@ -472,11 +573,15 @@ public class SellersFragment extends Fragment implements ICallBack {
                 if (rankLasts.size() > 0 || datas.size() > 0) {
                     rankLasts.clear();
                 }
-                rankLasts.addAll(rankLastBean.getMessages());
+
+                tvTime.setText(rankLastBean.getMessages().getTime());
+                rankLasts.addAll(rankLastBean.getMessages().getContents());
+                Log.e("lili", "ranklasts=" + rankLasts.size());
                 lastAdapter.notifyDataSetChanged();
             }
         }
     }
+
 
     @Override
     public void onError(String msg, String eCode) {
