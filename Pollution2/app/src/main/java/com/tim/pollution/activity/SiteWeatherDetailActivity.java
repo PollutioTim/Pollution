@@ -119,6 +119,11 @@ public class SiteWeatherDetailActivity extends BaseActivity implements ICallBack
     }
 
     @Override
+    public void initData() {
+
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         setActivityName("站点天气详情");
@@ -155,11 +160,17 @@ public class SiteWeatherDetailActivity extends BaseActivity implements ICallBack
         MData mData = (MData) data;
         if (MDataType.POINT_INFONET_BEAN.equals(mData.getType())) {
             pointInfoNetBean = (PointInfoNetBean) mData.getData();
-            initData();
+            setData();
         }
     }
-    @Override
-    public void initData() {
+
+    public void setData() {
+
+        if(pointInfoNetBean==null){
+            Toast.makeText(this,"该站点信息为空，不可查看",Toast.LENGTH_LONG).show();
+            this.finish();
+            return;
+        }
         if (pointInfoNetBean.getMessage() == null) {
             Toast.makeText(this,"该站点信息为空，不可查看",Toast.LENGTH_LONG).show();
             this.finish();
