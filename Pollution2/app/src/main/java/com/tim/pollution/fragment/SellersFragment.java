@@ -173,6 +173,7 @@ public class SellersFragment extends Fragment implements ICallBack {
     @BindView(R.id.top_down_iv)
     ImageView ivTopDown;
 
+
     private Map<String, String> parms;
     private List<RankMainBean.Message.Content> datas;
     private List<RankLastBean.Message.Content> rankLasts;
