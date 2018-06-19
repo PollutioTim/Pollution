@@ -22,6 +22,12 @@ public class RankMainBean extends StateCode implements Serializable {
         this.messages = messages;
     }
 
+    @Override
+    public String toString() {
+        return "RankMainBean{" +
+                "messages=" + messages +
+                '}';
+    }
 
     public class Message{
         private String time;

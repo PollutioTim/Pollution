@@ -342,9 +342,18 @@ public class SellersDetailActivity extends BaseActivity implements ICallBack {
                     datas.clear();
                 }
                 datas.addAll(rankMainBean.getMessages().getContents());
-                tvTime.setText(TimeString.switchTime(rankMainBean.getMessages().getTime()));
+                if("realsum".equals(datatype)){
+                    tvTime.setText(TimeString.switchAllTimes(
+                            rankMainBean.getMessages().getTime()));
+                }else if("day".equals(datatype)){
+                    tvTime.setText(TimeString.switchTime(rankMainBean.getMessages().getTime()));
+                }else if("real".equals(datatype)){
+                    tvTime.setText(TimeString.switchAllTimes(
+                            rankMainBean.getMessages().getTime()));
+                }
                 adapter.notifyDataSetChanged();
             }
+
         } else if (mData.getType().equals(MDataType.RANK_LAST)) {
             RankLastBean rankLastBean = (RankLastBean) mData.getData();
             if (rankLastBean != null) {
@@ -352,7 +361,8 @@ public class SellersDetailActivity extends BaseActivity implements ICallBack {
                     rankLasts.clear();
                 }
                 rankLasts.addAll(rankLastBean.getMessages().getContents());
-                tvTime.setText(rankLastBean.getMessages().getTime());
+                tvTime.setText(TimeString.switchYearTimes(
+                        rankLastBean.getMessages().getTime()));
                 lastAdapter.notifyDataSetChanged();
             }
         }

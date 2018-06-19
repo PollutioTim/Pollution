@@ -173,7 +173,6 @@ public class SellersFragment extends Fragment implements ICallBack {
     @BindView(R.id.top_down_iv)
     ImageView ivTopDown;
 
-
     private Map<String, String> parms;
     private List<RankMainBean.Message.Content> datas;
     private List<RankLastBean.Message.Content> rankLasts;
@@ -358,6 +357,9 @@ public class SellersFragment extends Fragment implements ICallBack {
                 llYestday.setSelected(true);
                 if (llYestday.isSelected()) {
                     flag = true;
+                    if (ranktype.equals("ZH")) {
+                        ranktype = "AQI";
+                    }
                     tvYesterday.setTextColor(getResources().getColor(R.color.color_white));
                     vYesterday.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.VISIBLE);
@@ -379,6 +381,9 @@ public class SellersFragment extends Fragment implements ICallBack {
                     recviewMonth.setVisibility(View.GONE);
                     tvIndex.setText("AQI");
                     tvO3.setText("3_8H");
+                    if (ranktype.equals("ZH")) {
+                        ranktype = "AQI";
+                    }
                     getData();
                 }
                 break;
@@ -562,10 +567,17 @@ public class SellersFragment extends Fragment implements ICallBack {
                 if (datas.size() > 0 || rankLasts.size() > 0) {
                     datas.clear();
                 }
-                datas.addAll(rankMainBean.getMessages().getContents());
 
-                tvTime.setText(TimeString.switchTime(
-                        rankMainBean.getMessages().getTime()));
+                datas.addAll(rankMainBean.getMessages().getContents());
+                if(llYestday.isSelected()){
+                    tvTime.setText(TimeString.switchTime(
+                            rankMainBean.getMessages().getTime()));
+                }else if(llNow.isSelected()){
+                    tvTime.setText(TimeString.switchTimes(rankMainBean.getMessages().getTime()));
+                }else if(llAll.isSelected()){
+                    tvTime.setText(TimeString.switchAllTimes(
+                            rankMainBean.getMessages().getTime()));
+                }
                 adapter.notifyDataSetChanged();
             }
         } else if (mData.getType().equals(MDataType.RANK_LAST)) {
@@ -575,7 +587,8 @@ public class SellersFragment extends Fragment implements ICallBack {
                     rankLasts.clear();
                 }
 
-                tvTime.setText(rankLastBean.getMessages().getTime());
+                tvTime.setText(TimeString.switchYearTimes(
+                        rankLastBean.getMessages().getTime()));
                 rankLasts.addAll(rankLastBean.getMessages().getContents());
                 Log.e("lili", "ranklasts=" + rankLasts.size());
                 lastAdapter.notifyDataSetChanged();
