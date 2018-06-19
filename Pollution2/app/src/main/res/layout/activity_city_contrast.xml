@@ -42,6 +42,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:gravity="center"
+
                     android:orientation="vertical">
 
                     <TextView
@@ -52,12 +53,13 @@
                         android:gravity="center"
                         android:padding="10dp"
                         android:textColor="@color/color_white"
+                        android:background="@drawable/radiobutton_selecter01"
                         android:textSize="12sp" />
 
-                    <View
+                   <!-- <View
                         android:layout_width="50dp"
                         android:layout_height="4dp"
-                        android:background="@color/color1" />
+                        android:background="@color/color1" />-->
                 </LinearLayout>
 
                 <LinearLayout
@@ -77,12 +79,13 @@
                         android:gravity="center"
                         android:padding="10dp"
                         android:textColor="@color/color_white"
+                        android:background="@drawable/radiobutton_selecter02"
                         android:textSize="12sp" />
 
-                    <View
+                   <!-- <View
                         android:layout_width="50dp"
                         android:layout_height="4dp"
-                        android:background="@color/color2" />
+                        android:background="@color/color2" />-->
 
                 </LinearLayout>
 
@@ -103,12 +106,13 @@
                         android:gravity="center"
                         android:padding="10dp"
                         android:textColor="@color/color_white"
+                        android:background="@drawable/radiobutton_selecter03"
                         android:textSize="12sp" />
 
-                    <View
+            <!--        <View
                         android:layout_width="50dp"
                         android:layout_height="4dp"
-                        android:background="@color/color3" />
+                        android:background="@color/color3" />-->
 
                 </LinearLayout>
 
