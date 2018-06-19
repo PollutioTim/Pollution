@@ -206,7 +206,7 @@ public class SellersFragment extends Fragment implements ICallBack {
         tvIndex.setTextColor(getResources().getColor(R.color.color_white));
         tvIndex.setText("AQI");
         tvTitleType.setText("AQI");
-        tvUnit.setText("mg/m3");
+        tvUnit.setText("ug/m3");
         initMain();
         initLast();
         getData();

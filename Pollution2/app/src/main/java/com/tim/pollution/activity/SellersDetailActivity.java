@@ -181,8 +181,6 @@ public class SellersDetailActivity extends BaseActivity implements ICallBack {
         datatype = getIntent().getStringExtra("datatype");
         ranktype = getIntent().getStringExtra("ranktype");
         areatype  =getIntent().getStringExtra("areatype");
-        Log.e("lili","regiontype = " + regiontype+",datatype = "+datatype+",ranktype = "+ranktype+",areatype ="+areatype
-        +",id = "+id);
         setTextColor();
         if("month".equals(datatype)||"year".equals(datatype)){
             tvIndex.setTextColor(getResources().getColor(R.color.color_white));
@@ -193,7 +191,7 @@ public class SellersDetailActivity extends BaseActivity implements ICallBack {
             tvIndex.setText("AQI");
             tvTitleType.setText("AQI");
         }
-        tvUnit.setText("mg/m3");
+        tvUnit.setText("ug/m3");
     }
 
     @Override

@@ -250,7 +250,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="match_parent"
-                    android:text="102"
+                    android:text="121"
                     android:background="@drawable/select_top_bottom_bt"
                     android:textColor="@drawable/select_tx_color"
                     android:textSize="14sp"
