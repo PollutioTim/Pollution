@@ -30,6 +30,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import retrofit2.http.Field;
 
 import static com.tim.pollution.R.layout.fragment_sellers;
 
@@ -38,6 +39,7 @@ import static com.tim.pollution.R.layout.fragment_sellers;
  */
 
 public class SellersDetailActivity extends BaseActivity implements ICallBack {
+
     @BindView(R.id.sellers_swicth_tv)
     TextView tvSwitch;
     @BindView(R.id.now_ll)
@@ -162,7 +164,6 @@ public class SellersDetailActivity extends BaseActivity implements ICallBack {
     private String areatype ="";
     private String ranktype = "";//初始为aqis
     private boolean isClick = true;
-
 
     @Override
     public int intiLayout() {
@@ -341,6 +342,7 @@ public class SellersDetailActivity extends BaseActivity implements ICallBack {
                 if (datas.size() > 0 || rankLasts.size() > 0) {
                     datas.clear();
                 }
+
                 datas.addAll(rankMainBean.getMessages().getContents());
                 if("realsum".equals(datatype)){
                     tvTime.setText(TimeString.switchAllTimes(
@@ -353,7 +355,6 @@ public class SellersDetailActivity extends BaseActivity implements ICallBack {
                 }
                 adapter.notifyDataSetChanged();
             }
-
         } else if (mData.getType().equals(MDataType.RANK_LAST)) {
             RankLastBean rankLastBean = (RankLastBean) mData.getData();
             if (rankLastBean != null) {

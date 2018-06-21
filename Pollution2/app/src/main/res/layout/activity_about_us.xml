@@ -97,6 +97,7 @@
                         android:layout_height="25dp"
                         android:layout_gravity="center"
                         android:layout_marginTop="25dp"
+                        android:visibility="gone"
                         android:src="@mipmap/ic_email"/>
 
                     <TextView
@@ -104,6 +105,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=""
+                        android:visibility="gone"
                         android:textColor="@color/black"
                         android:textSize="12sp"
                         android:layout_marginTop="10dp"
@@ -127,13 +129,14 @@
 
 
                     <TextView
+                        android:id="@+id/versionname_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
                         android:textSize="14sp"
                         android:layout_gravity="center"
                         android:layout_marginTop="20dp"
-                        android:text="山西省空气质量发布VERSION 1.2"/>
+                        android:text="山西省空气质量发布VERSION1.0"/>
 
 
                     <TextView
@@ -143,7 +146,7 @@
                         android:textSize="12sp"
                         android:layout_gravity="center"
                         android:layout_marginTop="12dp"
-                        android:text="山西环境监测中心站"/>
+                        android:text="山西省环境监测中心站"/>
                 </LinearLayout>
 
         </LinearLayout>

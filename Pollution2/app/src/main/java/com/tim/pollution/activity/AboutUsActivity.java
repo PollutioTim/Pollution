@@ -10,7 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 
+import com.tim.pollution.MyApplication;
 import com.tim.pollution.R;
 import com.tim.pollution.general.BaseActivity;
 import com.tim.pollution.utils.niorgai.StatusBarCompat;
@@ -29,6 +31,8 @@ public class AboutUsActivity extends BaseActivity {
     CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.versionname_tv)
+    TextView tvVersionName;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,6 +48,7 @@ public class AboutUsActivity extends BaseActivity {
     @Override
     public void initView() {
         collapsingToolbarLayout.setTitle(getResources().getString(R.string.about_us));
+        tvVersionName.setText("山西省空气质量发布VERSION"+ MyApplication.getInstance().getVersionName());
     }
 
     @Override
