@@ -1,6 +1,7 @@
 package com.tim.pollution.fragment;
 
 import android.app.Activity;
+import android.app.AppOpsManager;
 import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -8,7 +9,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.location.LocationManager;
+import android.net.Uri;
+import android.os.Binder;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.v4.app.AppOpsManagerCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -43,9 +50,11 @@ import com.tim.pollution.net.WeatherDal;
 import com.tim.pollution.utils.CityListSaveUtil;
 import com.tim.pollution.utils.DateUtil;
 import com.tim.pollution.utils.LocationUtil;
+import com.tim.pollution.view.ProgressView;
 import com.tim.pollution.view.WrapContentHeightViewPager;
 import com.tim.pollution.view.WrapContentListView;
 
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,8 +62,6 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import lecho.lib.hellocharts.formatter.ColumnChartValueFormatter;
-import lecho.lib.hellocharts.listener.ColumnChartOnValueSelectListener;
 import lecho.lib.hellocharts.model.Axis;
 import lecho.lib.hellocharts.model.AxisValue;
 import lecho.lib.hellocharts.model.Column;
@@ -111,16 +118,113 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
         View view = inflater.inflate(R.layout.activity_home, container, false);
         findView(view);
         initClick();
+
         return view;
 
     }
+    /**
+     * 检查定位服务、权限
+     */
+    private void checkLocationPermission() {
+        if (!isLocServiceEnable(MyApplication.getContext())) {//检测是否开启定位服务
+            showLocationDailog(0);
+        } else {//检测用户是否将当前应用的定位权限拒绝
+            int checkResult = checkOp(MyApplication.getContext(), 2, AppOpsManager.OPSTR_FINE_LOCATION);//其中2代表AppOpsManager.OP_GPS，如果要判断悬浮框权限，第二个参数需换成24即AppOpsManager。OP_SYSTEM_ALERT_WINDOW及，第三个参数需要换成AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW
+            int checkResult2 = checkOp(MyApplication.getContext(), 1, AppOpsManager.OPSTR_FINE_LOCATION);
+            if (AppOpsManagerCompat.MODE_IGNORED == checkResult || AppOpsManagerCompat.MODE_IGNORED == checkResult2) {
+                showLocationDailog(1);
+            }
+        }
+    }
+    /**
+     * 检查权限列表
+     *
+     * @param context
+     * @param op       这个值被hide了，去AppOpsManager类源码找，如位置权限  AppOpsManager.OP_GPS==2
+     * @param opString 如判断定位权限 AppOpsManager.OPSTR_FINE_LOCATION
+     * @return @see 如果返回值 AppOpsManagerCompat.MODE_IGNORED 表示被禁用了
+     */
+    public static int checkOp(Context context, int op, String opString) {
+        final int version = Build.VERSION.SDK_INT;
+        if (version >= 19) {
+            Object object = context.getSystemService(Context.APP_OPS_SERVICE);
+//            Object object = context.getSystemService("appops");
+            Class c = object.getClass();
+            try {
+                Class[] cArg = new Class[3];
+                cArg[0] = int.class;
+                cArg[1] = int.class;
+                cArg[2] = String.class;
+                Method lMethod = c.getDeclaredMethod("checkOp", cArg);
+                return (Integer) lMethod.invoke(object, op, Binder.getCallingUid(), context.getPackageName());
+            } catch (Exception e) {
+                e.printStackTrace();
+                if (Build.VERSION.SDK_INT >= 23) {
+                    return AppOpsManagerCompat.noteOp(context, opString, context.getApplicationInfo().uid,
+                            context.getPackageName());
+                }
 
+            }
+        }
+        return -1;
+    }
+    /**
+     * 开启定位权限
+     */
+    private void showLocationDailog(final int state ) {
+        if (dialogAgain != null) {
+            dialogAgain.show();
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("提示");
+        builder.setMessage("定位权限没有打开，请打开权限");
+        builder.setIcon(R.mipmap.prompt);
+        //点击对话框以外的区域是否让对话框消失
+        builder.setCancelable(false);
+        builder.setNegativeButton("是", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogAgain.dismiss();
+                Intent intent = new Intent();
+                if (state == 0) {
+                    //定位服务页面
+                    intent.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                } else {
+                    //应用详情页面
+                    intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    intent.setData(Uri.parse("package:" + activity.getPackageName()));
+                }
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    activity.startActivity(intent);
+            }
+        });
+        dialogAgain = builder.create();
+        if (dialogAgain != null) {
+            //显示对话框
+            dialogAgain.show();
+        }
+    }
+    /**
+     * 手机是否开启位置服务，如果没有开启那么所有app将不能使用定位功能
+     */
+    public static boolean isLocServiceEnable(Context context) {
+        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        boolean gps = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        boolean network = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        if (gps || network) {
+            return true;
+        }
+        return false;
+    }
     @Override
     public void onStart() {
         super.onStart();
-        loadLocation();
+        checkLocationPermission();
+        pd = ProgressDialog.show(getContext(), "提示", "加载数据中，请耐心等待......");
+        SDKInitializer.initialize(getActivity().getApplicationContext());
+        locationUtil = new LocationUtil(getActivity(), this);
+        loadLocation(); // TODO: 2018/6/21
     }
-
     private void findView(View view) {
         homeWeatherInfoTime = (TextView) view.findViewById(R.id.home_weather_info_time);
         weatherTitleLocation = (TextView) view.findViewById(R.id.weather_title_location);
@@ -182,12 +286,10 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
      * 获取县区列表
      */
     private void loadLocation() {
-        pd = ProgressDialog.show(getContext(), "提示", "加载数据中，请耐心等待......");
-        SDKInitializer.initialize(getActivity().getApplicationContext());
-        locationUtil = new LocationUtil(getActivity(), this);
         Map<String, String> params = new HashMap<>();
         params.put("key", Constants.key);
-        params.put("regiontype", "region");
+//        params.put("regiontype", "region");
+        params.put("regiontype", "allregion");
         WeatherDal.getInstance().getRegion(params, this);
     }
 
@@ -199,7 +301,16 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
         regionIds = new ArrayList<>();
         List<String> regionBeans = CityListSaveUtil.getList(getContext(), CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY);
         if (regionBeans != null && regionBeans.size() > 0) {
-            Log.e("tcy", "关注城市列表：" + regionBeans.toString());
+            RegionNetBean.RegionBean regionBean=new RegionNetBean.RegionBean();
+            regionBean.setRegionName(weatherTitleLocation.getText().toString());
+//            regionBean.setRegionName("阳曲县");
+            if(regionNetBean.getMessage().contains(regionBean)){//添加定位城市
+                int index=regionNetBean.getMessage().indexOf(regionBean);
+                if(!regionBeans.contains(regionNetBean.getMessage().get(index).getRegionId())){
+                    regionIds.add(regionNetBean.getMessage().get(index).getRegionId());
+                }
+            }
+
             for (String rb : regionBeans) {
                 regionIds.add(rb);
             }
@@ -208,7 +319,15 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
                 Toast.makeText(getContext(), "服务器异常，请稍后重试", Toast.LENGTH_LONG).show();
                 return;
             }
-            regionIds.add(regionNetBean.getMessage().get(0).getRegionId());
+            RegionNetBean.RegionBean regionBean=new RegionNetBean.RegionBean();
+            regionBean.setRegionName(weatherTitleLocation.getText().toString());
+            if(regionNetBean.getMessage().contains(regionBean)){
+                int index=regionNetBean.getMessage().indexOf(regionBean);
+                regionIds.add(regionNetBean.getMessage().get(index).getRegionId());
+            }else{
+                regionIds.add(regionNetBean.getMessage().get(0).getRegionId());
+            }
+
         }
         fragments = new ArrayList<>();
         for (int i = 0; i < regionIds.size(); i++) {
@@ -320,9 +439,9 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
                 BDLocation location = (BDLocation) mData.getData();
                 Toast.makeText(getContext(),"定位成功",Toast.LENGTH_LONG).show();
                 if (isFirstLocate) {
-                    weatherTitleLocation.setText(location.getDistrict());
+                    weatherTitleLocation.setText(location.getCity());
                 }
-
+                loadLocation();
             } catch (Exception e) {
 
             }
@@ -350,7 +469,7 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("提示");
-        builder.setMessage(msg + "是否重试？");
+        builder.setMessage(msg + ",是否重试？");
         builder.setIcon(R.mipmap.prompt);
         //点击对话框以外的区域是否让对话框消失
         builder.setCancelable(false);
