@@ -78,5 +78,17 @@ public class RegionNetBean extends StateCode implements Serializable {
             this.RegionName = RegionName;
         }
 
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            RegionBean that = (RegionBean) o;
+
+            return RegionName != null ? RegionName.equals(that.RegionName) : that.RegionName == null;
+
+        }
+
+
     }
 }

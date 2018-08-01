@@ -19,6 +19,7 @@ import android.support.v4.app.AppOpsManagerCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -133,6 +134,8 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
             int checkResult2 = checkOp(MyApplication.getContext(), 1, AppOpsManager.OPSTR_FINE_LOCATION);
             if (AppOpsManagerCompat.MODE_IGNORED == checkResult || AppOpsManagerCompat.MODE_IGNORED == checkResult2) {
                 showLocationDailog(1);
+            }else{
+                locationUtil = new LocationUtil(getActivity(), this);
             }
         }
     }
@@ -172,6 +175,9 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
      * 开启定位权限
      */
     private void showLocationDailog(final int state ) {
+        if (pd != null) {
+            pd.dismiss();
+        }
         if (dialogAgain != null) {
             dialogAgain.show();
         }
@@ -198,6 +204,14 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
                     activity.startActivity(intent);
             }
         });
+        builder.setPositiveButton("否", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                pd = ProgressDialog.show(getContext(), "提示", "加载数据中，请耐心等待......");
+                dialogAgain.dismiss();
+                loadLocation();
+            }
+        });
         dialogAgain = builder.create();
         if (dialogAgain != null) {
             //显示对话框
@@ -219,11 +233,10 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
     @Override
     public void onStart() {
         super.onStart();
-        checkLocationPermission();
         pd = ProgressDialog.show(getContext(), "提示", "加载数据中，请耐心等待......");
+        checkLocationPermission();
         SDKInitializer.initialize(getActivity().getApplicationContext());
-        locationUtil = new LocationUtil(getActivity(), this);
-        loadLocation(); // TODO: 2018/6/21
+//        loadLocation(); // TODO: 2018/6/21
     }
     private void findView(View view) {
         homeWeatherInfoTime = (TextView) view.findViewById(R.id.home_weather_info_time);
@@ -292,6 +305,19 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
         params.put("regiontype", "allregion");
         WeatherDal.getInstance().getRegion(params, this);
     }
+    private RegionNetBean.RegionBean getRegion(List<RegionNetBean.RegionBean> regionBeanList,String locationName){
+        Log.e("test","城市长度："+regionBeanList.size()+":"+locationName);
+        if(regionBeanList==null|| TextUtils.isEmpty(locationName)){
+            return null;
+        }
+        for(RegionNetBean.RegionBean regionBean:regionBeanList){
+            Log.e("test","城市："+regionBean.getRegionName()+":"+locationName);
+            if(regionBean.getRegionName().contains(locationName)){
+                return regionBean;
+            }
+        }
+        return null;
+    }
 
     /**
      * 显示关注城市，无关注城市，显示县区列表的第一项
@@ -304,13 +330,16 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
             RegionNetBean.RegionBean regionBean=new RegionNetBean.RegionBean();
             regionBean.setRegionName(weatherTitleLocation.getText().toString());
 //            regionBean.setRegionName("阳曲县");
-            if(regionNetBean.getMessage().contains(regionBean)){//添加定位城市
+            /*if(regionNetBean.getMessage().contains(regionBean)){//添加定位城市
                 int index=regionNetBean.getMessage().indexOf(regionBean);
                 if(!regionBeans.contains(regionNetBean.getMessage().get(index).getRegionId())){
                     regionIds.add(regionNetBean.getMessage().get(index).getRegionId());
                 }
+            }*/
+            RegionNetBean.RegionBean regionBeanLocation=getRegion(regionNetBean.getMessage(),weatherTitleLocation.getText().toString());//获取定位城市信息
+            if(regionBeanLocation!=null&&!regionBeans.contains(regionBeanLocation.getRegionId())){
+                regionIds.add(regionBeanLocation.getRegionId());
             }
-
             for (String rb : regionBeans) {
                 regionIds.add(rb);
             }
@@ -321,9 +350,12 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
             }
             RegionNetBean.RegionBean regionBean=new RegionNetBean.RegionBean();
             regionBean.setRegionName(weatherTitleLocation.getText().toString());
-            if(regionNetBean.getMessage().contains(regionBean)){
-                int index=regionNetBean.getMessage().indexOf(regionBean);
-                regionIds.add(regionNetBean.getMessage().get(index).getRegionId());
+            RegionNetBean.RegionBean regionBeanLocation=getRegion(regionNetBean.getMessage(),weatherTitleLocation.getText().toString());//获取定位城市信息
+//            if(regionNetBean.getMessage().contains(regionBean)){
+//                int index=regionNetBean.getMessage().indexOf(regionBean);
+//                regionIds.add(regionNetBean.getMessage().get(index).getRegionId());
+            if(regionBeanLocation!=null){
+                regionIds.add(regionBeanLocation.getRegionId());
             }else{
                 regionIds.add(regionNetBean.getMessage().get(0).getRegionId());
             }
@@ -437,9 +469,10 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
         } else if (mData.getType().equals(MDataType.MAP)) {
             try {
                 BDLocation location = (BDLocation) mData.getData();
-                Toast.makeText(getContext(),"定位成功",Toast.LENGTH_LONG).show();
+//                Toast.makeText(getContext(),"定位成功",Toast.LENGTH_LONG).show();
                 if (isFirstLocate) {
                     weatherTitleLocation.setText(location.getCity());
+//                    weatherTitleLocation.setText("长治");
                 }
                 loadLocation();
             } catch (Exception e) {
@@ -540,7 +573,7 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
             data.setAxisYLeft(new Axis().setHasLines(false).setAutoGenerated(true).setName("").setTextColor(Color.WHITE).setMaxLabelChars(3));
             //最后将所有值显示在View中
             homeChart.setColumnChartData(data);
-            homeChart.setZoomEnabled(true);
+            homeChart.setZoomEnabled(false);
             //
             homeChart.setValueSelectionEnabled(false);
             homeChart.setInteractive(true);
@@ -554,7 +587,7 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
 
             //这2个属性的设置一定要在lineChart.setMaximumViewport(v);这个方法之后,不然显示的坐标数据是不能左右滑动查看更多数据的
             v.right = 30;
-//            v.left = 5;
+            v.left = 13;
             homeChart.setCurrentViewport(v);
 
         } else {

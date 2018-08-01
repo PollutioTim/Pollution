@@ -283,9 +283,7 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
         return resId;
     }
 
-    /**
-     *
-     */
+
     private void findView(View view) {
         weatherLocationTime = (TextView) view.findViewById(R.id.weather_location_time);
         weatherArcProgress = (ArcProgress) view.findViewById(R.id.weather_arcProgress);

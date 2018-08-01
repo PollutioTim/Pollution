@@ -296,7 +296,7 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
             data.setAxisYLeft(new Axis().setHasLines(false).setTextColor(Color.WHITE).setMaxLabelChars(5));
             //最后将所有值显示在View中
             weatherDetailChart.setColumnChartData(data);
-            weatherDetailChart.setZoomEnabled(true);
+            weatherDetailChart.setZoomEnabled(false);
             Viewport v = new Viewport(weatherDetailChart.getMaximumViewport());
             v.bottom = 0f;
             v.top += v.top*0.2;
@@ -306,6 +306,14 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
 
             //这2个属性的设置一定要在lineChart.setMaximumViewport(v);这个方法之后,不然显示的坐标数据是不能左右滑动查看更多数据的
             v.right =30;
+            if(value_code==2){
+                v.left=3;
+            }else if(value_code==5){
+                v.left=15;
+            }else{
+                v.left=6;
+            }
+
             weatherDetailChart.setCurrentViewport(v);
         }
     }

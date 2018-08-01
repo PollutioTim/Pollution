@@ -16,7 +16,7 @@
 
     android:padding="10dp"
 
-    tools:context="com.tim.pollution.activity.WeatherMainActivity">
+   >
 
 
     <ScrollView

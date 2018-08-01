@@ -394,7 +394,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         data.setBaseValue(Float.NEGATIVE_INFINITY);
         cityContrastChart.setValueSelectionEnabled(false);
         cityContrastChart.setLineChartData(data);
-        cityContrastChart.setZoomEnabled(true);
+        cityContrastChart.setZoomEnabled(false);
         cityContrastChart.setMaxZoom(3);
         cityContrastChart.setInteractive(true);
 
@@ -408,7 +408,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
 
         //这2个属性的设置一定要在lineChart.setMaximumViewport(v);这个方法之后,不然显示的坐标数据是不能左右滑动查看更多数据的
         v.right = 30;
-//        v.left = 30;
+        v.left = 5;
         cityContrastChart.setCurrentViewport(v);
         cityContrastChart.setOnValueTouchListener(new LineChartOnValueSelectListener() {
             @Override
