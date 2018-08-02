@@ -88,4 +88,5 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.1.1'
     compile 'com.timehop.stickyheadersrecyclerview:library:0.4.3'
     compile 'com.baidu.mobstat:mtj-sdk:latest.integration'
+    compile project(path: ':calendar')
 }

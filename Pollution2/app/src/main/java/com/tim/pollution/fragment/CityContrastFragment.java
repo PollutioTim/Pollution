@@ -9,6 +9,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
@@ -33,6 +34,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.oxandon.calendar.CalendarPopWindow;
+import com.oxandon.calendar.OnCalendarPopSelectListener;
 import com.tim.pollution.MyApplication;
 import com.tim.pollution.R;
 import com.tim.pollution.adapter.CityContrastAdapter;
@@ -59,6 +62,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -118,6 +122,10 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
     @BindView(R.id.city_contrast_city3)
     TextView cityContrastCity3;
     RegionNetBean regionNetBean;
+    @BindView(R.id.city_contrast_rg_time)
+    RadioGroup cityContrastRgTime;
+    @BindView(R.id.city_contrast_rbSelect_time)
+    RadioButton cityContrastRgSelectTime;
 
     private CityContrastAdapter cityContrastAdapter;
 
@@ -137,6 +145,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
     private TextView className;
     private TextView classTime;
     private ProgressDialog pd;
+    private CalendarPopWindow mCalendarPopWindow;
 
     @Nullable
     @Override
@@ -149,6 +158,14 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         findView(view);
         loadRegionData();
         initOnclick();
+        mCalendarPopWindow = new CalendarPopWindow(getContext(), new OnCalendarPopSelectListener() {//特定日期选择监听
+            @Override
+            public void onSelect(@NonNull Date before, @NonNull Date after) {
+                beforeDate=before;
+                afterDate=after;
+                // TODO: 2018/8/2
+            }
+        });
         return view;
     }
 
@@ -181,14 +198,50 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         city3Value = (TextView) view.findViewById(R.id.city_contrast_info_city3_value);
         className = (TextView) view.findViewById(R.id.city_contrast_info_class);
         classTime = (TextView) view.findViewById(R.id.city_contrast_info_class_time);
+       cityContrastRgTime= (RadioGroup) view.findViewById(R.id.city_contrast_rg_time);
+        cityContrastRgSelectTime= (RadioButton) view.findViewById(R.id.city_contrast_rbSelect_time);
     }
-
+    //特定时间选择 开始时间
+    private Date beforeDate;
+    //特定时间选择 结束时间
+    private Date afterDate;
     private void initOnclick() {
         cityContrastSp1.setOnClickListener(this);
         cityContrastSp2.setOnClickListener(this);
         cityContrastSp3.setOnClickListener(this);
         cityContrastRgType.setOnCheckedChangeListener(this);
         cityContrastTimeSwitch.setOnClickListener(this);
+        cityContrastRgTime.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                if(checkedId==R.id.city_contrast_rb12_time){
+                    timeType ="12h";
+                    citys.clear();
+                    initSpinner();
+                }else if(checkedId==R.id.city_contrast_rb24_time){
+                    timeType ="24h";
+                    citys.clear();
+                    initSpinner();
+                }else if(checkedId==R.id.city_contrast_rb30_time){
+                    timeType = "day";
+                    citys.clear();
+                    initSpinner();
+                }else if(checkedId==R.id.city_contrast_rbSelect_time){//特定时间
+                    // TODO: 2018/8/2
+//                    mCalendarPopWindow.onShow(group);
+                }
+            }
+        });
+        cityContrastRgSelectTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (beforeDate != null && afterDate != null) {
+                    mCalendarPopWindow.onShow(v, beforeDate, afterDate);
+                } else {
+                    mCalendarPopWindow.onShow(v);
+                }
+            }
+        });
     }
 
     /**
@@ -277,7 +330,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
 //        initChars();
             initFrom();
             cityContrastRgType.check(R.id.city_contrast_rbaqi_type);
-            cityContrastAdapter = new CityContrastAdapter(getContext(), citys, CityContrastAdapter.PM25);
+            cityContrastAdapter = new CityContrastAdapter(getContext(), citys, CityContrastAdapter.AQI);
             cityContrastList.setAdapter(cityContrastAdapter);
         } catch (Exception e) {
             e.printStackTrace();
@@ -410,7 +463,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         v.right = 30;
         v.left = 5;
         cityContrastChart.setCurrentViewport(v);
-        cityContrastChart.setOnValueTouchListener(new LineChartOnValueSelectListener() {
+      /*  cityContrastChart.setOnValueTouchListener(new LineChartOnValueSelectListener() {
             @Override
             public void onValueSelected(int lineIndex, int pointIndex, PointValue value) {
                 Log.e("折线图", "lineIndex:" + lineIndex + ",pointIndex:" + pointIndex + ",PointValue" + value);
@@ -498,7 +551,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
             public void onValueDeselected() {
 
             }
-        });
+        });*/
     }
 
 
