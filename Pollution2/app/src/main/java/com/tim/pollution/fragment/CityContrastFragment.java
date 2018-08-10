@@ -5,61 +5,42 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.oxandon.calendar.CalendarPopWindow;
 import com.oxandon.calendar.OnCalendarPopSelectListener;
 import com.tim.pollution.MyApplication;
 import com.tim.pollution.R;
 import com.tim.pollution.adapter.CityContrastAdapter;
 import com.tim.pollution.adapter.CitySpinnerAdapter;
-import com.tim.pollution.bean.Charts;
-import com.tim.pollution.bean.RegionWeather;
 import com.tim.pollution.bean.changetrend.ChangeTrend;
 import com.tim.pollution.bean.changetrend.ChangeTrendMessageBean;
-import com.tim.pollution.bean.changetrend.DataBankNetBean;
 import com.tim.pollution.bean.changetrend.DataInfoBean;
 import com.tim.pollution.bean.changetrend.RegionNetBean;
-import com.tim.pollution.bean.weather.AQI24hBean;
 import com.tim.pollution.callback.ICallBack;
-import com.tim.pollution.fragment.FragmentCallBack;
 import com.tim.pollution.general.Constants;
 import com.tim.pollution.general.MData;
 import com.tim.pollution.general.MDataType;
 import com.tim.pollution.net.WeatherDal;
 import com.tim.pollution.utils.DateUtil;
-import com.tim.pollution.view.WrapContentListView;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -68,21 +49,13 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import lecho.lib.hellocharts.gesture.ZoomType;
-import lecho.lib.hellocharts.listener.LineChartOnValueSelectListener;
 import lecho.lib.hellocharts.model.Axis;
 import lecho.lib.hellocharts.model.AxisValue;
-import lecho.lib.hellocharts.model.Column;
-import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
-import lecho.lib.hellocharts.model.SubcolumnValue;
 import lecho.lib.hellocharts.model.ValueShape;
 import lecho.lib.hellocharts.model.Viewport;
-import lecho.lib.hellocharts.util.ChartUtils;
-import lecho.lib.hellocharts.view.ColumnChartView;
 import lecho.lib.hellocharts.view.LineChartView;
 
 /**
@@ -161,12 +134,24 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         mCalendarPopWindow = new CalendarPopWindow(getContext(), new OnCalendarPopSelectListener() {//特定日期选择监听
             @Override
             public void onSelect(@NonNull Date before, @NonNull Date after) {
-                beforeDate=before;
-                afterDate=after;
+                beforeDate = before;
+                afterDate = after;
                 // TODO: 2018/8/2
+                isSelectTime = true;
+                cleanPage();
+                if (beforeDate != null && afterDate != null) {
+                    initSpinner();
+                }
+
             }
         });
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+//        cityContrastRgTime.check(R.id.city_contrast_rb12_time);
     }
 
     /**
@@ -198,13 +183,15 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         city3Value = (TextView) view.findViewById(R.id.city_contrast_info_city3_value);
         className = (TextView) view.findViewById(R.id.city_contrast_info_class);
         classTime = (TextView) view.findViewById(R.id.city_contrast_info_class_time);
-       cityContrastRgTime= (RadioGroup) view.findViewById(R.id.city_contrast_rg_time);
-        cityContrastRgSelectTime= (RadioButton) view.findViewById(R.id.city_contrast_rbSelect_time);
+        cityContrastRgTime = (RadioGroup) view.findViewById(R.id.city_contrast_rg_time);
+        cityContrastRgSelectTime = (RadioButton) view.findViewById(R.id.city_contrast_rbSelect_time);
     }
+
     //特定时间选择 开始时间
     private Date beforeDate;
     //特定时间选择 结束时间
     private Date afterDate;
+
     private void initOnclick() {
         cityContrastSp1.setOnClickListener(this);
         cityContrastSp2.setOnClickListener(this);
@@ -214,21 +201,30 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         cityContrastRgTime.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-                if(checkedId==R.id.city_contrast_rb12_time){
-                    timeType ="12h";
+                if (checkedId == R.id.city_contrast_rb12_time) {
+                    isSelectTime = false;
+                    timeType = "12h";
                     citys.clear();
                     initSpinner();
-                }else if(checkedId==R.id.city_contrast_rb24_time){
-                    timeType ="24h";
+                } else if (checkedId == R.id.city_contrast_rb24_time) {
+                    isSelectTime = false;
+                    timeType = "24h";
                     citys.clear();
                     initSpinner();
-                }else if(checkedId==R.id.city_contrast_rb30_time){
+                } else if (checkedId == R.id.city_contrast_rb30_time) {
+                    isSelectTime = false;
                     timeType = "day";
                     citys.clear();
                     initSpinner();
-                }else if(checkedId==R.id.city_contrast_rbSelect_time){//特定时间
+                } else if (checkedId == R.id.city_contrast_rbSelect_time) {//特定时间
                     // TODO: 2018/8/2
 //                    mCalendarPopWindow.onShow(group);
+                    timeType = "day";
+                    isSelectTime = true;
+                    cleanPage();
+                    if (beforeDate != null && afterDate != null) {
+                        initSpinner();
+                    }
                 }
             }
         });
@@ -244,11 +240,14 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         });
     }
 
+    private boolean isSelectTime = false;
+
     /**
      * 加载县区列表
      */
     private void loadRegionData() {
         pd = ProgressDialog.show(getContext(), "提示", "加载数据中，请耐心等待......");
+        Log.e("tttt","pd show01");
         Map<String, String> params = new HashMap<>();
         params.put("key", Constants.key);
         params.put("regiontype", "allregion");
@@ -259,19 +258,34 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
 
     /**
      * 加载数据
+     *
      * @param regionid
      * @param state
      */
     private void loadData(String regionid, final int state) {
+        if(pd!=null){
+            pd.show();
+        }else{
+            pd = ProgressDialog.show(getContext(), "提示", "加载数据中，请耐心等待......");
+        }
+        Log.e("tttt","pd show02");
         cityContrastRgType.check(R.id.city_contrast_rbaqi_type);
         Map<String, String> params = new HashMap<>();
         params.put("key", Constants.key);
         params.put("type", timeType);
         params.put("regionid", regionid);
         params.put("state", state + "");
+        if (isSelectTime) {
+            params.put("starttime", DateUtil.dateToStr(beforeDate));
+            params.put("endtime", DateUtil.dateToStr(afterDate));
+        }
         WeatherDal.getInstance().getPollTrend(params, new ICallBack() {
             @Override
             public void onSuccess(Object data) {
+                if(pd!=null){
+                    pd.dismiss();
+                    Log.e("tttt","pd dis01");
+                }
                 MData mData = (MData) data;
                 if (MDataType.CHANGE_TREND.equals(mData.getType())) {
                     ChangeTrend changTrend = (ChangeTrend) mData.getData();
@@ -286,6 +300,10 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
 
             @Override
             public void onError(String msg, String eCode) {
+                if(pd!=null){
+                    pd.dismiss();
+                    Log.e("tttt","pd dis02");
+                }
             }
         });
     }
@@ -293,8 +311,9 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
 
     @Override
     public void onSuccess(Object data) {
-        if(pd!=null){
+        if (pd != null) {
             pd.dismiss();
+            Log.e("tttt","pd dis03");
         }
         MData mData = (MData) data;
         if (MDataType.REGIONNET_BEAN.equals(mData.getType())) {
@@ -313,7 +332,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
             return;
         }
         try {
-            String time = citys.get(1).getAQI_data().get(citys.get(1).getAQI_data().size() - 1).getTime();
+            /*String time = citys.get(1).getAQI_data().get(citys.get(1).getAQI_data().size() - 1).getTime();
             String vaule1 = cityContrastSp1.getText() + "  " + citys.get(1).getAQI_data().get(citys.get(1).getAQI_data().size() - 1).getValue();
             String vaule2 = cityContrastSp2.getText() + "  " + citys.get(2).getAQI_data().get(citys.get(2).getAQI_data().size() - 1).getValue();
             String vaule3 = cityContrastSp3.getText() + "  " + citys.get(3).getAQI_data().get(citys.get(3).getAQI_data().size() - 1).getValue();
@@ -326,7 +345,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
             city2Value.setText(citys.get(2).getAQI_data().get(citys.get(2).getAQI_data().size() - 1).getValue());
             city3.setText(cityContrastSp3.getText());
             city3Value.setText(citys.get(3).getAQI_data().get(citys.get(3).getAQI_data().size() - 1).getValue());
-            cityContrastTimeSwitch.setText(timeType.toUpperCase());
+            cityContrastTimeSwitch.setText(timeType.toUpperCase());*/
 //        initChars();
             initFrom();
             cityContrastRgType.check(R.id.city_contrast_rbaqi_type);
@@ -335,6 +354,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(getContext(), "获取数据失败，请重试", Toast.LENGTH_LONG).show();
+            cleanPage();
         }
     }
 
@@ -369,6 +389,10 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
     private void initFrom() {
         if (citys.size() < 3) {
             cityContrastChart.setLineChartData(null);
+            if(pd!=null){
+                pd.dismiss();
+                Log.e("tttt","pd dis05");
+            }
             return;
         }
         List<AxisValue> axisXValues = new ArrayList<AxisValue>();
@@ -399,9 +423,9 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
             max = 3;
         }
         for (int i = 0; i < citys.get(max).getAQI_data().size(); i++) {
-            String time=DateUtil.switchTime(citys.get(max).getAQI_data().get(i).getTime(),DateUtil.TIME_TYPE02);
-            if(timeType.contains("day")){
-                time=DateUtil.switchTime02(citys.get(max).getAQI_data().get(i).getTime(),DateUtil.TIME_TYPE03);
+            String time = DateUtil.switchTime(citys.get(max).getAQI_data().get(i).getTime(), DateUtil.TIME_TYPE02);
+            if (timeType.contains("day")) {
+                time = DateUtil.switchTime02(citys.get(max).getAQI_data().get(i).getTime(), DateUtil.TIME_TYPE03);
             }
             axisXValues.add(new AxisValue(i).setLabel(time));
         }
@@ -435,7 +459,10 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
             lines.add(getLine(citys.get(2).getAQI_data(), "#FF47F646", "AQI"));
             lines.add(getLine(citys.get(3).getAQI_data(), "#FF42DAFC", "AQI"));
         }
-        lines.remove(null);
+        while (lines.contains(null)) {
+            lines.remove(null);
+        }
+
         LineChartData data = new LineChartData(lines);
         if (true) {
             data.setAxisXBottom(new Axis(axisXValues).setHasLines(false).setTextColor(Color.WHITE).setName("").setHasTiltedLabels(false).setMaxLabelChars(4));
@@ -448,7 +475,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         cityContrastChart.setValueSelectionEnabled(false);
         cityContrastChart.setLineChartData(data);
         cityContrastChart.setZoomEnabled(false);
-        cityContrastChart.setMaxZoom(3);
+        cityContrastChart.setMaxZoom(10);
         cityContrastChart.setInteractive(true);
 
         Viewport v = new Viewport(cityContrastChart.getMaximumViewport());
@@ -457,12 +484,27 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
 
         //固定Y轴的范围,如果没有这个,Y轴的范围会根据数据的最大值和最小值决定,这不是我想要的
         cityContrastChart.setMaximumViewport(v);
-
-
         //这2个属性的设置一定要在lineChart.setMaximumViewport(v);这个方法之后,不然显示的坐标数据是不能左右滑动查看更多数据的
         v.right = 30;
         v.left = 5;
+        if(timeType=="day"&&isSelectTime){
+            long day=DateUtil.getTwoDay(afterDate,beforeDate);
+            if(day>30){
+                cityContrastChart.setZoomEnabled(true);
+            }else if(day<12){
+                v.left =0;
+                cityContrastChart.setZoomEnabled(false);
+            }else{
+                cityContrastChart.setZoomEnabled(false);
+            }
+        }else{
+            cityContrastChart.setZoomEnabled(false);
+        }
         cityContrastChart.setCurrentViewport(v);
+        if(pd!=null){
+            pd.dismiss();
+            Log.e("tttt","pd dis06");
+        }
       /*  cityContrastChart.setOnValueTouchListener(new LineChartOnValueSelectListener() {
             @Override
             public void onValueSelected(int lineIndex, int pointIndex, PointValue value) {
@@ -557,6 +599,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
 
     /**
      * 获取折线
+     *
      * @param data
      * @param color
      * @param type
@@ -570,13 +613,13 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         List<PointValue> pointValues = new ArrayList<PointValue>();// 节点数据结合
         for (int i = 0; i < data.size(); i++) {
             try {
-                String time=DateUtil.switchTime(data.get(i).getTime(),DateUtil.TIME_TYPE02);
-                if(timeType.contains("day")){
-                    time=DateUtil.switchTime02(data.get(i).getTime(),DateUtil.TIME_TYPE03);
+                String time = DateUtil.switchTime(data.get(i).getTime(), DateUtil.TIME_TYPE02);
+                if (timeType.contains("day")) {
+                    time = DateUtil.switchTime02(data.get(i).getTime(), DateUtil.TIME_TYPE03);
                 }
 
                 PointValue point = new PointValue(i, getFloatFromString(data.get(i).getValue()));
-                point.setLabel(type + " " + getIntFromString(data.get(i).getValue())+" 时间 "+time);
+                point.setLabel(type + " " + getIntFromString(data.get(i).getValue()) + " 时间 " + time);
                 pointValues.add(point);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -604,14 +647,15 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
      * @return
      */
     private int getIntFromString(String s) {
-        try{
+        try {
             int i = (int) Math.ceil(Double.valueOf(s));
             return i;
-        }catch (Exception e){
+        } catch (Exception e) {
             return 0;
         }
 
     }
+
     /**
      * string-->int
      *
@@ -619,49 +663,73 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
      * @return
      */
     private float getFloatFromString(String s) {
-        try{
+        try {
             float i = Float.valueOf(s);
             return i;
-        }catch (Exception e){
+        } catch (Exception e) {
             return 0;
         }
 
     }
+
     /**
      * 初始化城市
      */
     private void initSpinner() {
         if (regionNetBean != null) {
-            if (regionNetBean.getMessage().get(0) != null) {
-                cityContrastSp1.setText(regionNetBean.getMessage().get(0).getRegionName());
-                cityContrastCity1.setText(regionNetBean.getMessage().get(0).getRegionName());
-                loadData(regionNetBean.getMessage().get(0).getRegionId(), 1);
-            } else {
+            if (regionBeans[0] == null) {
+                if (regionNetBean.getMessage().get(0) != null) {
+                    cityContrastSp1.setText(regionNetBean.getMessage().get(0).getRegionName());
+                    cityContrastCity1.setText(regionNetBean.getMessage().get(0).getRegionName());
+                    loadData(regionNetBean.getMessage().get(0).getRegionId(), 1);
+                    regionBeans[0] = regionNetBean.getMessage().get(0);
+                } else {
 
-            }
-            if (regionNetBean.getMessage().get(1) != null) {
-                cityContrastSp2.setText(regionNetBean.getMessage().get(1).getRegionName());
-                cityContrastCity2.setText(regionNetBean.getMessage().get(1).getRegionName());
-                loadData(regionNetBean.getMessage().get(1).getRegionId(), 2);
+                }
             } else {
-
+                cityContrastSp1.setText(regionBeans[0].getRegionName());
+                cityContrastCity1.setText(regionBeans[0].getRegionName());
+                loadData(regionBeans[0].getRegionId(), 1);
             }
-            if (regionNetBean.getMessage().get(2) != null) {
-                cityContrastSp3.setText(regionNetBean.getMessage().get(2).getRegionName());
-                cityContrastCity3.setText(regionNetBean.getMessage().get(2).getRegionName());
-                loadData(regionNetBean.getMessage().get(2).getRegionId(), 3);
+            if (regionBeans[1] == null) {
+                if (regionNetBean.getMessage().get(1) != null) {
+                    cityContrastSp2.setText(regionNetBean.getMessage().get(1).getRegionName());
+                    cityContrastCity2.setText(regionNetBean.getMessage().get(1).getRegionName());
+                    loadData(regionNetBean.getMessage().get(1).getRegionId(), 2);
+                    regionBeans[1] = regionNetBean.getMessage().get(1);
+                } else {
+
+                }
             } else {
-
+                cityContrastSp2.setText(regionBeans[1].getRegionName());
+                cityContrastCity2.setText(regionBeans[1].getRegionName());
+                loadData(regionBeans[1].getRegionId(), 2);
             }
+            if (regionBeans[2] == null) {
+                if (regionNetBean.getMessage().get(2) != null) {
+                    cityContrastSp3.setText(regionNetBean.getMessage().get(2).getRegionName());
+                    cityContrastCity3.setText(regionNetBean.getMessage().get(2).getRegionName());
+                    loadData(regionNetBean.getMessage().get(2).getRegionId(), 3);
+                    regionBeans[2] = regionNetBean.getMessage().get(2);
+                } else {
+
+                }
+            } else {
+                cityContrastSp3.setText(regionBeans[2].getRegionName());
+                cityContrastCity3.setText(regionBeans[2].getRegionName());
+                loadData(regionBeans[2].getRegionId(), 3);
+            }
+
         }
     }
 
     @Override
     public void onError(String msg, String eCode) {
-        if(pd!=null){
+        if (pd != null) {
             pd.dismiss();
+            Log.e("tttt","pd dis07");
         }
-        Toast.makeText(getContext(),msg,Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
     }
 
 
@@ -704,9 +772,14 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
 
     private int state1;
 
+    /**
+     * 选中的城市
+     */
+    private RegionNetBean.RegionBean[] regionBeans = new RegionNetBean.RegionBean[3];
 
     /**
      * 城市选择弹框
+     *
      * @param view
      * @param state
      */
@@ -734,12 +807,15 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
                 if (state1 == 1) {
                     cityContrastSp1.setText(regionNetBean.getMessage().get(position).getRegionName());
                     cityContrastCity1.setText(regionNetBean.getMessage().get(position).getRegionName());
+                    regionBeans[0] = regionNetBean.getMessage().get(position);
                 } else if (state1 == 2) {
                     cityContrastCity2.setText(regionNetBean.getMessage().get(position).getRegionName());
                     cityContrastSp2.setText(regionNetBean.getMessage().get(position).getRegionName());
+                    regionBeans[1] = regionNetBean.getMessage().get(position);
                 } else {
                     cityContrastCity3.setText(regionNetBean.getMessage().get(position).getRegionName());
                     cityContrastSp3.setText(regionNetBean.getMessage().get(position).getRegionName());
+                    regionBeans[2] = regionNetBean.getMessage().get(position);
                 }
                 dialog.dismiss();
             }
@@ -899,10 +975,21 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
 
             datatype = CityContrastAdapter.AQI;
         }
+        Log.e("tcy","!!!!!!!!!!!!!!!!!!!!!!!!!!!!002");
         initFrom();
         if (cityContrastAdapter != null) {
             cityContrastAdapter.setCode(datatype);
             cityContrastAdapter.notifyDataSetChanged();
         }
+    }
+
+    /**
+     * 清空界面信息
+     */
+    private void cleanPage() {
+        cityContrastChart.setLineChartData(null);
+        cityContrastAdapter = new CityContrastAdapter(getContext(), null, CityContrastAdapter.AQI);
+        cityContrastList.setAdapter(cityContrastAdapter);
+
     }
 }

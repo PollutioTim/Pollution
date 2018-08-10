@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/ArcProgressLibrary/ArcProgressLibrary.iml" filepath="$PROJECT_DIR$/ArcProgressLibrary/ArcProgressLibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/Pollution2.iml" filepath="$PROJECT_DIR$/Pollution2.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/calendar/calendar.iml" filepath="$PROJECT_DIR$/calendar/calendar.iml" />
     </modules>
   </component>
 </project>

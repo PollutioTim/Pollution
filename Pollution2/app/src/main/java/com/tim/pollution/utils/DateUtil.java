@@ -290,7 +290,18 @@ public class DateUtil {
         }
         return day + "";
     }
-
+    /**
+     * 得到二个日期间的间隔天数
+     */
+    public static long getTwoDay(Date sj1, Date sj2) {
+        long day = 0;
+        try {
+            day = (sj1.getTime() - sj2.getTime()) / (24 * 60 * 60 * 1000);
+        } catch (Exception e) {
+            return 0;
+        }
+        return day;
+    }
     /**
      * 时间前推或后推分钟,其中JJ表示分钟.
      */

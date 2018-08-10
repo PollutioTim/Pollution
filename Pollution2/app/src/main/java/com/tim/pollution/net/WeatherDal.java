@@ -34,13 +34,13 @@ public class WeatherDal {
     private static final String dataBankUrl;
 
     private static final String regionUrl;
-
+//    http://202.97.152.195:5004/AppInterface/PollTrend?key=6DlLqAyx3mY=&regionid=140101&type=day&starttime=2018-07-24&endtime=2018-08-03
     static {
-        weatherUal = "http://218.26.106.43:10009/AppInterface/HomeData";
-        changeTrendUrl="http://218.26.106.43:10009/AppInterface/PollTrend";
-        pointDataUrl="http://218.26.106.43:10009/AppInterface/PointData";
-        dataBankUrl="http://218.26.106.43:10009/AppInterface/DataRank";
-        regionUrl ="http://218.26.106.43:10009/AppInterface/Region";
+        weatherUal = "http://202.97.152.195:5004/AppInterface/HomeData";
+        changeTrendUrl="http://202.97.152.195:5004/AppInterface/PollTrend";
+        pointDataUrl="http://202.97.152.195:5004/AppInterface/PointData";
+        dataBankUrl="http://202.97.152.195:5004/AppInterface/DataRank";
+        regionUrl ="http://202.97.152.195:5004/AppInterface/Region";
 
     }
 
@@ -102,6 +102,7 @@ public class WeatherDal {
      * @param callBack
      * regionid	是	String	县区代码
      * type	是	String	数据类型 12h为近12小时数据  24h为近24小时数据 day为近30日数据
+     * http://218.26.106.43:10009/AppInterface/PollTrend?key=6DlLqAyx3mY=&regionid=140101&type=day&starttime=2018-07-24&endtime=2018-08-03
      */
     public void getPollTrend(Map<String ,String> params, final ICallBack callBack){
         PostFormBuilder postFormBuilder = OkHttpUtils.post().url(changeTrendUrl).params(params);

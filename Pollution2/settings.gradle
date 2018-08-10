@@ -1,1 +1,1 @@
-include ':app', ':ArcProgressLibrary'
+include ':app', ':ArcProgressLibrary', ':calendar'
