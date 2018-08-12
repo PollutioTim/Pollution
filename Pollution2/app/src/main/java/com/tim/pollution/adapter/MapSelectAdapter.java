@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tim.pollution.R;
+import com.tim.pollution.activity.CityActivity;
 import com.tim.pollution.bean.changetrend.RegionNetBean;
 import com.tim.pollution.callback.OnItemClickListener;
 import com.tim.pollution.fragment.NewMapFragment;
@@ -27,7 +28,7 @@ import java.util.List;
  * Created by lenovo on 2018/4/27.
  */
 
-public class FocusCityWithClassAdapter extends RecyclerView.Adapter<FocusCityWithClassAdapter.ViewHolder>{
+public class MapSelectAdapter extends RecyclerView.Adapter<MapSelectAdapter.ViewHolder>{
     private Context context;
     private List<RegionNetBean.RegionBean>data;
     private int selectedPosition = -5; //默认一个参数
@@ -36,17 +37,13 @@ public class FocusCityWithClassAdapter extends RecyclerView.Adapter<FocusCityWit
 
     //    private List<String> focusCity=new ArrayList<>();
     private  List<String> regionBeans;
-    public FocusCityWithClassAdapter(Context context, List<RegionNetBean.RegionBean> cityBeens){
+    public MapSelectAdapter(Context context, List<RegionNetBean.RegionBean> cityBeens){
         this.context = context;
         this.data = cityBeens;
-        regionBeans=CityListSaveUtil.getList(context,CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY);
 //        focusCity.addAll(regionBeans);
 //        regionBeans=CityListSaveUtil.getList(context,CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY);
     }
 
-    public List<String> getFocusCity(){
-        return regionBeans;
-    }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.focus_city_item,parent,false);
@@ -77,23 +74,6 @@ public class FocusCityWithClassAdapter extends RecyclerView.Adapter<FocusCityWit
                     holder.ivSelect.setVisibility(View.INVISIBLE);
                 }
 
-                holder.llCity.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        RegionNetBean.RegionBean  regionBean=getDataByPosition(position);
-                        //tcy  tijiao
-                            if (regionBeans == null) {
-                                regionBeans = new ArrayList<String>();
-                            }
-                            if (regionBeans.contains(regionBean.getRegionId())) {
-                                holder.ivSelect.setVisibility(View.INVISIBLE);
-                                regionBeans.remove(regionBean.getRegionId());
-                            } else {
-                                holder.ivSelect.setVisibility(View.VISIBLE);
-                                regionBeans.add(regionBean.getRegionId());
-                            }
-                        }
-                });
             }
         }
 

@@ -60,6 +60,7 @@ import com.baidu.mapapi.utils.poi.DispathcPoiData;
 import com.tim.pollution.MyApplication;
 import com.tim.pollution.R;
 import com.tim.pollution.activity.CityActivity;
+import com.tim.pollution.activity.FocusCityActivity;
 import com.tim.pollution.activity.MapActivity;
 import com.tim.pollution.adapter.MapColorAdapter;
 import com.tim.pollution.bean.CityBean;
@@ -408,8 +409,7 @@ public class MapFragment extends Fragment implements ICallBack,
                 getArea(cityBeens);
                 break;
             case R.id.map_swicth_tv:
-                EventBus.getDefault().postSticky(new MessageEvent(datas));
-                Intent intent = new Intent(getActivity(), CityActivity.class);
+                Intent intent = new Intent(getActivity(), FocusCityActivity.class);
                 intent.putExtra("tag", 1);
                 startActivity(intent);
                 break;
@@ -480,7 +480,6 @@ public class MapFragment extends Fragment implements ICallBack,
                 if (mapBean != null) {
                     LocationData data = new LocationData();
                     data.setLatLng(result.getLocation());
-                    EventBus.getDefault().postSticky(new MessageEvent(data));
 
                     Intent intent = new Intent(getActivity(), MapActivity.class);
                     intent.putExtra("id",cityBean.getRegionId());

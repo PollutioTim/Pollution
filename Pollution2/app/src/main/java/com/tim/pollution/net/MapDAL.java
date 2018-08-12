@@ -26,7 +26,7 @@ public class MapDAL {
     private static String mapUrls;
 
     static {
-        mapUrls = "http://218.26.106.43:10009/AppInterface/MapData";
+        mapUrls = "http://202.97.152.195:5004/AppInterface/MapDataNew";
 
     }
 

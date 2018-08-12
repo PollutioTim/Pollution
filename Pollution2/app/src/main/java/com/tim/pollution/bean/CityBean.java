@@ -4,12 +4,14 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
+import butterknife.BindView;
+
 /**
  * Created by lenovo on 2018/4/24.
  */
 
 public class CityBean implements Serializable {
-//    "RegionId": "140100",
+    //    "RegionId": "140100",
 //            "RegionName": "太原",
 //            "AQI": "90",
 //            "AQIcolor": "#FFFF00",
@@ -33,6 +35,8 @@ public class CityBean implements Serializable {
     private String AQI;
     @SerializedName("AQIcolor")
     private String AQIColor;
+    @SerializedName("Q_AQIcolor")
+    private String QAqiColor;
     @SerializedName("SO2")
     private String SO2;
     @SerializedName("SO2color")
@@ -57,6 +61,123 @@ public class CityBean implements Serializable {
     private String PM25;
     @SerializedName("PM25color")
     private String PM25Color;
+    @SerializedName("Feng")
+    private String Feng;
+    @SerializedName("Fengcolor")
+    private String Fengcolor;
+    @SerializedName("FengXiang")
+    private String FengXiang;
+    @SerializedName("QiWen")
+    private String QiWen ;
+    @SerializedName("QiWencolor")
+    private String QiWencolor;
+    @SerializedName("QiYa")
+    private String QiYa;
+    @SerializedName("QiYacolor")
+    private String QiYacolor;
+    @SerializedName("ShiDu")
+    private String ShiDu;
+    @SerializedName("ShiDucolor")
+    private String ShiDucolor;
+
+    public String getQAqiColor() {
+        return QAqiColor;
+    }
+
+    public void setQAqiColor(String QAqiColor) {
+        this.QAqiColor = QAqiColor;
+    }
+
+    public String getFeng() {
+        return Feng;
+    }
+
+    public void setFeng(String feng) {
+        Feng = feng;
+    }
+
+    public String getFengcolor() {
+        return Fengcolor;
+    }
+
+    public void setFengcolor(String fengcolor) {
+        Fengcolor = fengcolor;
+    }
+
+    public String getFengXiang() {
+        return FengXiang;
+    }
+
+    public void setFengXiang(String fengXiang) {
+        FengXiang = fengXiang;
+    }
+
+    public String getQiWen() {
+        return QiWen;
+    }
+
+    public void setQiWen(String qiWen) {
+        QiWen = qiWen;
+    }
+
+    public String getQiWencolor() {
+        return QiWencolor;
+    }
+
+    public void setQiWencolor(String qiWencolor) {
+        QiWencolor = qiWencolor;
+    }
+
+    public String getQiYa() {
+        return QiYa;
+    }
+
+    public void setQiYa(String qiYa) {
+        QiYa = qiYa;
+    }
+
+    public String getQiYacolor() {
+        return QiYacolor;
+    }
+
+    public void setQiYacolor(String qiYacolor) {
+        QiYacolor = qiYacolor;
+    }
+
+    public String getShiDu() {
+        return ShiDu;
+    }
+
+    public void setShiDu(String shiDu) {
+        ShiDu = shiDu;
+    }
+
+    public String getShiDucolor() {
+        return ShiDucolor;
+    }
+
+    public void setShiDucolor(String shiDucolor) {
+        ShiDucolor = shiDucolor;
+    }
+
+    private String PointLatitude;
+    private String PointLongitude;
+
+    public String getPointLatitude() {
+        return PointLatitude;
+    }
+
+    public void setPointLatitude(String pointLatitude) {
+        PointLatitude = pointLatitude;
+    }
+
+    public String getPointLongitude() {
+        return PointLongitude;
+    }
+
+    public void setPointLongitude(String pointLongitude) {
+        PointLongitude = pointLongitude;
+    }
 
     public String getRegionId() {
         return regionId;

@@ -7,6 +7,7 @@ import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +67,7 @@ public class FocusCityActivity extends BaseActivity implements ICallBack {
     @Override
     public void initView() {
         setActivityName("城市列表");
+        //李立地图选择 newmapfragment
         cityBeens = new ArrayList<>();
         tvFocus.setVisibility(View.VISIBLE);
         adapter = new FocusCityWithClassAdapter(this,cityBeens);
@@ -147,11 +149,6 @@ public class FocusCityActivity extends BaseActivity implements ICallBack {
             }
         });
     }
-
-
-
-
-
 
     @Override
     public void initData() {
