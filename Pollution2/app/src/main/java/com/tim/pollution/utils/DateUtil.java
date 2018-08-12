@@ -131,7 +131,15 @@ public class DateUtil {
         Date strtodate = formatter.parse(strDate, pos);
         return strtodate;
     }
-
+    public static String getLastMon(){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar c=Calendar.getInstance();
+        c.setTime(new Date());
+        c.add(Calendar.MONTH, -1);
+        Date m = c.getTime();
+        String mon = format.format(m);
+        return mon;
+    }
     /**
      * 将短时间格式字符串转换为时间 yyyy-MM-dd HH:mm:ss
      *

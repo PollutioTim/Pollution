@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -24,7 +23,6 @@ import com.tim.pollution.general.MData;
 import com.tim.pollution.general.MDataType;
 import com.tim.pollution.net.WeatherDal;
 import com.tim.pollution.utils.DateUtil;
-import com.tim.pollution.view.WrapContentListView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,6 +31,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import lecho.lib.hellocharts.formatter.SimpleColumnChartValueFormatter;
 import lecho.lib.hellocharts.model.Axis;
 import lecho.lib.hellocharts.model.AxisValue;
 import lecho.lib.hellocharts.model.Column;
@@ -284,6 +283,7 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
                 }
                 //设置每个柱子的Lable是否选中，为false，表示不用选中，一直显示在柱子上
                 column.setHasLabelsOnlyForSelected(true);
+                column.setFormatter(new SimpleColumnChartValueFormatter(2));
                 //将每个属性得列全部添加到List中
                 columns.add(column);
             }
@@ -297,6 +297,7 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
             //最后将所有值显示在View中
             weatherDetailChart.setColumnChartData(data);
             weatherDetailChart.setZoomEnabled(false);
+            weatherDetailChart.setValueSelectionEnabled(true);
             Viewport v = new Viewport(weatherDetailChart.getMaximumViewport());
             v.bottom = 0f;
             v.top += v.top*0.2;
@@ -324,9 +325,9 @@ public class WeatherVariationTrendActivity extends AppCompatActivity implements 
      * @param s
      * @return
      */
-    private int getIntFromString(String s) {
+    private float getIntFromString(String s) {
         try {
-            int i = (int) Math.ceil(Double.valueOf(s));
+            float i = Float.valueOf(s);
             return i;
         } catch (Exception e) {
             e.printStackTrace();

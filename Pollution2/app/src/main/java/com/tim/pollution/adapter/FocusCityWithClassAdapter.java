@@ -1,6 +1,8 @@
 package com.tim.pollution.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tim.pollution.R;
+import com.tim.pollution.activity.FocusCityActivity;
 import com.tim.pollution.bean.changetrend.RegionNetBean;
 import com.tim.pollution.callback.OnItemClickListener;
 import com.tim.pollution.utils.CityListSaveUtil;
@@ -27,12 +30,14 @@ public class FocusCityWithClassAdapter extends RecyclerView.Adapter<FocusCityWit
     private List<RegionNetBean.RegionBean>data;
     private int selectedPosition = -5; //默认一个参数
 
+    private String state;
 //    private List<String> focusCity=new ArrayList<>();
     private  List<String> regionBeans;
-    public FocusCityWithClassAdapter(Context context, List<RegionNetBean.RegionBean> cityBeens){
+    public FocusCityWithClassAdapter(Context context, List<RegionNetBean.RegionBean> cityBeens,String state){
         this.context = context;
         this.data = cityBeens;
         regionBeans=CityListSaveUtil.getList(context,CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY);
+        this.state=state;
 //        focusCity.addAll(regionBeans);
 //        regionBeans=CityListSaveUtil.getList(context,CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY);
 
@@ -65,8 +70,12 @@ public class FocusCityWithClassAdapter extends RecyclerView.Adapter<FocusCityWit
                 if(regionBeans==null){
                     regionBeans=new ArrayList<String>();
                 }
-                if(regionBeans.contains(regionBean.getRegionId())){
-                    holder.ivSelect.setVisibility(View.VISIBLE);
+                if("01".equals(state)){
+                    if(regionBeans.contains(regionBean.getRegionId())){
+                        holder.ivSelect.setVisibility(View.VISIBLE);
+                    }else{
+                        holder.ivSelect.setVisibility(View.INVISIBLE);
+                    }
                 }else{
                     holder.ivSelect.setVisibility(View.INVISIBLE);
                 }
@@ -75,16 +84,24 @@ public class FocusCityWithClassAdapter extends RecyclerView.Adapter<FocusCityWit
                     public void onClick(View v) {
                         RegionNetBean.RegionBean  regionBean=getDataByPosition(position);
                         //tcy  tijiao
-                        if(regionBeans==null){
-                            regionBeans=new ArrayList<String>();
-                        }
-                        if(regionBeans.contains(regionBean.getRegionId())){
-                            holder.ivSelect.setVisibility(View.INVISIBLE);
-                            regionBeans.remove(regionBean.getRegionId());
+                        if("01".equals(state)){
+                            if(regionBeans==null){
+                                regionBeans=new ArrayList<String>();
+                            }
+                            if(regionBeans.contains(regionBean.getRegionId())){
+                                holder.ivSelect.setVisibility(View.INVISIBLE);
+                                regionBeans.remove(regionBean.getRegionId());
+                            }else{
+                                holder.ivSelect.setVisibility(View.VISIBLE);
+                                regionBeans.add(regionBean.getRegionId());
+                            }
                         }else{
-                            holder.ivSelect.setVisibility(View.VISIBLE);
-                            regionBeans.add(regionBean.getRegionId());
+                            Intent intent= ((FocusCityActivity)context).getIntent();
+                            intent.putExtra("regionBean",regionBean);
+                            ((FocusCityActivity)context).setResult(Activity.RESULT_OK,intent);
+                            ((FocusCityActivity) context).finish();
                         }
+
                     }
                 });
             }

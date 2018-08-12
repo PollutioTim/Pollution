@@ -1,22 +1,15 @@
 package com.tim.pollution.fragment;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.RelativeSizeSpan;
-import android.text.style.SuperscriptSpan;
 import android.util.Log;
-import android.util.TimeUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,19 +17,15 @@ import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
-import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.tim.pollution.MainActivity;
 import com.tim.pollution.R;
 import com.tim.pollution.activity.SellersDetailActivity;
 import com.tim.pollution.adapter.RankAdapter;
 import com.tim.pollution.adapter.RankLastAdapter;
-import com.tim.pollution.bean.MyData;
 import com.tim.pollution.bean.RankLastBean;
 import com.tim.pollution.bean.RankMainBean;
 import com.tim.pollution.callback.ICallBack;
@@ -45,31 +34,24 @@ import com.tim.pollution.general.MDataType;
 import com.tim.pollution.net.RankDAL;
 import com.tim.pollution.utils.DateUtil;
 import com.tim.pollution.utils.TimeString;
-import com.woodnaonly.arcprogress.Utils;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.qqtheme.framework.picker.DatePicker;
 
-import static android.support.v4.widget.DrawerLayout.STATE_DRAGGING;
-import static android.support.v4.widget.DrawerLayout.STATE_IDLE;
-import static android.support.v4.widget.DrawerLayout.STATE_SETTLING;
+import static com.tim.pollution.utils.DateUtil.getStringDateShort;
 
 /**
  * Created by lenovo on 2018/4/23.
  * 排名
  */
-
-
 public class SellersFragment extends Fragment implements ICallBack {
     @BindView(R.id.sellers_swicth_tv)
     TextView tvSwitch;
@@ -161,7 +143,14 @@ public class SellersFragment extends Fragment implements ICallBack {
     TextView tvUnit;
     @BindView(R.id.time_seller_tv)
     TextView tvTime;
-
+    @BindView(R.id.time_choose_end)
+    TextView tvTimeChooseEnd;
+    @BindView(R.id.time_choose_start)
+    TextView tvTimeChooseStart;
+    @BindView(R.id.time_choose_show)
+    TextView tvTimeChooseShow;
+    @BindView(R.id.time_choose_ll)
+    LinearLayout llTimeChoose;
     //    @BindView(R.id.city_tv)
     TextView tvCity;
     //    @BindView(R.id.region_tv)
@@ -173,6 +162,8 @@ public class SellersFragment extends Fragment implements ICallBack {
     @BindView(R.id.top_down_iv)
     ImageView ivTopDown;
 
+    @BindView(R.id.time_ll)
+    LinearLayout lltime;
     private Map<String, String> parms;
     private List<RankMainBean.Message.Content> datas;
     private List<RankLastBean.Message.Content> rankLasts;
@@ -186,9 +177,11 @@ public class SellersFragment extends Fragment implements ICallBack {
     private String regiontype = "city";//区域类型
     private String areatype = "allregion";//区县 allregion、Point
     private boolean flag = true;
-    private boolean isClick= true;//箭头的选择
+    private boolean isClick = true;//箭头的选择
     int height;
     private boolean isSelect = true;//是否选择了aqi
+
+    DatePicker datePicker;
 
     @Nullable
     @Override
@@ -210,7 +203,124 @@ public class SellersFragment extends Fragment implements ICallBack {
         initMain();
         initLast();
         getData();
+        initDatePicker();
+        tvTimeChooseEnd.setOnClickListener(new View.OnClickListener() {//
+            @Override
+            public void onClick(View v) {
+                if (datatype.equals("day")) {
+                    datePicker.show();
+                } else if (datatype.equals("month")) {// TODO: 2018/8/12
+                    datePicker.show();
+                    isStart=false;
+                }
+            }
+        });
+        tvTimeChooseStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                datePicker.show();
+                isStart=true;
+            }
+        });
         return view;
+    }
+    private boolean isStart;
+    private String startTime;
+    private String endTime;
+    private void initDatePicker() {
+        llTimeChoose.setVisibility(View.GONE);
+        tvTimeChooseStart.setVisibility(View.GONE);
+        lltime.setVisibility(View.VISIBLE);
+        startTime="";
+        endTime="";
+        datePicker = new DatePicker(getActivity(), DatePicker.YEAR_MONTH_DAY);
+//        Date date=new Date();
+        String[] strDate = DateUtil.getStringDateShort().split("-");
+//        Log.e("test","时间："+date.getYear()+date.getMonth()+date.getDay());
+        datePicker.setRangeEnd(Integer.parseInt(strDate[0]), Integer.parseInt(strDate[1]), Integer.parseInt(strDate[2]));
+        datePicker.setRangeStart(2010, Integer.parseInt(strDate[1]), Integer.parseInt(strDate[2]));
+        datePicker.setOnDatePickListener(new DatePicker.OnYearMonthDayPickListener() {
+            @Override
+            public void onDatePicked(String s, String s1, String s2) {//重新选择时间
+                if(datatype.equals("day")){
+                    tvTimeChooseEnd.setText(s + "." + s1 + "." + s2);
+                    tvTimeChooseShow.setText(s + "." + s1 + "." + s2);
+                    setClear();
+                    datatype = "day";
+                    llYestday.setSelected(true);
+                    if (llYestday.isSelected()) {
+                        flag = true;
+                        if (ranktype.equals("ZH")) {
+                            ranktype = "AQI";
+                        }
+                        tvYesterday.setTextColor(getResources().getColor(R.color.color_white));
+                        vYesterday.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.VISIBLE);
+                        recviewMonth.setVisibility(View.GONE);
+                        tvIndex.setText("AQI");
+                        tvO3.setText("3_8H");
+                        getData();
+                    }
+                }else{
+                    if(isStart){
+                        startTime=s + "." + s1 + "." + s2;
+                        if(!TextUtils.isEmpty(endTime)&&DateUtil.strToDate(startTime).getTime()>DateUtil.strToDate(endTime).getTime()){
+                            Toast.makeText(getContext(),"结束时间不能小于开始时间",Toast.LENGTH_LONG).show();
+                            startTime="";
+                            return;
+                        }
+                        tvTimeChooseStart.setText(startTime);
+                        if(!TextUtils.isEmpty(endTime)){
+                            tvTimeChooseShow.setText(startTime+"-"+endTime);
+                            setClear();
+                            datatype = "month";
+                            llLast.setSelected(true);
+                            if (llLast.isSelected()) {
+                                flag = false;
+                                tvLast.setTextColor(getResources().getColor(R.color.color_white));
+                                vLast.setVisibility(View.VISIBLE);
+                                recyclerView.setVisibility(View.GONE);
+                                recviewMonth.setVisibility(View.VISIBLE);
+                                tvIndex.setText("综指");
+                                if (isSelect) {
+                                    ranktype = "ZH";
+                                }
+                                tvO3.setText("3_8H");
+                                getData();
+                            }
+                        }
+                    }else{
+                        endTime=s + "." + s1 + "." + s2;
+                        if(!TextUtils.isEmpty(startTime)&&DateUtil.strToDate(startTime).getTime()>DateUtil.strToDate(endTime).getTime()){
+                            Toast.makeText(getContext(),"结束时间不能小于开始时间",Toast.LENGTH_LONG).show();
+                            endTime="";
+                            return;
+                        }
+                        tvTimeChooseEnd.setText(endTime);
+                        if(!TextUtils.isEmpty(startTime)){
+                            tvTimeChooseShow.setText(startTime+"-"+endTime);
+                            setClear();
+                            datatype = "month";
+                            llLast.setSelected(true);
+                            if (llLast.isSelected()) {
+                                flag = false;
+                                tvLast.setTextColor(getResources().getColor(R.color.color_white));
+                                vLast.setVisibility(View.VISIBLE);
+                                recyclerView.setVisibility(View.GONE);
+                                recviewMonth.setVisibility(View.VISIBLE);
+                                tvIndex.setText("综指");
+                                if (isSelect) {
+                                    ranktype = "ZH";
+                                }
+                                tvO3.setText("3_8H");
+                                getData();
+                            }
+                        }
+
+                    }
+                }
+            }
+        });
     }
 
     private void initMain() {
@@ -285,6 +395,13 @@ public class SellersFragment extends Fragment implements ICallBack {
         parms.put("areatype", areatype);
         Log.e("lili", "regiontype = " + regiontype + ",datatype=" + datatype + ",ranktype=" + ranktype
                 + ",areatype=" + areatype);
+        if (datatype.equals("day")) {
+            parms.put("starttime", tvTimeChooseEnd.getText().toString());
+        }
+        if (datatype.equals("month")&&!TextUtils.isEmpty(startTime)&&!TextUtils.isEmpty(endTime)) {
+            parms.put("starttime", startTime);
+            parms.put("entime",endTime);
+        }
         if (llLast.isSelected() || llYear.isSelected()) {
             RankDAL.getInstance().getRankLast(parms, this);
         } else {
@@ -292,11 +409,17 @@ public class SellersFragment extends Fragment implements ICallBack {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @OnClick({R.id.now_ll, R.id.last_ll, R.id.yesterday_ll, R.id.all_ll, R.id.sellers_swicth_tv
             , R.id.sellers_o_3, R.id.index_all_tv, R.id.sellers_pm_25, R.id.sellers_pm_10, R.id.sellers_so_2,
             R.id.sellers_co_tv, R.id.sellers_no_2, R.id.sellers_sort_ll, R.id.seller_one_rb, R.id.seller_two_rb
             , R.id.year_ll, R.id.seller_four_rb, R.id.seller_three_rb})
     public void OnClick(View view) {
+        llTimeChoose.setVisibility(View.GONE);
+        tvTimeChooseStart.setVisibility(View.GONE);
+        lltime.setVisibility(View.VISIBLE);
+        startTime="";
+        endTime="";
         switch (view.getId()) {
             case R.id.sellers_sort_ll://顺序
                 if (flag) {//正序
@@ -306,10 +429,10 @@ public class SellersFragment extends Fragment implements ICallBack {
                     Collections.reverse(rankLasts);
                     lastAdapter.notifyDataSetChanged();
                 }
-                if(isClick){
+                if (isClick) {
                     isClick = false;
                     ivTopDown.setImageResource(R.drawable.ic_down_jiantou);
-                }else{
+                } else {
                     isClick = true;
                     ivTopDown.setImageResource(R.drawable.ic_top_jiantou);
                 }
@@ -334,6 +457,11 @@ public class SellersFragment extends Fragment implements ICallBack {
                 }
                 break;
             case R.id.last_ll://上月
+                llTimeChoose.setVisibility(View.VISIBLE);
+                tvTimeChooseStart.setVisibility(View.VISIBLE);
+                lltime.setVisibility(View.GONE);
+                tvTimeChooseStart.setText("开始时间");
+                tvTimeChooseEnd.setText("结束时间");
                 setClear();
                 datatype = "month";
                 llLast.setSelected(true);
@@ -352,7 +480,14 @@ public class SellersFragment extends Fragment implements ICallBack {
                 }
                 break;
             case R.id.yesterday_ll://昨日排
+                llTimeChoose.setVisibility(View.VISIBLE);
+                tvTimeChooseStart.setVisibility(View.GONE);
+                lltime.setVisibility(View.GONE);
+                tvTimeChooseEnd.setText("选择时间");
+                tvTimeChooseEnd.setVisibility(View.VISIBLE);
                 setClear();
+                tvTimeChooseEnd.setText(DateUtil.getNextDay(getStringDateShort(), "-1"));
+                tvTimeChooseShow.setText(DateUtil.getNextDay(getStringDateShort(), "-1"));
                 datatype = "day";
                 llYestday.setSelected(true);
                 if (llYestday.isSelected()) {
@@ -388,6 +523,8 @@ public class SellersFragment extends Fragment implements ICallBack {
                 }
                 break;
             case R.id.year_ll://年排
+                String[] dateStr = DateUtil.getStringDateShort().split("-");
+                tvTimeChooseEnd.setText(dateStr[0]);
                 setClear();
                 datatype = "year";
                 llYear.setSelected(true);
@@ -569,12 +706,12 @@ public class SellersFragment extends Fragment implements ICallBack {
                 }
 
                 datas.addAll(rankMainBean.getMessages().getContents());
-                if(llYestday.isSelected()){
+                if (llYestday.isSelected()) {
                     tvTime.setText(TimeString.switchTime(
                             rankMainBean.getMessages().getTime()));
-                }else if(llNow.isSelected()){
+                } else if (llNow.isSelected()) {
                     tvTime.setText(TimeString.switchTimes(rankMainBean.getMessages().getTime()));
-                }else if(llAll.isSelected()){
+                } else if (llAll.isSelected()) {
                     tvTime.setText(TimeString.switchAllTimes(
                             rankMainBean.getMessages().getTime()));
                 }
@@ -588,6 +725,8 @@ public class SellersFragment extends Fragment implements ICallBack {
                 }
 
                 tvTime.setText(TimeString.switchYearTimes(
+                        rankLastBean.getMessages().getTime()));
+                tvTimeChooseShow.setText(TimeString.switchYearTimes(
                         rankLastBean.getMessages().getTime()));
                 rankLasts.addAll(rankLastBean.getMessages().getContents());
                 Log.e("lili", "ranklasts=" + rankLasts.size());

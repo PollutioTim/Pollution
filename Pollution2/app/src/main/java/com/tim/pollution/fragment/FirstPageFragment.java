@@ -2,7 +2,6 @@ package com.tim.pollution.fragment;
 
 import android.app.Activity;
 import android.app.AppOpsManager;
-import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,6 +17,7 @@ import android.provider.Settings;
 import android.support.v4.app.AppOpsManagerCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
@@ -51,7 +51,6 @@ import com.tim.pollution.net.WeatherDal;
 import com.tim.pollution.utils.CityListSaveUtil;
 import com.tim.pollution.utils.DateUtil;
 import com.tim.pollution.utils.LocationUtil;
-import com.tim.pollution.view.ProgressView;
 import com.tim.pollution.view.WrapContentHeightViewPager;
 import com.tim.pollution.view.WrapContentListView;
 
@@ -63,6 +62,7 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import lecho.lib.hellocharts.formatter.SimpleColumnChartValueFormatter;
 import lecho.lib.hellocharts.model.Axis;
 import lecho.lib.hellocharts.model.AxisValue;
 import lecho.lib.hellocharts.model.Column;
@@ -70,6 +70,8 @@ import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.SubcolumnValue;
 import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.ColumnChartView;
+
+import static android.app.Activity.RESULT_OK;
 
 public class FirstPageFragment extends Fragment implements ICallBack, AdapterView.OnItemClickListener, FragmentCallBack {
     @BindView(R.id.weather_title_location)
@@ -100,6 +102,8 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
     TextView homeWeatherInfoCityVa;
     private ArrayList<ImageView> dotsList;
 
+    @BindView(R.id.home_sw)
+    SwipeRefreshLayout homeSw;
     private List<Fragment> fragments;
     private RegionNetBean regionNetBean;
     private ArrayList<String> regionIds;
@@ -119,7 +123,9 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
         View view = inflater.inflate(R.layout.activity_home, container, false);
         findView(view);
         initClick();
-
+        pd = ProgressDialog.show(getContext(), "提示", "加载数据中，请耐心等待......");
+        checkLocationPermission();
+        SDKInitializer.initialize(getActivity().getApplicationContext());
         return view;
 
     }
@@ -127,6 +133,7 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
      * 检查定位服务、权限
      */
     private void checkLocationPermission() {
+        homeSw.setRefreshing(false);
         if (!isLocServiceEnable(MyApplication.getContext())) {//检测是否开启定位服务
             showLocationDailog(0);
         } else {//检测用户是否将当前应用的定位权限拒绝
@@ -233,10 +240,6 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
     @Override
     public void onStart() {
         super.onStart();
-        pd = ProgressDialog.show(getContext(), "提示", "加载数据中，请耐心等待......");
-        checkLocationPermission();
-        SDKInitializer.initialize(getActivity().getApplicationContext());
-//        loadLocation(); // TODO: 2018/6/21
     }
     private void findView(View view) {
         homeWeatherInfoTime = (TextView) view.findViewById(R.id.home_weather_info_time);
@@ -253,6 +256,7 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
         homeWeatherInfoVa = (TextView) view.findViewById(R.id.home_weather_info_va);
         homeWeatherInfoCity = (TextView) view.findViewById(R.id.home_weather_info_city);
         homeWeatherInfoCityVa = (TextView) view.findViewById(R.id.home_weather_info_city_va);
+        homeSw= (SwipeRefreshLayout) view.findViewById(R.id.home_sw);
     }
 
     private Activity activity;
@@ -289,11 +293,27 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), FocusCityActivity.class);
-                startActivity(intent);
+                intent.putExtra("state","01");
+                startActivityForResult(intent,1001);
+            }
+        });
+        homeSw.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                pd = ProgressDialog.show(getContext(), "提示", "加载数据中，请耐心等待......");
+                checkLocationPermission();
             }
         });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==1001&&resultCode==RESULT_OK){
+            pd = ProgressDialog.show(getContext(), "提示", "加载数据中，请耐心等待......");
+            checkLocationPermission();
+        }
+    }
 
     /**
      * 获取县区列表
@@ -556,7 +576,7 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
                 column.setHasLabels(false);
                 //设置每个柱子的Lable是否选中，为false，表示不用选中，一直显示在柱子上
                 column.setHasLabelsOnlyForSelected(true);
-
+                column.setFormatter(new SimpleColumnChartValueFormatter(2));
 
                 //将每个属性得列全部添加到List中
                 columns.add(column);
@@ -575,7 +595,7 @@ public class FirstPageFragment extends Fragment implements ICallBack, AdapterVie
             homeChart.setColumnChartData(data);
             homeChart.setZoomEnabled(false);
             //
-            homeChart.setValueSelectionEnabled(false);
+            homeChart.setValueSelectionEnabled(true);
             homeChart.setInteractive(true);
             //
             Viewport v = new Viewport(homeChart.getMaximumViewport());
