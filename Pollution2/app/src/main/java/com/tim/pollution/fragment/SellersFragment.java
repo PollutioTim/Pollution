@@ -271,7 +271,7 @@ public class SellersFragment extends Fragment implements ICallBack {
                         }
                         tvTimeChooseStart.setText(startTime);
                         if(!TextUtils.isEmpty(endTime)){
-                            tvTimeChooseShow.setText(startTime+"-"+endTime);
+                            tvTimeChooseShow.setText(startTime+"至"+endTime);
                             setClear();
                             datatype = "month";
                             llLast.setSelected(true);
@@ -298,7 +298,7 @@ public class SellersFragment extends Fragment implements ICallBack {
                         }
                         tvTimeChooseEnd.setText(endTime);
                         if(!TextUtils.isEmpty(startTime)){
-                            tvTimeChooseShow.setText(startTime+"-"+endTime);
+                            tvTimeChooseShow.setText(startTime+"至"+endTime);
                             setClear();
                             datatype = "month";
                             llLast.setSelected(true);
