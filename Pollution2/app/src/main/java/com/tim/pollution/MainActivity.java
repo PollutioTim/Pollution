@@ -20,6 +20,7 @@ import com.tim.pollution.fragment.CityContrastFragment;
 import com.tim.pollution.fragment.FirstPageFragment;
 import com.tim.pollution.fragment.MainFragment;
 import com.tim.pollution.fragment.MapFragment;
+import com.tim.pollution.fragment.NewMapFragment;
 import com.tim.pollution.fragment.PKFragment;
 import com.tim.pollution.fragment.SellersFragment;
 import com.tim.pollution.general.BaseActivity;
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
         fragments = new ArrayList<>();
         fragments.add(new FirstPageFragment());
-        fragments.add(new MapFragment());
+        fragments.add(new NewMapFragment());
         fragments.add(new SellersFragment());
         fragments.add(new CityContrastFragment());
         fragments.add(new AboutFragment());

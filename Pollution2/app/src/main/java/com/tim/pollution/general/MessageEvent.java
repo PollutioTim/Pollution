@@ -12,29 +12,17 @@ import java.util.List;
 
 public class MessageEvent {
 
-    private LocationData message;
-    private List<LevePollutionBean> LevePollutionBeans;
+    private String  id;
 
-    public MessageEvent(LocationData data ) {
-        this.message = data;
+    public MessageEvent ( String  id){
+        this.id = id;
     }
 
-    public MessageEvent (List<LevePollutionBean> LevePollutionBeans){
-        this.LevePollutionBeans = LevePollutionBeans;
-    }
-    public List<LevePollutionBean> getLevePollutionBeans() {
-        return LevePollutionBeans;
+    public String getId() {
+        return id;
     }
 
-    public void setLevePollutionBeans(List<LevePollutionBean> levePollutionBeans) {
-        LevePollutionBeans = levePollutionBeans;
-    }
-
-    public LocationData getMessage() {
-        return message;
-    }
-
-    public void setMessage(LocationData message) {
-        this.message = message;
+    public void setId(String id) {
+        this.id = id;
     }
 }

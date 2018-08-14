@@ -183,36 +183,6 @@ public class MapActivity extends BaseActivity implements ICallBack,BaiduMap.OnMa
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true) //在ui线程执行
-    public void onMessageEvent(MessageEvent event) {
-        try {
-            LocationData data = event.getMessage();
-            LatLng latLng = data.getLatLng();
-
-            // 更新界面
-            if (isFirstLocate) {
-                LatLng ll = new LatLng(latLng.latitude, latLng.longitude);
-                MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(ll);
-                mBaiduMap.animateMapStatus(update);
-                update = MapStatusUpdateFactory.zoomTo(12f);
-                mBaiduMap.animateMapStatus(update);
-            /*判断baiduMap是已经移动到指定位置*/
-                if (mBaiduMap.getLocationData() != null)
-                    if (mBaiduMap.getLocationData().latitude == latLng.latitude
-                            && mBaiduMap.getLocationData().longitude == latLng.longitude) {
-                        isFirstLocate = false;
-                    }
-            }
-            MyLocationData.Builder locationBuilder = new MyLocationData.Builder();
-            locationBuilder.latitude(latLng.latitude);
-            locationBuilder.longitude(latLng.longitude);
-            MyLocationData locationData = locationBuilder.build();
-            mBaiduMap.setMyLocationData(locationData);
-        }catch (Exception e){
-            Log.e("lili","onMessageEvent =====e="+e.toString());
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public void onResume() {

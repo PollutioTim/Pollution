@@ -12,37 +12,20 @@ import java.util.List;
 
 public class MapPointBean extends StateCode implements Serializable {
     @SerializedName("message")
-    private List<PointBean>messages;
+    private List<MapPointBean.PointBean> messages;
 
-    public List<PointBean> getMessages() {
-        return messages;
+    public MapPointBean() {
     }
 
-    public void setMessages(List<PointBean> messages) {
+    public List<MapPointBean.PointBean> getMessages() {
+        return this.messages;
+    }
+
+    public void setMessages(List<MapPointBean.PointBean> messages) {
         this.messages = messages;
     }
 
-    public class PointBean{
-//        "PointCode": "140101001",
-//                "PointName": "上兰",
-//                "PointAddress": "太原市尖草坪区通顺街",
-//                "PointLongitude": "112.434",
-//                "PointLatitude": "38.0108",
-//                "PointType": "国控",
-//                "AQI": "99",
-//                "AQIcolor": "#FFFF00",
-//                "SO2": "33",
-//                "NO2": "43",
-//                "PM10": "109",
-//                "CO": "0.8",
-//                "O3": "82",
-//                "PM25": "74",
-//                "Feng":"4",
-//                "FengXiang":"288",
-//                "Qiya":"855",
-//                "QiWen":"22",
-//                "ShiDu":"18"
-        //Q_AQIcolor
+    public class PointBean {
         @SerializedName("PointCode")
         private String pointCode;
         @SerializedName("PointName")
@@ -73,19 +56,238 @@ public class MapPointBean extends StateCode implements Serializable {
         private String O3;
         @SerializedName("PM25")
         private String PM25;
+        @SerializedName("SO2color")
+        private String SO2Color;
+        @SerializedName("Q_SO2color")
+        private String QSO2Color;
+        @SerializedName("NO2color")
+        private String NO2Color;
+        @SerializedName("Q_NO2color")
+        private String QNO2Color;
+        @SerializedName("PM10color")
+        private String PM10Color;
+        @SerializedName("Q_PM10color")
+        private String QPM10Color;
+        @SerializedName("COcolor")
+        private String COColor;
+        @SerializedName("Q_COcolor")
+        private String QCOColor;
+        @SerializedName("O3color")
+        private String O3Color;
+        @SerializedName("Q_O3color")
+        private String QO3Color;
+        @SerializedName("PM25color")
+        private String PM25Color;
+        @SerializedName("Q_PM25color")
+        private String QPM25Color;
         @SerializedName("Feng")
         private String Feng;
+        @SerializedName("Fengcolor")
+        private String Fengcolor;
+        @SerializedName("Q_Fengcolor")
+        private String QFengColor;
         @SerializedName("FengXiang")
         private String FengXiang;
-        @SerializedName("Qiya")
-        private String qiYa;
         @SerializedName("QiWen")
-        private String qiWen;
+        private String QiWen;
+        @SerializedName("QiWencolor")
+        private String QiWencolor;
+        @SerializedName("Q_QiWencolor")
+        private String QQiWenColor;
+        @SerializedName("QiYa")
+        private String QiYa;
+        @SerializedName("QiYacolor")
+        private String QiYacolor;
+        @SerializedName("Q_QiYacolor")
+        private String QQiYaColor;
         @SerializedName("ShiDu")
         private String ShiDu;
+        @SerializedName("ShiDucolor")
+        private String ShiDucolor;
+        @SerializedName("Q_ShiDucolor")
+        private String QShiDuColor;
+
+        public PointBean() {
+        }
+
+        public String getQSO2Color() {
+            return this.QSO2Color;
+        }
+
+        public void setQSO2Color(String QSO2Color) {
+            this.QSO2Color = QSO2Color;
+        }
+
+        public String getQNO2Color() {
+            return this.QNO2Color;
+        }
+
+        public void setQNO2Color(String QNO2Color) {
+            this.QNO2Color = QNO2Color;
+        }
+
+        public String getQPM10Color() {
+            return this.QPM10Color;
+        }
+
+        public void setQPM10Color(String QPM10Color) {
+            this.QPM10Color = QPM10Color;
+        }
+
+        public String getQCOColor() {
+            return this.QCOColor;
+        }
+
+        public void setQCOColor(String QCOColor) {
+            this.QCOColor = QCOColor;
+        }
+
+        public String getQO3Color() {
+            return this.QO3Color;
+        }
+
+        public void setQO3Color(String QO3Color) {
+            this.QO3Color = QO3Color;
+        }
+
+        public String getQPM25Color() {
+            return this.QPM25Color;
+        }
+
+        public void setQPM25Color(String QPM25Color) {
+            this.QPM25Color = QPM25Color;
+        }
+
+        public String getQFengColor() {
+            return this.QFengColor;
+        }
+
+        public void setQFengColor(String QFengColor) {
+            this.QFengColor = QFengColor;
+        }
+
+        public String getQQiWenColor() {
+            return this.QQiWenColor;
+        }
+
+        public void setQQiWenColor(String QQiWenColor) {
+            this.QQiWenColor = QQiWenColor;
+        }
+
+        public String getQQiYaColor() {
+            return this.QQiYaColor;
+        }
+
+        public void setQQiYaColor(String QQiYaColor) {
+            this.QQiYaColor = QQiYaColor;
+        }
+
+        public String getQShiDuColor() {
+            return this.QShiDuColor;
+        }
+
+        public void setQShiDuColor(String QShiDuColor) {
+            this.QShiDuColor = QShiDuColor;
+        }
+
+        public String getFengcolor() {
+            return this.Fengcolor;
+        }
+
+        public String getSO2Color() {
+            return this.SO2Color;
+        }
+
+        public void setSO2Color(String SO2Color) {
+            this.SO2Color = SO2Color;
+        }
+
+        public String getNO2Color() {
+            return this.NO2Color;
+        }
+
+        public void setNO2Color(String NO2Color) {
+            this.NO2Color = NO2Color;
+        }
+
+        public String getPM10Color() {
+            return this.PM10Color;
+        }
+
+        public void setPM10Color(String PM10Color) {
+            this.PM10Color = PM10Color;
+        }
+
+        public String getCOColor() {
+            return this.COColor;
+        }
+
+        public void setCOColor(String COColor) {
+            this.COColor = COColor;
+        }
+
+        public String getO3Color() {
+            return this.O3Color;
+        }
+
+        public void setO3Color(String o3Color) {
+            this.O3Color = o3Color;
+        }
+
+        public String getPM25Color() {
+            return this.PM25Color;
+        }
+
+        public void setPM25Color(String PM25Color) {
+            this.PM25Color = PM25Color;
+        }
+
+        public void setFengcolor(String fengcolor) {
+            this.Fengcolor = fengcolor;
+        }
+
+        public String getQiWen() {
+            return this.QiWen;
+        }
+
+        public void setQiWen(String qiWen) {
+            this.QiWen = qiWen;
+        }
+
+        public String getQiWencolor() {
+            return this.QiWencolor;
+        }
+
+        public void setQiWencolor(String qiWencolor) {
+            this.QiWencolor = qiWencolor;
+        }
+
+        public String getQiYa() {
+            return this.QiYa;
+        }
+
+        public void setQiYa(String qiYa) {
+            this.QiYa = qiYa;
+        }
+
+        public String getQiYacolor() {
+            return this.QiYacolor;
+        }
+
+        public void setQiYacolor(String qiYacolor) {
+            this.QiYacolor = qiYacolor;
+        }
+
+        public String getShiDucolor() {
+            return this.ShiDucolor;
+        }
+
+        public void setShiDucolor(String shiDucolor) {
+            this.ShiDucolor = shiDucolor;
+        }
 
         public String getPointCode() {
-            return pointCode;
+            return this.pointCode;
         }
 
         public void setPointCode(String pointCode) {
@@ -93,7 +295,7 @@ public class MapPointBean extends StateCode implements Serializable {
         }
 
         public String getPointName() {
-            return pointName;
+            return this.pointName;
         }
 
         public void setPointName(String pointName) {
@@ -101,7 +303,7 @@ public class MapPointBean extends StateCode implements Serializable {
         }
 
         public String getPointAddress() {
-            return pointAddress;
+            return this.pointAddress;
         }
 
         public void setPointAddress(String pointAddress) {
@@ -109,7 +311,7 @@ public class MapPointBean extends StateCode implements Serializable {
         }
 
         public String getPointLongitude() {
-            return pointLongitude;
+            return this.pointLongitude;
         }
 
         public void setPointLongitude(String pointLongitude) {
@@ -117,7 +319,7 @@ public class MapPointBean extends StateCode implements Serializable {
         }
 
         public String getPointLatitude() {
-            return pointLatitude;
+            return this.pointLatitude;
         }
 
         public void setPointLatitude(String pointLatitude) {
@@ -125,7 +327,7 @@ public class MapPointBean extends StateCode implements Serializable {
         }
 
         public String getPointType() {
-            return pointType;
+            return this.pointType;
         }
 
         public void setPointType(String pointType) {
@@ -133,7 +335,7 @@ public class MapPointBean extends StateCode implements Serializable {
         }
 
         public String getAQI() {
-            return AQI;
+            return this.AQI;
         }
 
         public void setAQI(String AQI) {
@@ -141,7 +343,7 @@ public class MapPointBean extends StateCode implements Serializable {
         }
 
         public String getAQIColor() {
-            return AQIColor;
+            return this.AQIColor;
         }
 
         public void setAQIColor(String AQIColor) {
@@ -149,23 +351,23 @@ public class MapPointBean extends StateCode implements Serializable {
         }
 
         public String getSo2() {
-            return So2;
+            return this.So2;
         }
 
         public void setSo2(String so2) {
-            So2 = so2;
+            this.So2 = so2;
         }
 
         public String getNo2() {
-            return No2;
+            return this.No2;
         }
 
         public void setNo2(String no2) {
-            No2 = no2;
+            this.No2 = no2;
         }
 
         public String getPM10() {
-            return PM10;
+            return this.PM10;
         }
 
         public void setPM10(String PM10) {
@@ -173,23 +375,23 @@ public class MapPointBean extends StateCode implements Serializable {
         }
 
         public String getCo() {
-            return Co;
+            return this.Co;
         }
 
         public void setCo(String co) {
-            Co = co;
+            this.Co = co;
         }
 
         public String getO3() {
-            return O3;
+            return this.O3;
         }
 
         public void setO3(String o3) {
-            O3 = o3;
+            this.O3 = o3;
         }
 
         public String getPM25() {
-            return PM25;
+            return this.PM25;
         }
 
         public void setPM25(String PM25) {
@@ -197,47 +399,31 @@ public class MapPointBean extends StateCode implements Serializable {
         }
 
         public String getFeng() {
-            return Feng;
+            return this.Feng;
         }
 
         public void setFeng(String feng) {
-            Feng = feng;
+            this.Feng = feng;
         }
 
         public String getFengXiang() {
-            return FengXiang;
+            return this.FengXiang;
         }
 
         public void setFengXiang(String fengXiang) {
-            FengXiang = fengXiang;
-        }
-
-        public String getQiYa() {
-            return qiYa;
-        }
-
-        public void setQiYa(String qiYa) {
-            this.qiYa = qiYa;
-        }
-
-        public String getQiWen() {
-            return qiWen;
-        }
-
-        public void setQiWen(String qiWen) {
-            this.qiWen = qiWen;
+            this.FengXiang = fengXiang;
         }
 
         public String getShiDu() {
-            return ShiDu;
+            return this.ShiDu;
         }
 
         public void setShiDu(String shiDu) {
-            ShiDu = shiDu;
+            this.ShiDu = shiDu;
         }
 
         public String getQAqiColor() {
-            return QAqiColor;
+            return this.QAqiColor;
         }
 
         public void setQAqiColor(String QAqiColor) {

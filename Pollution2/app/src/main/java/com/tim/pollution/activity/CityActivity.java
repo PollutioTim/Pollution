@@ -1,33 +1,36 @@
 package com.tim.pollution.activity;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.widget.GridLayoutManager;
+import android.provider.ContactsContract;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.baidu.mapapi.map.MapStatusUpdate;
-import com.baidu.mapapi.map.MapStatusUpdateFactory;
-import com.baidu.mapapi.map.MyLocationData;
-import com.baidu.mapapi.model.LatLng;
-import com.tim.pollution.MyApplication;
 import com.tim.pollution.R;
-import com.tim.pollution.adapter.CityAdapter;
-import com.tim.pollution.bean.CityBean;
-import com.tim.pollution.bean.LevePollutionBean;
-import com.tim.pollution.bean.MapBean;
-import com.tim.pollution.bean.MyData;
+import com.tim.pollution.adapter.FocusCityWithClassAdapter;
+import com.tim.pollution.adapter.MapSelectAdapter;
+import com.tim.pollution.bean.changetrend.DataBankNetBean;
 import com.tim.pollution.bean.changetrend.RegionNetBean;
 import com.tim.pollution.callback.ICallBack;
 import com.tim.pollution.callback.OnItemClickListener;
 import com.tim.pollution.general.BaseActivity;
 import com.tim.pollution.general.Constants;
-import com.tim.pollution.general.LocationData;
 import com.tim.pollution.general.MData;
 import com.tim.pollution.general.MDataType;
-import com.tim.pollution.general.MessageEvent;
-import com.tim.pollution.net.MapDAL;
 import com.tim.pollution.net.WeatherDal;
+import com.tim.pollution.utils.CityListSaveUtil;
+import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
+import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,12 +51,16 @@ public class CityActivity extends BaseActivity implements ICallBack {
     RecyclerView recyclerView;
     @BindView(R.id.city_back_iv)
     ImageView ivBack;
-    private List<CityBean>cityBeens;
+    @BindView(R.id.city_focus)
+    TextView tvFocus;
+    private List<RegionNetBean.RegionBean>cityBeens;
 
-    private CityAdapter adapter;
-    private GridLayoutManager lm;
+    private MapSelectAdapter adapter;
     private RegionNetBean regionNetBean;
     private Map<String,String> parms;
+    private AlertDialog dialogAgain;
+    private StickyRecyclerHeadersDecoration headersDecor;
+    private ProgressDialog pd;
 
     @Override
     public int intiLayout() {
@@ -62,26 +69,90 @@ public class CityActivity extends BaseActivity implements ICallBack {
 
     @Override
     public void initView() {
-        setActivityName("城市列表选择");
+        setActivityName("城市列表");
+        //李立地图选择 newmapfragment
         cityBeens = new ArrayList<>();
-
-        adapter = new CityAdapter(this,cityBeens);
-        lm = new GridLayoutManager(this,4);
-        recyclerView.setLayoutManager(lm);
+        tvFocus.setVisibility(View.GONE);
+        adapter = new MapSelectAdapter(this,cityBeens);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-        loadRegionData();
+        pd = ProgressDialog.show(this, "提示", "加载数据中，请耐心等待......");
+        loadData("area",null);
+
+        adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                RegionNetBean.RegionBean regionBean = cityBeens.get(position);
+                //lili
+                Intent intent = new Intent("city_id");
+                intent.putExtra("id", regionBean.getRegionId());
+                sendBroadcast(intent);
+                finish();
+            }
+        });
     }
-    /**
-     * 加载县区列表
-     */
-    private void loadRegionData() {
-        if (parms == null) {
-            parms = new HashMap<>();
-        }
+    int size =0;
+    int index=0;
+    private void  loadData(String type, final String id){//http://218.26.106.43:10009/AppInterface/Region?key=6DlLqAyx3mY=&regiontype=area
+        parms=new HashMap<>();
         parms.put("key", Constants.key);
-        parms.put("regiontype", "area");
-        MapDAL.getInstance().getCityData(parms, this);
+        parms.put("regiontype",type);
+        if(id!=null){
+            parms.put("regionid",id);
+        }
+        WeatherDal.getInstance().getRegion(parms, new ICallBack() {
+            @Override
+            public void onSuccess(Object data) {
+                MData mData = (MData) data;
+                if (MDataType.REGIONNET_BEAN.equals(mData.getType())) {
+                    if(id==null){
+                        regionNetBean = (RegionNetBean) mData.getData();
+                        //            regionNetBean = getTest();
+                        if (regionNetBean != null) {
+                            size=regionNetBean.getMessage().size();
+                            loadData("singlecity",regionNetBean.getMessage().get(index).getRegionId());
+                            for(RegionNetBean.RegionBean regionBean:regionNetBean.getMessage()){
+                                regionBean.setClass(true);
+                            }
+                            cityBeens.addAll(regionNetBean.getMessage());
+                        }
+                    }else{
+                        if(regionNetBean!=null){
+                            regionNetBean.getMessage().get(index).setRegionBeens(((RegionNetBean)mData.getData()).getMessage());
+                            if(index==size-1){
+                                cityBeens.clear();
+                                cityBeens.addAll(regionNetBean.getMessage());
+                                recyclerView.setAdapter(new FocusCityWithClassAdapter(CityActivity.this,cityBeens));
+                                if(pd!=null){
+                                    pd.dismiss();
+                                }
+                                return;
+                            }
+                            index++;
+                            loadData("singlecity",regionNetBean.getMessage().get(index).getRegionId());
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onError(String msg, String eCode) {
+                index++;
+                if(index>=size){
+                    cityBeens.clear();
+                    cityBeens.addAll(regionNetBean.getMessage());
+                    recyclerView.setAdapter(new FocusCityWithClassAdapter(CityActivity.this,cityBeens));
+                    if(pd!=null){
+                        pd.dismiss();
+                    }
+                }
+                Toast.makeText(CityActivity.this, msg, Toast.LENGTH_LONG).show();
+                showAgainDailog(msg);
+            }
+        });
     }
+
     @Override
     public void initData() {
 
@@ -98,20 +169,46 @@ public class CityActivity extends BaseActivity implements ICallBack {
 
     @Override
     public void onSuccess(Object data) {
-        MData mData = (MData) data;
-        if (mData.getType().equals(MDataType.MAP_DATA)) {//获得城市名
-            MapBean mapBean = (MapBean) mData.getData();
-            if (cityBeens.size() > 0) {
-                cityBeens.clear();
-            }
-            cityBeens.addAll(mapBean.getMessage().getCityBeens());
-            adapter.notifyDataSetChanged();
-        }
+
+
     }
 
     @Override
     public void onError(String msg, String eCode) {
 
     }
+
+    /**
+     * 重试
+     */
+    private void showAgainDailog(String msg) {
+        if (dialogAgain != null) {
+            dialogAgain.show();
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("提示");
+        builder.setMessage(msg + "是否重试？");
+        builder.setIcon(R.mipmap.prompt);
+        //点击对话框以外的区域是否让对话框消失
+        builder.setCancelable(false);
+        builder.setNegativeButton("是", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (parms == null) {
+                    parms = new HashMap<>();
+                }
+                parms.put("key", Constants.key);
+                parms.put("regiontype", "region");
+                WeatherDal.getInstance().getRegion(parms, CityActivity.this);
+            }
+        });
+        dialogAgain = builder.create();
+        if (dialogAgain != null) {
+            //显示对话框
+            dialogAgain.show();
+        }
+    }
+
+
 
 }
