@@ -1,13 +1,10 @@
 package com.tim.pollution.fragment;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -21,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
@@ -51,7 +47,6 @@ import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.tim.pollution.MyApplication;
 import com.tim.pollution.R;
-import com.tim.pollution.activity.CityActivity;
 import com.tim.pollution.activity.FocusCityActivity;
 import com.tim.pollution.activity.MapActivity;
 import com.tim.pollution.adapter.MapColorAdapter;
@@ -59,18 +54,14 @@ import com.tim.pollution.bean.CityBean;
 import com.tim.pollution.bean.LevePollutionBean;
 import com.tim.pollution.bean.MapBean;
 import com.tim.pollution.bean.MapPointBean;
+import com.tim.pollution.bean.changetrend.RegionNetBean;
 import com.tim.pollution.callback.ICallBack;
 import com.tim.pollution.general.Constants;
 import com.tim.pollution.general.LocationData;
 import com.tim.pollution.general.MData;
 import com.tim.pollution.general.MDataType;
-import com.tim.pollution.general.MessageEvent;
 import com.tim.pollution.net.MapDAL;
 import com.tim.pollution.utils.LocationUtil;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -83,6 +74,8 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static android.app.Activity.RESULT_OK;
 
 
 /**
@@ -190,7 +183,7 @@ public class NewMapFragment extends Fragment implements ICallBack,
     int count = 0;
 
     private IntentFilter intentFilter;
-    private IdReceiver idReceiver;
+/*    private IdReceiver idReceiver;*/
     private List<List<LatLng>> polyLines;
 
     @Nullable
@@ -245,8 +238,8 @@ public class NewMapFragment extends Fragment implements ICallBack,
                         for (final CityBean cityBean : cityBeens) {
                             //设置坐标点
                             try {
-                                LatLng point1 = new LatLng(Double.valueOf(cityBean.getPointLatitude()),
-                                        Double.valueOf(cityBean.getPointLongitude()));
+                                LatLng point1 = new LatLng(stringToDouble(cityBean.getPointLatitude()),
+                                        stringToDouble(cityBean.getPointLongitude()));
                                 setMarker(cityBean, point1);
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -261,8 +254,8 @@ public class NewMapFragment extends Fragment implements ICallBack,
                         for (final CityBean cityBean : cityBeens) {
                             //设置坐标点
                             try {
-                                LatLng point1 = new LatLng(Double.valueOf(cityBean.getPointLatitude()),
-                                        Double.valueOf(cityBean.getPointLongitude()));
+                                LatLng point1 = new LatLng(stringToDouble(cityBean.getPointLatitude()),
+                                        stringToDouble(cityBean.getPointLongitude()));
                                 setSmallMarker(cityBean, point1);
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -284,15 +277,15 @@ public class NewMapFragment extends Fragment implements ICallBack,
     }
 
     private void initBrost() {
-        //动态接受网络变化的广播接收器
+        /*//动态接受网络变化的广播接收器
         intentFilter = new IntentFilter();
         intentFilter.addAction("city_id");
 
         idReceiver = new IdReceiver();
-        getActivity().registerReceiver(idReceiver, intentFilter);
+        getActivity().registerReceiver(idReceiver, intentFilter);*/
     }
 
-    //自定义接受网络变化的广播接收器
+/*    //自定义接受网络变化的广播接收器
     class IdReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -304,8 +297,22 @@ public class NewMapFragment extends Fragment implements ICallBack,
             parms.put("regionid", pointCityId);
             MapDAL.getInstance().getPointData(parms, NewMapFragment.this);
         }
-    }
+    }*/
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==1003&&resultCode==RESULT_OK){
+            RegionNetBean.RegionBean  regionBean= (RegionNetBean.RegionBean) data.getSerializableExtra("regionBean");
+            pointCityId=regionBean.getRegionId();
+            Log.e("test","pointCityId:"+pointCityId);
+            parms.put("key", Constants.key);
+            parms.put("regiontype", regiontype);
+            parms.put("datatype", "many");
+            parms.put("regionid", pointCityId);
+            MapDAL.getInstance().getPointData(parms, NewMapFragment.this);
+        }
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -362,7 +369,7 @@ public class NewMapFragment extends Fragment implements ICallBack,
         if (pool.isShutdown()) {
             pool.shutdown();
         }
-        getActivity().unregisterReceiver(idReceiver);
+       /* getActivity().unregisterReceiver(idReceiver);*/
     }
 
     Handler handler = new Handler() {
@@ -377,8 +384,8 @@ public class NewMapFragment extends Fragment implements ICallBack,
                             pool.execute(new Runnable() {
                                 @Override
                                 public void run() {
-                                    LatLng point1 = new LatLng(Double.valueOf(cityBean.getPointLatitude()),
-                                            Double.valueOf(cityBean.getPointLongitude()));
+                                    LatLng point1 = new LatLng(stringToDouble(cityBean.getPointLatitude()),
+                                            stringToDouble(cityBean.getPointLongitude()));
                                     setSmallMarker(cityBean, point1);
                                 }
                             });
@@ -392,6 +399,13 @@ public class NewMapFragment extends Fragment implements ICallBack,
         }
     };
 
+    private double stringToDouble(String value){
+        try{
+          return   Double.valueOf(value);
+        }catch (Exception e){
+            return 0;
+        }
+    }
     @Override
     public void onSuccess(Object data) {
         MData data1 = (MData) data;
@@ -569,8 +583,8 @@ public class NewMapFragment extends Fragment implements ICallBack,
             for (final CityBean cityBean : cityBeens) {
                 //定义Maker坐标点
                 View markView = View.inflate(getActivity(), R.layout.icon_jianton, null);
-                LatLng point = new LatLng(Double.valueOf(cityBean.getPointLatitude()),
-                        Double.valueOf(cityBean.getPointLongitude()));
+                LatLng point = new LatLng(stringToDouble(cityBean.getPointLatitude()),
+                        stringToDouble(cityBean.getPointLongitude()));
                 //构建Marker图标
                 //将View转换为BitmapDescriptor
                 BitmapDescriptor descriptor = BitmapDescriptorFactory.fromView(markView);
@@ -593,8 +607,8 @@ public class NewMapFragment extends Fragment implements ICallBack,
             for (final CityBean cityBean : cityBeens) {
                 //定义Maker坐标点
                 View markView = View.inflate(getActivity(), R.layout.icon_big_jiantou, null);
-                LatLng point = new LatLng(Double.valueOf(cityBean.getPointLatitude()),
-                        Double.valueOf(cityBean.getPointLongitude()));
+                LatLng point = new LatLng(stringToDouble(cityBean.getPointLatitude()),
+                        stringToDouble(cityBean.getPointLongitude()));
                 //构建Marker图标
                 //将View转换为BitmapDescriptor
                 BitmapDescriptor descriptor = BitmapDescriptorFactory.fromView(markView);
@@ -634,8 +648,8 @@ public class NewMapFragment extends Fragment implements ICallBack,
 
         for (final CityBean clickMapBean : cityBeens) {
             //设置坐标点
-            LatLng point1 = new LatLng(Double.valueOf(clickMapBean.getPointLatitude()),
-                    Double.valueOf(clickMapBean.getPointLongitude()));
+            LatLng point1 = new LatLng(stringToDouble(clickMapBean.getPointLatitude()),
+                    stringToDouble(clickMapBean.getPointLongitude()));
             if (zoomTo >= 9.0) {
                 setMarker(clickMapBean, point1);
             } else if (zoomTo <= 8.0) {
@@ -768,9 +782,12 @@ public class NewMapFragment extends Fragment implements ICallBack,
                 setColorMarker();
                 break;
             case R.id.map_swicth_tv:
-                Intent intent = new Intent(getActivity(), CityActivity.class);
-                startActivity(intent);
-                break;
+              /*  Intent intent = new Intent(getActivity(), CityActivity.class);
+                startActivity(intent);*/
+              Intent intent=new Intent(getActivity(), FocusCityActivity.class);
+              intent.putExtra("state","02");
+              startActivityForResult(intent,1003);
+              break;
         }
     }
 
