@@ -745,7 +745,7 @@
 
                 android:background="#FF42969D"
 
-                android:checkedButton="@+id/weather_main_detail_rbpm25_type"
+                android:checkedButton="@+id/weather_main_detail_rbAQI_type"
 
                 android:orientation="horizontal">
 

@@ -1,23 +1,17 @@
 package com.tim.pollution.activity;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tim.pollution.R;
 import com.tim.pollution.adapter.FocusCityWithClassAdapter;
-import com.tim.pollution.bean.changetrend.DataBankNetBean;
 import com.tim.pollution.bean.changetrend.RegionNetBean;
 import com.tim.pollution.callback.ICallBack;
 import com.tim.pollution.general.BaseActivity;
@@ -26,7 +20,6 @@ import com.tim.pollution.general.MData;
 import com.tim.pollution.general.MDataType;
 import com.tim.pollution.net.WeatherDal;
 import com.tim.pollution.utils.CityListSaveUtil;
-import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import java.util.ArrayList;
@@ -58,6 +51,7 @@ public class FocusCityActivity extends BaseActivity implements ICallBack {
     private AlertDialog dialogAgain;
     private StickyRecyclerHeadersDecoration headersDecor;
     private ProgressDialog pd;
+    private String state;//状态：01 首页  02 选择城市
 
     @Override
     public int intiLayout() {
@@ -66,11 +60,14 @@ public class FocusCityActivity extends BaseActivity implements ICallBack {
 
     @Override
     public void initView() {
+        state=getIntent().getStringExtra("state");
+        if("02".equals(state)){
+            tvFocus.setVisibility(View.GONE);
+        }
         setActivityName("城市列表");
-        //李立地图选择 newmapfragment
         cityBeens = new ArrayList<>();
         tvFocus.setVisibility(View.VISIBLE);
-        adapter = new FocusCityWithClassAdapter(this,cityBeens);
+        adapter = new FocusCityWithClassAdapter(this,cityBeens,state);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
@@ -85,6 +82,7 @@ public class FocusCityActivity extends BaseActivity implements ICallBack {
                 }catch (Exception e){
                     e.printStackTrace();
                 }
+                setResult(RESULT_OK);
                 FocusCityActivity.this.finish();
             }
         });
@@ -120,7 +118,7 @@ public class FocusCityActivity extends BaseActivity implements ICallBack {
                             if(index==size-1){
                                 cityBeens.clear();
                                 cityBeens.addAll(regionNetBean.getMessage());
-                                recyclerView.setAdapter(new FocusCityWithClassAdapter(FocusCityActivity.this,cityBeens));
+                                recyclerView.setAdapter(new FocusCityWithClassAdapter(FocusCityActivity.this,cityBeens,state));
                                 if(pd!=null){
                                     pd.dismiss();
                                 }
@@ -139,7 +137,7 @@ public class FocusCityActivity extends BaseActivity implements ICallBack {
                 if(index>=size){
                     cityBeens.clear();
                     cityBeens.addAll(regionNetBean.getMessage());
-                    recyclerView.setAdapter(new FocusCityWithClassAdapter(FocusCityActivity.this,cityBeens));
+                    recyclerView.setAdapter(new FocusCityWithClassAdapter(FocusCityActivity.this,cityBeens,state));
                     if(pd!=null){
                         pd.dismiss();
                     }
@@ -149,6 +147,11 @@ public class FocusCityActivity extends BaseActivity implements ICallBack {
             }
         });
     }
+
+
+
+
+
 
     @Override
     public void initData() {

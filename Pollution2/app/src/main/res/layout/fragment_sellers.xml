@@ -190,12 +190,58 @@
 
             </LinearLayout>
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/time_choose_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/title_ll"
+            android:layout_alignParentRight="true"
+            android:gravity="center_vertical"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+
+            <TextView
+                android:id="@+id/time_choose_show"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:text="1111"
+                android:textColor="@color/black"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/time_choose_start"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="开始时间"
+                android:layout_margin="@dimen/dp_10"
+                android:background="@drawable/shape_border_black"
+                android:textSize="13sp"
+                android:padding="2dp"
+                android:textColor="@color/gree_blue"
+                android:gravity="center"/>
+            <TextView
+                android:id="@+id/time_choose_end"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="结束时间"
+                android:layout_margin="@dimen/dp_10"
+                android:textSize="13sp"
+                android:padding="2dp"
+                android:background="@drawable/shape_border_black"
+                android:textColor="@color/gree_blue"
+                android:gravity="center"/>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/time_ll"
             android:layout_width="match_parent"
             android:layout_height="25dp"
-            android:layout_below="@+id/title_ll"
+            android:layout_below="@+id/time_choose_ll"
             android:background="@color/color_white"
             android:orientation="horizontal">
             <TextView

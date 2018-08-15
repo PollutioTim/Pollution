@@ -4,11 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -17,16 +14,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.tim.pollution.MyApplication;
 import com.tim.pollution.R;
 import com.tim.pollution.activity.SiteWeatherDetailActivity;
 import com.tim.pollution.bean.RegionWeather;
-import com.tim.pollution.bean.weather.AQI24hBean;
 import com.tim.pollution.callback.ICallBack;
 import com.tim.pollution.general.Constants;
 import com.tim.pollution.general.MData;
@@ -36,22 +30,12 @@ import com.tim.pollution.utils.DateUtil;
 import com.tim.pollution.view.ProgressView;
 import com.woodnaonly.arcprogress.ArcProgress;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import lecho.lib.hellocharts.model.Axis;
-import lecho.lib.hellocharts.model.AxisValue;
-import lecho.lib.hellocharts.model.Column;
-import lecho.lib.hellocharts.model.ColumnChartData;
-import lecho.lib.hellocharts.model.SubcolumnValue;
 
 /**
  * 首页-》上
@@ -171,6 +155,13 @@ public class FirstPageTopFragment extends Fragment implements ICallBack, View.On
                 weatherCoPro.setMaxCount(500);
                 weatherCoPro.setCurrentCount(getIntFromString(regionWeather.getMessage().getRegionList().getCO()));
                 weatherCoPro.setPrograssColor(regionWeather.getMessage().getRegionList().getCOcolor());
+                //占满
+                weatherCoPro.setCurrentCount(500);
+                weatherNo2Pro.setCurrentCount(500);
+                weatherO3Pro.setCurrentCount(500);
+                weatherSo2Pro.setCurrentCount(500);
+                weatherPm10Pro.setCurrentCount(500);
+                weatherPm25Pro.setCurrentCount(500);
             }
 
         }

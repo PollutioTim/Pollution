@@ -1,7 +1,6 @@
 package com.tim.pollution.net;
 
 import com.google.gson.Gson;
-import com.tim.pollution.bean.MapBean;
 import com.tim.pollution.bean.RankLastBean;
 import com.tim.pollution.bean.RankMainBean;
 import com.tim.pollution.bean.StateCode;
@@ -24,7 +23,7 @@ public class RankDAL {
     private static String mapUrls;
 
     static {
-        mapUrls = "http://218.26.106.43:10009/AppInterface/DataRank";
+        mapUrls = "http://202.97.152.195:5004/AppInterface/DataRank";
 
     }
 
@@ -69,7 +68,7 @@ public class RankDAL {
                     }
                 });
     }
-
+//    http://202.97.152.195:5004/AppInterface/DataRank?regiontype=city&datatype=year&ranktype=ZH&areatype=allregion&starttime=2016-01-01&key=6DlLqAyx3mY=
     public void getRankLast(Map<String ,String> params, final ICallBack callBack){
         PostFormBuilder postFormBuilder = OkHttpUtils.post().url(mapUrls).params(params);
         postFormBuilder.build().connTimeOut(20*1000)

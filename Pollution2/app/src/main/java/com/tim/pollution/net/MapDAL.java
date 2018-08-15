@@ -1,7 +1,6 @@
 package com.tim.pollution.net;
 
 import com.google.gson.Gson;
-import com.tim.pollution.bean.ClickMapBean;
 import com.tim.pollution.bean.ClickMapListBean;
 import com.tim.pollution.bean.ClickPointBean;
 import com.tim.pollution.bean.MapBean;
@@ -26,7 +25,7 @@ public class MapDAL {
     private static String mapUrls;
 
     static {
-        mapUrls = "http://202.97.152.195:5004/AppInterface/MapDataNew";
+        mapUrls = "http://202.97.152.195:5004/AppInterface/MapData";
 
     }
 

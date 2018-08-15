@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -28,6 +29,7 @@ import com.oxandon.calendar.CalendarPopWindow;
 import com.oxandon.calendar.OnCalendarPopSelectListener;
 import com.tim.pollution.MyApplication;
 import com.tim.pollution.R;
+import com.tim.pollution.activity.FocusCityActivity;
 import com.tim.pollution.adapter.CityContrastAdapter;
 import com.tim.pollution.adapter.CitySpinnerAdapter;
 import com.tim.pollution.bean.changetrend.ChangeTrend;
@@ -49,6 +51,8 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import lecho.lib.hellocharts.formatter.LineChartValueFormatter;
+import lecho.lib.hellocharts.formatter.SimpleLineChartValueFormatter;
 import lecho.lib.hellocharts.model.Axis;
 import lecho.lib.hellocharts.model.AxisValue;
 import lecho.lib.hellocharts.model.Line;
@@ -57,6 +61,8 @@ import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.model.ValueShape;
 import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.LineChartView;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * 城市对比
@@ -186,6 +192,33 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         cityContrastRgTime = (RadioGroup) view.findViewById(R.id.city_contrast_rg_time);
         cityContrastRgSelectTime = (RadioButton) view.findViewById(R.id.city_contrast_rbSelect_time);
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==1002&&resultCode==RESULT_OK){
+            RegionNetBean.RegionBean  regionBean= (RegionNetBean.RegionBean) data.getSerializableExtra("regionBean");
+            int code=data.getIntExtra("code",0);
+            if(regionBean!=null){
+                loadData(regionBean.getRegionId(), code);
+                if (code == 1) {
+                    cityContrastSp1.setText(regionBean.getRegionName());
+                    cityContrastCity1.setText(regionBean.getRegionName());
+                    regionBeans[0] = regionBean;
+                } else if (code == 2) {
+                    cityContrastCity2.setText(regionBean.getRegionName());
+                    cityContrastSp2.setText(regionBean.getRegionName());
+                    regionBeans[1] = regionBean;
+                } else {
+                    cityContrastCity3.setText(regionBean.getRegionName());
+                    cityContrastSp3.setText(regionBean.getRegionName());
+                    regionBeans[2] = regionBean;
+                }
+            }
+
+        }
+    }
+
 
     //特定时间选择 开始时间
     private Date beforeDate;
@@ -472,7 +505,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
             data.setAxisYLeft(null);
         }
         data.setBaseValue(Float.NEGATIVE_INFINITY);
-        cityContrastChart.setValueSelectionEnabled(false);
+        cityContrastChart.setValueSelectionEnabled(true);
         cityContrastChart.setLineChartData(data);
         cityContrastChart.setZoomEnabled(false);
         cityContrastChart.setMaxZoom(10);
@@ -619,7 +652,7 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
                 }
 
                 PointValue point = new PointValue(i, getFloatFromString(data.get(i).getValue()));
-                point.setLabel(type + " " + getIntFromString(data.get(i).getValue()) + " 时间 " + time);
+                point.setLabel(type + " " + getFloatFromString(data.get(i).getValue()) + " 时间 " + time);
                 pointValues.add(point);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -637,6 +670,8 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
         line.setHasPoints(true);// 是否显示节点
         line.setShape(ValueShape.CIRCLE);// 节点图形样式 DIAMOND菱形、SQUARE方形、CIRCLE圆形
         line.setHasLabelsOnlyForSelected(true);// 隐藏数据，触摸可以显示
+        LineChartValueFormatter chartValueFormatter = new SimpleLineChartValueFormatter(2);
+        line.setFormatter(chartValueFormatter);//显示小数点
         return line;
     }
 
@@ -747,14 +782,22 @@ public class CityContrastFragment extends Fragment implements ICallBack, Adapter
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.city_contrast_sp1:
-                showCitySelect(cityContrastSp1, 1);
+                Intent intent01=new Intent(getContext(), FocusCityActivity.class);
+                intent01.putExtra("code",1);
+                startActivityForResult(intent01,1002);
+//                showCitySelect(cityContrastSp1, 1);
                 break;
             case R.id.city_contrast_sp2:
-                showCitySelect(cityContrastSp2, 2);
-
+//                showCitySelect(cityContrastSp2, 2);
+                Intent intent02=new Intent(getContext(), FocusCityActivity.class);
+                intent02.putExtra("code",2);
+                startActivityForResult(intent02,1002);
                 break;
             case R.id.city_contrast_sp3:
-                showCitySelect(cityContrastSp3, 3);
+//                showCitySelect(cityContrastSp3, 3);
+                Intent intent03=new Intent(getContext(), FocusCityActivity.class);
+                intent03.putExtra("code",3);
+                startActivityForResult(intent03,1002);
                 break;
             case R.id.city_contrast_time_switch://切换时间
                 int index = timeTypes.indexOf(timeType);
