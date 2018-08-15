@@ -35,13 +35,11 @@ public class MapSelectAdapter extends RecyclerView.Adapter<MapSelectAdapter.View
 
     private int tag ;
 
-    //    private List<String> focusCity=new ArrayList<>();
     private  List<String> regionBeans;
     public MapSelectAdapter(Context context, List<RegionNetBean.RegionBean> cityBeens){
         this.context = context;
         this.data = cityBeens;
-//        focusCity.addAll(regionBeans);
-//        regionBeans=CityListSaveUtil.getList(context,CityListSaveUtil.CITY_FILE, CityListSaveUtil.CITY_KEY);
+        Log.e("lili","==================");
     }
 
     @Override
@@ -52,23 +50,30 @@ public class MapSelectAdapter extends RecyclerView.Adapter<MapSelectAdapter.View
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        RegionNetBean.RegionBean regionBean = getDataByPosition(position);
+        if (onItemClickListener != null) {
+        holder.llCity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onItemClickListener.onItemClick(position);
+            }
+        });
+        }
 
-        if(regionBean!=null){
-            Log.e("城市显示：",position+","+regionBean.getRegionName());
-            if(regionBean.isClass()){
+        if(data.get(position)!=null){
+            Log.e("城市显示：",position+","+data.get(position).getRegionName());
+            if(data.get(position).isClass()){
                 holder.tvCityClass.setVisibility(View.VISIBLE);
-                holder.tvCityClass.setText(regionBean.getRegionName());
+                holder.tvCityClass.setText(data.get(position).getRegionName());
                 holder.llCity.setVisibility(View.GONE);
             }else{
                 holder.llCity.setVisibility(View.VISIBLE);
                 holder.tvCityClass.setVisibility(View.GONE);
-                holder.tvName.setText(regionBean.getRegionName());
+                holder.tvName.setText(data.get(position).getRegionName());
 
                 if(regionBeans==null){
                     regionBeans=new ArrayList<String>();
                 }
-                if(regionBeans.contains(regionBean.getRegionId())){
+                if(regionBeans.contains(data.get(position).getRegionId())){
                     holder.ivSelect.setVisibility(View.VISIBLE);
                 }else{
                     holder.ivSelect.setVisibility(View.INVISIBLE);
@@ -78,17 +83,6 @@ public class MapSelectAdapter extends RecyclerView.Adapter<MapSelectAdapter.View
         }
 
     }
-
-  /*  class MyOnClickListener implements View.OnClickListener{
-        int position;
-        public MyOnClickListener(int position){
-            this.position
-        }
-        @Override
-        public void onClick(View v) {
-
-        }
-    }*/
 
     @Override
     public int getItemCount() {

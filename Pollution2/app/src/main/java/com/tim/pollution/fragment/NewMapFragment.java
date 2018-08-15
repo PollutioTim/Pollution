@@ -128,7 +128,6 @@ public class NewMapFragment extends Fragment implements ICallBack,
     TextView tvO3;
     @BindView(R.id.co_tv)
     TextView tvCo;
-
     @BindView(R.id.map_swicth_tv)
     TextView tvSwicth;
     @BindView(R.id.new_map_recyview)
@@ -192,6 +191,7 @@ public class NewMapFragment extends Fragment implements ICallBack,
 
     private IntentFilter intentFilter;
     private IdReceiver idReceiver;
+    private List<List<LatLng>> polyLines;
 
     @Nullable
     @Override
@@ -252,11 +252,11 @@ public class NewMapFragment extends Fragment implements ICallBack,
                                 e.printStackTrace();
                             }
                         }
-                    }else{
+                    } else {
                         setBigJTMarker();
                     }
                 } else if (zoomTo <= 8.0) {
-                        mBaiduMap.clear();
+                    mBaiduMap.clear();
                     if (!colorType.equals("FengXiang")) {
                         for (final CityBean cityBean : cityBeens) {
                             //设置坐标点
@@ -268,7 +268,7 @@ public class NewMapFragment extends Fragment implements ICallBack,
                                 e.printStackTrace();
                             }
                         }
-                    }else{
+                    } else {
                         setJTMarker();
                     }
                 }
@@ -297,7 +297,7 @@ public class NewMapFragment extends Fragment implements ICallBack,
         @Override
         public void onReceive(Context context, Intent intent) {
             pointCityId = intent.getStringExtra("id");
-            Log.e("lili","pointCityId="+pointCityId);
+            Log.e("lili", "pointCityId=" + pointCityId);
             parms.put("key", Constants.key);
             parms.put("regiontype", regiontype);
             parms.put("datatype", "many");
@@ -563,6 +563,7 @@ public class NewMapFragment extends Fragment implements ICallBack,
             e.printStackTrace();
         }
     }
+
     private void setJTMarker() {
         try {
             for (final CityBean cityBean : cityBeens) {
@@ -586,6 +587,7 @@ public class NewMapFragment extends Fragment implements ICallBack,
             e.printStackTrace();
         }
     }
+
     private void setBigJTMarker() {
         try {
             for (final CityBean cityBean : cityBeens) {
@@ -629,15 +631,16 @@ public class NewMapFragment extends Fragment implements ICallBack,
 
     private void setColorMarker() {
         mBaiduMap.clear();
+
         for (final CityBean clickMapBean : cityBeens) {
             //设置坐标点
-                        LatLng point1 = new LatLng(Double.valueOf(clickMapBean.getPointLatitude()),
-                                Double.valueOf(clickMapBean.getPointLongitude()));
-                        if (zoomTo >= 9.0) {
-                            setMarker(clickMapBean, point1);
-                        } else if (zoomTo <= 8.0) {
-                            setSmallMarker(clickMapBean, point1);
-                        }
+            LatLng point1 = new LatLng(Double.valueOf(clickMapBean.getPointLatitude()),
+                    Double.valueOf(clickMapBean.getPointLongitude()));
+            if (zoomTo >= 9.0) {
+                setMarker(clickMapBean, point1);
+            } else if (zoomTo <= 8.0) {
+                setSmallMarker(clickMapBean, point1);
+            }
         }
     }
 
@@ -646,17 +649,23 @@ public class NewMapFragment extends Fragment implements ICallBack,
     public void onGetDistrictResult(DistrictResult districtResult) {
         districtResult.getCenterPt();//获取行政区中心坐标点
         districtResult.getCityName();//获取行政区域名称
-        List<List<LatLng>> polyLines = districtResult.getPolylines();
+        polyLines = districtResult.getPolylines();
         //获取行政区域边界坐标点 //边界就是坐标点的集合，在地图上画出来就是多边形图层。
         // 有的行政区可能有多个区域，所以会有多个点集合。
         if (polyLines == null) return;
         //地理边界对象
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        for (List<LatLng> polyline : polyLines) {
-            OverlayOptions ooPolygon = new PolylineOptions().width(5)
-                    .points(polyline).dottedLine(true).color(0xAA00FF88);
-            mBaiduMap.addOverlay(ooPolygon);
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (List<LatLng> polyline : polyLines) {
+                    OverlayOptions ooPolygon = new PolylineOptions().width(5)
+                            .points(polyline).dottedLine(true).color(0xAA00FF88);
+                    mBaiduMap.addOverlay(ooPolygon);
+                }
+            }
+        }).start();
+
     }
 
     private String insertStr(String colors) throws ClassCastException {
@@ -698,9 +707,10 @@ public class NewMapFragment extends Fragment implements ICallBack,
                 colorType = "FengXiang";
                 mBaiduMap.clear();
                 tvWindDirection.setTextColor(getResources().getColor(R.color.color_white));
-                if(zoomTo >=9.0){
+
+                if (zoomTo >= 9.0) {
                     setBigJTMarker();
-                }else{
+                } else {
                     setJTMarker();
                 }
                 break;

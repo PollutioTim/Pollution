@@ -167,8 +167,8 @@ public class MapActivity extends BaseActivity implements ICallBack,BaiduMap.OnMa
     public void OnClick(View view) {
         switch (view.getId()) {
             case R.id.map_ac_swicth_tv:
-                Intent intent = new Intent(this, CityActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(this, CityActivity.class);
+//                startActivity(intent);
                 break;
             case R.id.map_all_ll:
                 if (llAll.isSelected()) {

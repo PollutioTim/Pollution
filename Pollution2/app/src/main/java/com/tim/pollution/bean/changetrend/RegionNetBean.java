@@ -36,6 +36,17 @@ public class RegionNetBean extends StateCode implements Serializable {
         private List<RegionBean> regionBeens;
         private boolean isClass;
 
+        @Override
+        public String toString() {
+            return "RegionBean{" +
+                    "RegionId='" + RegionId + '\'' +
+                    ", RegionName='" + RegionName + '\'' +
+                    ", isClick=" + isClick +
+                    ", regionBeens=" + regionBeens +
+                    ", isClass=" + isClass +
+                    '}';
+        }
+
         public List<RegionBean> getRegionBeens() {
             return regionBeens;
         }

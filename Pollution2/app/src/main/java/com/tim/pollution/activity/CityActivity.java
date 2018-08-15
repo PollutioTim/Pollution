@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tim.pollution.R;
+import com.tim.pollution.adapter.CityAdapter;
 import com.tim.pollution.adapter.FocusCityWithClassAdapter;
 import com.tim.pollution.adapter.MapSelectAdapter;
 import com.tim.pollution.bean.changetrend.DataBankNetBean;
@@ -74,9 +75,11 @@ public class CityActivity extends BaseActivity implements ICallBack {
         cityBeens = new ArrayList<>();
         tvFocus.setVisibility(View.GONE);
         adapter = new MapSelectAdapter(this,cityBeens);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this,
+                LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+
         pd = ProgressDialog.show(this, "提示", "加载数据中，请耐心等待......");
         loadData("area",null);
 
@@ -84,14 +87,15 @@ public class CityActivity extends BaseActivity implements ICallBack {
             @Override
             public void onItemClick(int position) {
                 RegionNetBean.RegionBean regionBean = cityBeens.get(position);
-                //lili
                 Intent intent = new Intent("city_id");
                 intent.putExtra("id", regionBean.getRegionId());
+                Log.e("lili","id="+regionBean.getRegionId());
                 sendBroadcast(intent);
                 finish();
             }
         });
     }
+
     int size =0;
     int index=0;
     private void  loadData(String type, final String id){//http://218.26.106.43:10009/AppInterface/Region?key=6DlLqAyx3mY=&regiontype=area
@@ -123,7 +127,8 @@ public class CityActivity extends BaseActivity implements ICallBack {
                             if(index==size-1){
                                 cityBeens.clear();
                                 cityBeens.addAll(regionNetBean.getMessage());
-                                recyclerView.setAdapter(new FocusCityWithClassAdapter(CityActivity.this,cityBeens));
+                                adapter.notifyDataSetChanged();
+//                                recyclerView.setAdapter(new MapSelectAdapter(CityActivity.this,cityBeens));
                                 if(pd!=null){
                                     pd.dismiss();
                                 }
@@ -142,7 +147,7 @@ public class CityActivity extends BaseActivity implements ICallBack {
                 if(index>=size){
                     cityBeens.clear();
                     cityBeens.addAll(regionNetBean.getMessage());
-                    recyclerView.setAdapter(new FocusCityWithClassAdapter(CityActivity.this,cityBeens));
+                    recyclerView.setAdapter(new MapSelectAdapter(CityActivity.this,cityBeens));
                     if(pd!=null){
                         pd.dismiss();
                     }
@@ -169,7 +174,6 @@ public class CityActivity extends BaseActivity implements ICallBack {
 
     @Override
     public void onSuccess(Object data) {
-
 
     }
 
